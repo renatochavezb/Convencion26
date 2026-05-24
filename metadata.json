@@ -1,0 +1,6 @@
+{
+  "name": "COMEV 2026 - Convención Nacional",
+  "description": "Sistema oficial y de registro para la Convención Nacional COMEV 2026 en la Ciudad de Chihuahua.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
