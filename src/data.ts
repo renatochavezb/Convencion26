@@ -4,7 +4,7 @@ import nestorPhoto from './nestor_guerra.png';
 export const SPEAKERS: Speaker[] = [
   {
     id: 'nestor',
-    name: 'NÉSTOR GUERRA',
+    name: 'NÉSTOR GUERRA 🇪🇸',
     role: 'Conferencista Internacional IA & negocios',
     quote: '"La inteligencia artificial no es el futuro. Es una decisión del presente."',
     bullets: [
@@ -95,9 +95,9 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   },
   {
     id: 'd4-2',
-    title: 'Cumbre: Néstor Guerra. CONFERENCISTA INTERNACIONAL IA & NEGOCIOS',
+    title: 'Cumbre: Néstor Guerra 🇪🇸. CONFERENCISTA INTERNACIONAL IA & NEGOCIOS',
     speakerId: 'nestor',
-    speakerName: 'NÉSTOR GUERRA',
+    speakerName: 'NÉSTOR GUERRA 🇪🇸',
     time: '11:00 AM - 01:00 PM',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',

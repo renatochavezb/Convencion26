@@ -59,8 +59,9 @@ export default function SpeakerHighlight() {
               <span className="font-mono text-xs font-bold text-secondary-orange tracking-widest uppercase mb-3 block">
                 CONFERENCISTA PRINCIPAL • EXCEPCIONAL
               </span>
-              <h3 className="font-headline text-4xl md:text-5xl font-black text-white leading-none tracking-tight">
-                NÉSTOR <span className="text-[#fe9800]">GUERRA</span>
+              <h3 className="font-headline text-4xl md:text-5xl font-black text-white leading-none tracking-tight flex items-center gap-3">
+                <span>NÉSTOR <span className="text-[#fe9800]">GUERRA</span></span>
+                <span className="inline-block text-3xl md:text-4xl" title="España">🇪🇸</span>
               </h3>
               <p className="font-headline text-xl md:text-2xl text-[#ffc080] font-bold mt-1.5 uppercase italic">
                 Conferencista Internacional IA & negocios
