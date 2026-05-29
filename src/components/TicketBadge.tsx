@@ -1,6 +1,9 @@
 import { RegistrationDetails } from '../types';
 import { Download, Check, Printer, RefreshCw, Star, ShieldAlert } from 'lucide-react';
 import { useState } from 'react';
+import logoGradiente from '../assets/logo-gradiente.png';
+import logoNaranja from '../assets/logo-naranja.png';
+import logoBlanco from '../assets/logo-blanco.png';
 
 interface TicketBadgeProps {
   registration: RegistrationDetails;
@@ -9,6 +12,18 @@ interface TicketBadgeProps {
 
 export default function TicketBadge({ registration, onClear }: TicketBadgeProps) {
   const [downloaded, setDownloaded] = useState(false);
+
+  // Select badge logo based on attendee role
+  const getBadgeLogo = () => {
+    switch (registration.badgeRole) {
+      case 'VIP':
+        return logoGradiente;
+      case 'Invitado Especial':
+        return logoBlanco;
+      default:
+        return logoNaranja;
+    }
+  };
 
   const handleDownload = () => {
     setDownloaded(true);
@@ -54,8 +69,11 @@ export default function TicketBadge({ registration, onClear }: TicketBadgeProps)
 
       {/* Lanyard Graphic Card */}
       <div className="flex justify-center">
-        <div className="w-[310px] bg-[#020d18] border-t-[14px] border-secondary-orange border-x border-b border-surface-variant p-5 text-white relative shadow-2xl overflow-hidden flex flex-col justify-between min-h-[460px]">
+        <div className="w-[310px] bg-[#020d18] border-t-[14px] border-secondary-orange border-x border-b border-surface-variant p-5 text-white relative shadow-2xl overflow-hidden flex flex-col justify-between min-h-[460px] group/card">
           
+          {/* Holographic shimmer overlay */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 pointer-events-none transform -translate-x-full group-hover/card:translate-x-full ease-out" style={{ transitionDuration: '1.5s' }} />
+
           {/* Lanyard Loop simulation */}
           <div className="absolute top-1 left-1/2 -translate-x-1/2 w-8 h-2.5 bg-black/50 border border-outline/20 rounded-t-sm" />
           
@@ -68,12 +86,18 @@ export default function TicketBadge({ registration, onClear }: TicketBadgeProps)
             <span>SEPT 3-5, 2026</span>
           </div>
 
-          <div className="text-center my-4 relative z-10">
-            <h5 className="font-headline font-black text-xl tracking-tighter text-white">
-              COMEV <span className="text-secondary-orange">2026</span>
-            </h5>
-            <p className="font-mono text-[8px] text-on-surface-variant tracking-widest uppercase">
-              • Convención Nacional de Negocios •
+          <div className="flex flex-col items-center my-3 relative z-10 group/logo">
+            <div className="relative overflow-hidden rounded-full p-1">
+              {/* Interactive foil glow overlay for innovation */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500 pointer-events-none transform -translate-x-full group-hover/logo:translate-x-full ease-out" style={{ transitionDuration: '1s' }} />
+              <img 
+                src={getBadgeLogo()} 
+                alt="COMEV Logo" 
+                className="w-28 h-28 object-contain filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)] transition-transform duration-500 group-hover/logo:scale-105"
+              />
+            </div>
+            <p className="font-mono text-[8px] text-on-surface-variant tracking-widest uppercase mt-2">
+              • Convención Nacional 2026 •
             </p>
           </div>
 

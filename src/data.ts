@@ -84,11 +84,21 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
     description: 'Apertura formal de la Convención Nacional COMEV 2026 con la presencia de autoridades e invitados de honor.'
   },
   {
+    id: 'd4-new-speaker',
+    title: 'Conferencia Magistral: Ponente por confirmar',
+    time: '10:00 AM - 11:00 AM',
+    day: 4,
+    location: 'Centro de Exposiciones y Convenciones',
+    locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
+    track: 'negocios',
+    description: 'Magna ponencia de negocios e innovación con un destacado líder industrial nacional, ponente de primer nivel por anunciarse próximamente.'
+  },
+  {
     id: 'd4-2',
     title: 'Cumbre: Néstor Guerra. CONFERENCISTA INTERNACIONAL IA & NEGOCIOS',
     speakerId: 'nestor',
     speakerName: 'NÉSTOR GUERRA',
-    time: '10:00 AM - 12:00 PM',
+    time: '11:00 AM - 01:00 PM',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
@@ -98,7 +108,7 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   {
     id: 'd4-3',
     title: 'Foto del recuerdo',
-    time: '12:00 PM - 12:30 PM',
+    time: '01:00 PM - 01:30 PM',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
@@ -108,7 +118,7 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   {
     id: 'd4-4',
     title: 'Comida',
-    time: '01:00 PM - 03:30 PM',
+    time: '01:30 PM - 04:00 PM',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',

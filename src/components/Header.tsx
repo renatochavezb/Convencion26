@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Ticket, HelpCircle } from 'lucide-react';
+import logoBlanco from '../assets/logo-blanco.png';
 
 interface HeaderProps {
   onRegisterClick: () => void;
@@ -43,9 +44,21 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
         {/* Brand Logo */}
         <div 
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="text-2xl font-headline font-black tracking-tighter text-white cursor-pointer select-none"
+          className="flex items-center gap-3 cursor-pointer select-none group"
         >
-          COMEV <span className="text-secondary-orange font-black italic">2026</span>
+          <img 
+            src={logoBlanco} 
+            alt="Logo COMEV" 
+            className="h-15 w-auto object-contain transition-all duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_8px_rgba(254,152,0,0.6)]"
+          />
+          <div className="flex flex-col leading-none">
+            <span className="font-headline font-black text-lg tracking-tighter text-white uppercase">
+              COMEV
+            </span>
+            <span className="text-secondary-orange font-bold text-[10px] tracking-widest uppercase font-mono mt-0.5">
+              CONVENCIÓN 2026
+            </span>
+          </div>
         </div>
 
         {/* Desktop Links */}

@@ -1,4 +1,5 @@
 import { Star, Shield, Landmark } from 'lucide-react';
+import logoNaranja from '../assets/logo-naranja.png';
 
 export default function Footer() {
   const handleScrollToTop = () => {
@@ -18,12 +19,10 @@ export default function Footer() {
             
             {/* Embedded Logo replica */}
             <div className="flex items-center gap-6">
-              <span className="font-headline font-black text-2xl tracking-tighter text-white">
-                EVM <span className="text-secondary-orange">CHIHUAHUA</span>
-              </span>
-              <div className="w-[1.5px] h-8 bg-surface-variant" />
-              <span className="font-headline font-black text-2xl tracking-tighter text-[#ffc080] italic">
-                COMEV
+              <img src={logoNaranja} alt="Logo COMEV" className="h-20 w-auto object-contain" />
+              <div className="w-[1.5px] h-14 bg-surface-variant" />
+              <span className="font-headline font-black text-xl tracking-tighter text-white uppercase text-left leading-tight">
+                EVM <br /><span className="text-secondary-orange">CHIHUAHUA</span>
               </span>
             </div>
 
@@ -42,9 +41,21 @@ export default function Footer() {
           {/* Logo */}
           <div 
             onClick={handleScrollToTop}
-            className="text-2xl font-headline font-black text-white hover:text-secondary-orange cursor-pointer tracking-tight"
+            className="flex items-center gap-2.5 cursor-pointer group"
           >
-            COMEV <span className="text-secondary-orange font-bold">2026</span>
+            <img 
+              src={logoNaranja} 
+              alt="Logo COMEV" 
+              className="h-14 w-auto object-contain transition-all duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_8px_rgba(254,152,0,0.5)]"
+            />
+            <div className="flex flex-col leading-none text-left">
+              <span className="font-headline font-black text-base tracking-tighter text-white uppercase">
+                COMEV
+              </span>
+              <span className="text-secondary-orange font-bold text-[9px] tracking-widest uppercase font-mono mt-0.5">
+                CONVENCIÓN 2026
+              </span>
+            </div>
           </div>
 
           {/* Links */}

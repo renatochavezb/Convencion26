@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Play, Ticket, MapPin, Calendar, Clock } from 'lucide-react';
+import logoGradiente from '../assets/logo-gradiente.png';
 
 interface HeroProps {
   onCtaclick: () => void;
@@ -34,6 +35,15 @@ export default function Hero({ onCtaclick }: HeroProps) {
       
       {/* Heavy Blue Overlay to match the design palette tone */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-[#001429]/40 to-[#001429]"></div>
+
+      {/* Giant static logo background watermark behind the main title for strong city identity */}
+      <div className="absolute -left-48 -top-24 w-[850px] h-[850px] opacity-50 pointer-events-none z-0 hidden lg:block select-none">
+        <img 
+          src={logoGradiente} 
+          alt="Chihuahua Skyline Watermark" 
+          className="w-full h-full object-contain filter blur-[0.5px]"
+        />
+      </div>
 
       <div className="relative z-10 w-full max-w-[1280px] mx-auto px-5 md:px-[80px] grid lg:grid-cols-12 gap-12 items-center">
         
@@ -119,8 +129,8 @@ export default function Hero({ onCtaclick }: HeroProps) {
               
               {/* Header inside ticket */}
               <div className="flex justify-between items-center pb-4 border-b border-white/10">
-                <div className="flex items-center gap-1.5">
-                  <Ticket className="w-4 h-4 text-secondary-orange" />
+                <div className="flex items-center gap-3">
+                  <img src={logoGradiente} alt="" className="w-11 h-11 object-contain" />
                   <span className="font-mono text-[10px] text-white tracking-wider font-bold">ACCESO CONVENCIÓN</span>
                 </div>
                 <span className="bg-[#fe9800]/10 text-secondary-orange text-[9px] font-mono px-2 py-0.5 border border-[#fe9800]/30 font-bold uppercase">
