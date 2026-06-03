@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Ticket, HelpCircle } from 'lucide-react';
 import logoBlanco from '../assets/logo-blanco.png';
+import comevLogo from '../assets/comev-logo-trans.png';
 
 
 interface HeaderProps {
@@ -49,7 +50,7 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
         >
           <img 
             src={logoBlanco} 
-            alt="Logo COMEV" 
+            alt="Logo Convención" 
             className="h-15 w-auto object-contain transition-all duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_8px_rgba(254,152,0,0.6)]"
           />
           <div className="flex flex-col leading-none">
@@ -60,6 +61,12 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
               CONVENCIÓN 2026
             </span>
           </div>
+          <div className="w-px h-8 bg-white/20 mx-1" />
+          <img
+            src={comevLogo}
+            alt="Logo COMEV"
+            className="h-10 w-auto object-contain opacity-90 transition-all duration-300 group-hover:opacity-100 group-hover:drop-shadow-[0_0_6px_rgba(254,152,0,0.5)]"
+          />
         </div>
 
         {/* Desktop Links */}

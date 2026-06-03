@@ -1,5 +1,6 @@
 import { Star, Shield, Landmark } from 'lucide-react';
 import logoNaranja from '../assets/logo-naranja.png';
+import comevLogo from '../assets/comev-logo-trans.png';
 
 
 export default function Footer() {
@@ -20,11 +21,18 @@ export default function Footer() {
             
             {/* Embedded Logo replica */}
             <div className="flex items-center gap-6">
-              <img src={logoNaranja} alt="Logo COMEV" className="h-20 w-auto object-contain" />
+              <img src={logoNaranja} alt="Logo Convención" className="h-20 w-auto object-contain" />
               <div className="w-[1.5px] h-14 bg-surface-variant" />
-              <span className="font-headline font-black text-xl tracking-tighter text-white uppercase text-left leading-tight">
-                EVM <br /><span className="text-secondary-orange">CHIHUAHUA</span>
-              </span>
+              <div className="flex flex-col leading-none text-left">
+                <span className="font-headline font-black text-xl tracking-tighter text-white uppercase">
+                  COMEV
+                </span>
+                <span className="text-secondary-orange font-bold text-[10px] tracking-widest uppercase font-mono mt-0.5">
+                  CONVENCIÓN 2026
+                </span>
+              </div>
+              <div className="w-px h-12 bg-white/15 mx-1" />
+              <img src={comevLogo} alt="Logo COMEV" className="h-14 w-auto object-contain opacity-90" />
             </div>
 
             {/* Verification code to emphasize realistic detail */}
@@ -46,7 +54,7 @@ export default function Footer() {
           >
             <img 
               src={logoNaranja} 
-              alt="Logo COMEV" 
+              alt="Logo Convención" 
               className="h-14 w-auto object-contain transition-all duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_8px_rgba(254,152,0,0.5)]"
             />
             <div className="flex flex-col leading-none text-left">
@@ -57,6 +65,12 @@ export default function Footer() {
                 CONVENCIÓN 2026
               </span>
             </div>
+            <div className="w-px h-8 bg-white/15 mx-1" />
+            <img
+              src={comevLogo}
+              alt="Logo COMEV"
+              className="h-10 w-auto object-contain opacity-85 transition-all duration-300 group-hover:opacity-100 group-hover:drop-shadow-[0_0_6px_rgba(254,152,0,0.4)]"
+            />
           </div>
 
           {/* Links */}
