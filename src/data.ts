@@ -1,10 +1,11 @@
 import { Speaker, ScheduleEvent } from './types';
 import nestorPhoto from './nestor_guerra.png';
+import keynoteGuestPhoto from './keynote_guest_placeholder.png';
 
 export const SPEAKERS: Speaker[] = [
   {
     id: 'nestor',
-    name: 'NÉSTOR GUERRA 🇪🇸',
+    name: 'NÉSTOR GUERRA',
     role: 'Conferencista Internacional IA & negocios',
     quote: '"La inteligencia artificial no es el futuro. Es una decisión del presente."',
     bullets: [
@@ -17,6 +18,21 @@ export const SPEAKERS: Speaker[] = [
     imageUrl: nestorPhoto,
     featured: true,
     bio: 'Néstor Guerra es socio fundador e investigador asociado de consultorías digitales. Es considerado uno de los expertos más influyentes del ecosistema de habla hispana en la aplicación práctica de Inteligencia Artificial para la toma de decisiones empresariales, rediseño de modelos de negocio y optimización de productividad corporativa.'
+  },
+  {
+    id: 'invitado-keynote',
+    name: 'CONFERENCISTA INVITADO',
+    role: 'UNA VISIÓN ESTRATÉGICA PARA IMPULSAR EL CRECIMIENTO EMPRESARIAL',
+    quote: '"El crecimiento empresarial exige nuevas formas de pensar, conectar y actuar."',
+    bullets: [
+      'Perspectiva empresarial aplicada al entorno actual',
+      'Ideas prácticas para fortalecer liderazgo, ventas e innovación',
+      'Participación especial dentro del programa académico',
+      'Contenido enfocado en retos reales de las empresas'
+    ],
+    imageUrl: keynoteGuestPhoto,
+    featured: true,
+    bio: 'Próximamente anunciaremos al conferencista invitado que se sumará al programa académico con una participación especial diseñada para aportar valor, ampliar la visión estratégica de los asistentes y conectar nuevas ideas con los retos reales de las empresas.'
   },
   {
     id: 'marisol',
@@ -63,13 +79,13 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   // Jueves 03 de Septiembre (Día 3)
   {
     id: 'd3-1',
-    title: 'Rompe Hielo al estilo 70s y 80s',
+    title: 'Rompe Hielo al estilo 80s',
     time: '07:00 PM - 10:00 PM',
     day: 3,
     location: 'Hacienda San José',
     locationUrl: 'https://maps.google.com/?q=Hacienda+San+Jose+Chihuahua',
     track: 'negocios',
-    description: 'Cóctel rompehielos de bienvenida con temática de los años 70 y 80 para todos los congresistas y acompañantes.'
+    description: 'Cóctel rompehielos de bienvenida con temática de los años 80 para todos los congresistas y acompañantes.'
   },
 
   // Viernes 04 de Septiembre (Día 4)
@@ -85,19 +101,21 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   },
   {
     id: 'd4-new-speaker',
-    title: 'Conferencia Magistral: Ponente por confirmar',
+    title: 'Conferencia Magistral: Liderazgo y Competitividad Industrial',
+    speakerId: 'invitado-keynote',
+    speakerName: 'Conferencista Invitado',
     time: '10:00 AM - 11:00 AM',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
     track: 'negocios',
-    description: 'Magna ponencia de negocios e innovación con un destacado líder industrial nacional, ponente de primer nivel por anunciarse próximamente.'
+    description: 'Magna ponencia magistral enfocada en los retos de la competitividad en el mercado actual, mejores prácticas de liderazgo estratégico y el crecimiento sustentable para el desarrollo empresarial de vanguardia.'
   },
   {
     id: 'd4-2',
-    title: 'Cumbre: Néstor Guerra 🇪🇸. CONFERENCISTA INTERNACIONAL IA & NEGOCIOS',
+    title: 'Cumbre: Néstor Guerra. CONFERENCISTA INTERNACIONAL IA & NEGOCIOS',
     speakerId: 'nestor',
-    speakerName: 'NÉSTOR GUERRA 🇪🇸',
+    speakerName: 'NÉSTOR GUERRA',
     time: '11:00 AM - 01:00 PM',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
@@ -159,12 +177,13 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   // Sábado 05 de Septiembre (Día 5)
   {
     id: 'd5-1',
-    title: 'Paseo',
+    title: 'Experiencia Regional: Paisajes y Tradición',
     time: '09:00 AM - 01:30 PM',
     day: 5,
-    location: 'Punto de partida: Lobby del hotel',
+    location: 'María Bonita: Hotel Sede',
+    locationUrl: 'https://maps.google.com/?q=Hotel+Maria+Bonita+Chihuahua',
     track: 'casos_reales',
-    description: 'Recorrido turístico especial para conocer los atractivos emblemáticos e históricos de la ciudad de Chihuahua.'
+    description: 'Una excursión de integración fuera de la ciudad para explorar la riqueza de la región, diseñada para descubrir espectaculares paisajes naturales o disfrutar de las nuevas propuestas locales que ofrece el entorno de Chihuahua.'
   },
   {
     id: 'd5-2',

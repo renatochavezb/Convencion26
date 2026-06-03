@@ -1,6 +1,7 @@
 import { Star, Shield, Landmark } from 'lucide-react';
 import logoNaranja from '../assets/logo-naranja.png';
 
+
 export default function Footer() {
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });

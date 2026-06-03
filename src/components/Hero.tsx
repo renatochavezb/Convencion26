@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Play, Ticket, MapPin, Calendar, Clock } from 'lucide-react';
 import logoGradiente from '../assets/logo-gradiente.png';
+import comevLogo from '../assets/comev-logo.png';
+
 
 interface HeroProps {
   onCtaclick: () => void;
@@ -36,12 +38,12 @@ export default function Hero({ onCtaclick }: HeroProps) {
       {/* Heavy Blue Overlay to match the design palette tone */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-[#001429]/40 to-[#001429]"></div>
 
-      {/* Giant static logo background watermark behind the main title for strong city identity */}
-      <div className="absolute -left-48 -top-24 w-[850px] h-[850px] opacity-50 pointer-events-none z-0 hidden lg:block select-none">
+      {/* Giant gradient logo watermark in the background (bottom-left) without the text labels */}
+      <div className="absolute -left-28 -bottom-28 w-[600px] h-[450px] overflow-hidden opacity-30 pointer-events-none z-0 select-none">
         <img 
           src={logoGradiente} 
-          alt="Chihuahua Skyline Watermark" 
-          className="w-full h-full object-contain filter blur-[0.5px]"
+          alt="Logo Watermark Left" 
+          className="w-[600px] h-[540px] object-cover object-top filter blur-[0.5px]"
         />
       </div>
 
@@ -49,10 +51,6 @@ export default function Hero({ onCtaclick }: HeroProps) {
         
         {/* Left Column: Text & CTA */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Banner Tag Chihuahua September */}
-          <div className="inline-block bg-secondary-orange text-deep-blue font-mono text-[10px] font-black px-3 py-1 tracking-wider uppercase">
-            CHIHUAHUA CITY • SEPTIEMBRE 2026
-          </div>
 
           {/* Display Hero Title with staggered italic highlights */}
           <h2 className="font-headline text-5xl md:text-7xl font-black text-white leading-[0.95] tracking-tighter uppercase italic select-none">
@@ -63,7 +61,10 @@ export default function Hero({ onCtaclick }: HeroProps) {
           {/* Primary Subhead */}
           <h1 className="font-headline text-2xl md:text-[38px] font-extrabold text-white tracking-tight uppercase leading-none">
             CONVENCIÓN NACIONAL <br />
-            <span className="text-[#ffc080] font-black">COMEV 2026</span>
+            <span className="text-[#ffc080] font-black inline-flex items-center gap-3">
+              COMEV 2026
+              <img src={comevLogo} alt="Logo COMEV" className="h-8 md:h-10 w-auto object-contain select-none" />
+            </span>
           </h1>
 
           {/* Mission Statement */}
@@ -73,7 +74,7 @@ export default function Hero({ onCtaclick }: HeroProps) {
 
           {/* Speed Stats Columns */}
           <div className="flex flex-col sm:flex-row gap-8 sm:gap-14 items-start sm:items-center pt-2">
-            <div className="border-l-[4px] border-secondary-orange pl-6 py-2">
+            <div className="border-l-[4px] border-secondary-orange pl-6 py-2 relative z-10">
               <p className="font-mono text-[10px] font-bold text-secondary-orange tracking-widest uppercase mb-1">
                 FECHA DEL EVENTO
               </p>
@@ -82,7 +83,7 @@ export default function Hero({ onCtaclick }: HeroProps) {
               </p>
             </div>
 
-            <div className="border-l-[4px] border-secondary-orange pl-6 py-2">
+            <div className="border-l-[4px] border-secondary-orange pl-6 py-2 relative z-10">
               <p className="font-mono text-[10px] font-bold text-secondary-orange tracking-widest uppercase mb-1">
                 SEDE OFICIAL
               </p>
@@ -112,8 +113,9 @@ export default function Hero({ onCtaclick }: HeroProps) {
         </div>
 
         {/* Right Column: Glassmorphic Access Ticket Card with Live Countdown */}
-        <div className="lg:col-span-5 hidden lg:block">
-          <div className="relative group">
+        <div className="lg:col-span-5 hidden lg:block relative">
+
+          <div className="relative z-10 group">
             {/* Background glowing orb */}
             <div className="absolute -inset-2 bg-gradient-to-r from-secondary-orange via-[#fe9800]/40 to-accent-orange rounded-none blur-3xl opacity-15 group-hover:opacity-25 transition duration-1000 pointer-events-none"></div>
             

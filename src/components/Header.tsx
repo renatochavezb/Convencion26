@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X, Ticket, HelpCircle } from 'lucide-react';
 import logoBlanco from '../assets/logo-blanco.png';
 
+
 interface HeaderProps {
   onRegisterClick: () => void;
   hasTicket: boolean;
@@ -67,7 +68,7 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
             onClick={() => handleScrollTo('speakers')}
             className="text-on-surface-variant hover:text-white leading-none tracking-widest uppercase transition-colors pointer-events-auto cursor-pointer"
           >
-            Conferencistas
+            SPEAKERS
           </button>
           
           <button 
@@ -132,7 +133,7 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
             onClick={() => handleScrollTo('speakers')}
             className="text-left py-2 font-mono text-xs font-bold leading-none tracking-widest uppercase text-on-surface-variant hover:text-white transition-colors"
           >
-            Conferencistas
+            SPEAKERS
           </button>
           
           <button 

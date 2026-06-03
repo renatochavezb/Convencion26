@@ -3,6 +3,7 @@ import { Award, ChevronRight, FileText } from 'lucide-react';
 
 export default function ExecutiveHighlight() {
   const [showFullSemblance, setShowFullSemblance] = useState(false);
+  const whatsappUrl = import.meta.env.VITE_WHATSAPP_GROUP_URL || 'https://chat.whatsapp.com/invite/dummy';
 
   const achievements = [
     'Director General de Desarrollo Industrial en el Norte de México',
@@ -39,7 +40,7 @@ export default function ExecutiveHighlight() {
           
           {/* Teaser Overlay Card (Glassmorphic & Premium) */}
           <div className="absolute inset-0 z-20 flex items-center justify-center p-2">
-            <div className="bg-[#05172b]/90 backdrop-blur-md border-2 border-secondary-orange p-8 md:p-12 text-center shadow-2xl max-w-2xl w-full space-y-6">
+            <div className="bg-[#05172b]/95 backdrop-blur-md border-2 border-secondary-orange p-8 md:p-12 text-center shadow-2xl max-w-2xl w-full space-y-6">
               <div className="w-16 h-16 bg-secondary-orange/10 border border-secondary-orange/30 text-secondary-orange flex items-center justify-center rounded-full mx-auto animate-pulse">
                 <Award className="w-8 h-8" />
               </div>
@@ -48,12 +49,31 @@ export default function ExecutiveHighlight() {
                   REVELACIÓN DEL GALARDONADO
                 </h4>
                 <p className="font-sans text-sm md:text-base text-on-surface-variant leading-relaxed">
-                  El próximo <span className="text-secondary-orange font-bold text-lg">5 de Julio</span> se anunciará oficialmente al galardonado como Ejecutivo Distinguido Nacional 2026.
+                  El próximo <span className="text-secondary-orange font-bold text-lg">15 de Junio</span> se anunciará oficialmente al galardonado como Ejecutivo Distinguido Nacional 2026.
                 </p>
               </div>
+
+              {/* WhatsApp Group CTA */}
+              <div className="pt-4 border-t border-white/10 flex flex-col items-center gap-3">
+                <p className="font-sans text-xs text-[#c4c6cf] max-w-md mx-auto leading-relaxed">
+                  Únete a nuestro grupo oficial de WhatsApp para enterarte de la revelación al instante y recibir actualizaciones de la Convención:
+                </p>
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-[#05172b] hover:text-white px-6 py-2.5 font-mono text-xs font-black uppercase tracking-wider transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(37,211,102,0.3)] active:scale-95 cursor-pointer"
+                >
+                  <svg className="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.66.986 3.292 1.503 4.883 1.504 5.428 0 9.845-4.414 9.848-9.841.002-2.63-1.018-5.101-2.871-6.958C16.6 2.002 14.127.985 11.999.985 6.574.985 2.158 5.4 2.156 10.826c-.001 1.688.455 3.336 1.32 4.793l-.988 3.606 3.693-.97c1.47.801 3.055 1.202 4.673 1.202H6.602a.01.01 0 0 0-.012.001zm11.53-3.691c-.296-.148-1.748-.862-2.019-.962-.27-.099-.467-.148-.662.148-.196.297-.76.962-.931 1.16-.171.197-.341.221-.637.074-1.28-.64-2.274-1.18-3.097-2.593-.217-.373.217-.346.621-1.152.069-.138.034-.259-.017-.358-.052-.099-.467-1.127-.64-1.54-.168-.405-.333-.351-.467-.358-.12-.006-.259-.007-.397-.007-.138 0-.363.052-.553.259-.19.208-.727.711-.727 1.733 0 1.022.744 2.01 1.848 2.158.11.015 2.137 3.262 5.178 4.57.72.311 1.282.497 1.72.636.724.23 1.381.197 1.902.12.58-.087 1.748-.714 1.993-1.401.246-.688.246-1.278.172-1.401-.074-.123-.27-.197-.566-.346z" />
+                  </svg>
+                  ÚNETE AL GRUPO DE WHATSAPP
+                </a>
+              </div>
+
               <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row justify-center gap-4 text-xs font-mono">
                 <span className="bg-secondary-orange/10 text-secondary-orange px-3 py-1 border border-secondary-orange/20">
-                  📅 ANUNCIO: 05 DE JULIO, 2026
+                  📅 ANUNCIO: 15 DE JUNIO, 2026
                 </span>
                 <span className="bg-white/5 text-white/60 px-3 py-1 border border-white/10">
                   🔒 CONTENIDO RESERVADO

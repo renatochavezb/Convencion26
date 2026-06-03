@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SCHEDULE_EVENTS } from '../data';
+import { SCHEDULE_EVENTS, SPEAKERS } from '../data';
 import { ScheduleEvent } from '../types';
 import { Clock, MapPin, Grid, Layers, CalendarCheck, BookOpen, UserCheck, Star } from 'lucide-react';
 import retro70sBg from '../assets/retro-70s-bg.png';
@@ -358,8 +358,8 @@ interface EventCardStyle {
 function getEventCardStyle(eventId: string, title: string): EventCardStyle {
   const titleLower = title.toLowerCase();
 
-  // 1. Rompe Hielo 70s y 80s (Retro)
-  if (eventId === 'd3-1' || titleLower.includes('70s') || titleLower.includes('80s')) {
+  // 1. Rompe Hielo 80s (Retro)
+  if (eventId === 'd3-1' || titleLower.includes('80s')) {
     return {
       isRetro: true,
       containerClass: 'bg-gradient-to-r from-[#d946ef]/15 via-[#f43f5e]/15 to-[#eab308]/15 border-2 border-dashed border-[#eab308]/60 shadow-[inset_0_0_20px_rgba(244,63,94,0.15),0_8px_30px_rgba(234,179,8,0.1)] hover:border-[#eab308] hover:shadow-[inset_0_0_30px_rgba(244,63,94,0.25),0_12px_40px_rgba(234,179,8,0.2)]',
@@ -367,7 +367,7 @@ function getEventCardStyle(eventId: string, title: string): EventCardStyle {
         <div className="absolute inset-0 z-0 opacity-[0.18] pointer-events-none select-none mix-blend-overlay">
           <img 
             src={retro70sBg} 
-            alt="Retro 70s fashion background" 
+            alt="Retro 80s fashion background" 
             className="w-full h-full object-cover object-center" 
           />
         </div>
@@ -550,8 +550,8 @@ function getEventCardStyle(eventId: string, title: string): EventCardStyle {
     };
   }
 
-  // 9. Paseo / Recorrido / Tour
-  if (titleLower.includes('paseo') || titleLower.includes('recorrido')) {
+  // 9. Paseo / Recorrido / Tour / Experiencia Regional
+  if (titleLower.includes('paseo') || titleLower.includes('recorrido') || titleLower.includes('experiencia regional') || eventId === 'd5-1') {
     return {
       isRetro: false,
       containerClass: 'bg-gradient-to-r from-[#0284c7]/15 via-[#041221] to-[#0ea5e9]/10 border border-[#0284c7]/30 hover:border-[#38bdf8] shadow-[inset_0_0_15px_rgba(2,132,199,0.05)] hover:shadow-[0_0_20px_rgba(2,132,199,0.15)]',
@@ -639,6 +639,7 @@ export default function ScheduleSection() {
           {filteredEvents.length > 0 ? (
             filteredEvents.map((event) => {
                 const cardStyle = getEventCardStyle(event.id, event.title);
+                const linkedSpeaker = event.speakerId ? SPEAKERS.find((s) => s.id === event.speakerId) : null;
                 return (
                   <div 
                     key={event.id}
@@ -678,31 +679,33 @@ export default function ScheduleSection() {
                     {/* Dynamic Event Representative Watermark for other events */}
                     {!cardStyle.isRetro && getEventWatermark(event.id, event.title)}
 
-                    {/* Left Column: Timing */}
+                    {/* Left Column: Location (Timing is commented out but kept in code) */}
                     <div className="md:col-span-3 space-y-2 relative z-10">
+                      {/* Horario oculto temporalmente - se reactivará después
                       <div className="flex items-center gap-1.5 font-mono text-xs text-white">
                         <Clock className={`w-3.5 h-3.5 ${cardStyle.clockIconColor}`} strokeWidth={2.5} />
                         <span className={cardStyle.timeTextClass}>{event.time}</span>
                       </div>
-                      <div className={`flex items-start gap-1.5 font-sans text-xs ${cardStyle.descTextClass} leading-relaxed`}>
-                        <MapPin className={`w-3.5 h-3.5 ${cardStyle.pinIconColor} shrink-0 mt-0.5`} />
+                      */}
+                      <div className={`flex items-start gap-1.5 font-sans ${cardStyle.descTextClass} leading-relaxed`}>
+                        <MapPin className={`w-4 h-4 ${cardStyle.pinIconColor} shrink-0 mt-0.5`} />
                         {event.locationUrl ? (
                           <a 
                             href={event.locationUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className={`transition-all duration-150 ${cardStyle.locationClass}`}
+                            className={`transition-all duration-150 text-sm md:text-base font-bold ${cardStyle.locationClass}`}
                           >
                             {event.location}
                           </a>
                         ) : (
-                          <span>{event.location}</span>
+                          <span className="text-sm md:text-base font-bold">{event.location}</span>
                         )}
                       </div>
                     </div>
 
-                    {/* Center Column: Description and Speaker */}
-                    <div className="md:col-span-7 space-y-3 relative z-10">
+                    {/* Center Column: Description and Speaker (Extended to 9 columns since calendar button is hidden) */}
+                    <div className="md:col-span-9 space-y-3 relative z-10">
                       <div>
                         {event.title === 'Ejecutivo Distinguido Nacional' ? (
                           <button
@@ -718,23 +721,46 @@ export default function ScheduleSection() {
                           </button>
                         ) : (
                           <h4 className={`font-headline text-lg md:text-xl leading-snug ${cardStyle.titleClass}`}>
-                            {event.title}
+                            {event.speakerId === 'invitado-keynote' && linkedSpeaker ? (
+                              <span>Conferencia Magistral: {linkedSpeaker.role}</span>
+                            ) : event.id === 'd4-2' ? (
+                              <span className="inline-flex flex-wrap items-center gap-2">
+                                <span>Cumbre: Néstor Guerra</span>
+                                <svg className="w-8 h-5.5 shadow-md border border-white/10 rounded-sm inline-block shrink-0" viewBox="0 0 3 2" fill="none" xmlns="http://www.w3.org/2000/svg" title="España">
+                                  <rect width="3" height="2" fill="#AD1519" />
+                                  <rect y="0.5" width="3" height="1" fill="#FABD00" />
+                                </svg>
+                                <span>. CONFERENCISTA INTERNACIONAL IA & NEGOCIOS</span>
+                              </span>
+                            ) : (
+                              event.title
+                            )}
                           </h4>
                         )}
                       </div>
 
-                      {event.speakerName && (
-                        <p className="font-sans text-xs text-secondary-orange font-medium flex items-center gap-1">
-                          <UserCheck className="w-3.5 h-3.5" /> Ponente: <span className="text-white underline underline-offset-2 decoration-accent-orange/40">{event.speakerName}</span>
+                      {(event.speakerName || (event.speakerId && linkedSpeaker)) && (
+                        <p className="font-sans text-xs text-secondary-orange font-medium flex items-center gap-1.5">
+                          <UserCheck className="w-3.5 h-3.5" /> Ponente:{' '}
+                          <span className="text-white underline underline-offset-2 decoration-accent-orange/40 inline-flex items-center gap-1.5">
+                            {linkedSpeaker ? linkedSpeaker.name : event.speakerName}
+                            {event.speakerId === 'nestor' && (
+                              <svg className="w-6 h-4 shadow-sm border border-white/10 rounded-sm inline-block shrink-0" viewBox="0 0 3 2" fill="none" xmlns="http://www.w3.org/2000/svg" title="España">
+                                <rect width="3" height="2" fill="#AD1519" />
+                                <rect y="0.5" width="3" height="1" fill="#FABD00" />
+                              </svg>
+                            )}
+                          </span>
                         </p>
                       )}
 
                       <p className={`font-sans text-xs md:text-sm leading-relaxed ${cardStyle.descTextClass}`}>
-                        {event.description}
+                        {event.speakerId === 'invitado-keynote' && linkedSpeaker ? linkedSpeaker.bio : event.description}
                       </p>
                     </div>
 
-                    {/* Right Column: Interaction Action Selector */}
+                    {/* Right Column: Interaction Action Selector (Commented out but kept in code) */}
+                    {/* 
                     <div className="md:col-span-2 flex md:justify-end relative z-10">
                       <a
                         href={getGoogleCalendarUrl(event)}
@@ -746,6 +772,7 @@ export default function ScheduleSection() {
                         <CalendarCheck className="w-3.5 h-3.5" /> AGREGAR A CALENDARIO
                       </a>
                     </div>
+                    */}
 
                   </div>
                 );

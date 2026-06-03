@@ -6,22 +6,8 @@ interface RegistrationTicketsProps {
 }
 
 export default function RegistrationTickets({ onSelectModality }: RegistrationTicketsProps) {
-  const [showInquiryModal, setShowInquiryModal] = useState(false);
-  const [inquiryName, setInquiryName] = useState('');
-  const [inquiryCompany, setInquiryCompany] = useState('');
-  const [inquiryCount, setInquiryCount] = useState(5);
-  const [inquirySubmitted, setInquirySubmitted] = useState(false);
+  const whatsappUrl = import.meta.env.VITE_WHATSAPP_GROUP_URL || 'https://chat.whatsapp.com/GuhC4PJ0XCd6VZmVxFaGr7';
 
-  const handleInquirySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setInquirySubmitted(true);
-    setTimeout(() => {
-      setInquirySubmitted(false);
-      setShowInquiryModal(false);
-      setInquiryName('');
-      setInquiryCompany('');
-    }, 2500);
-  };
 
   return (
     <section className="py-12 bg-deep-blue border-t border-surface-card-high">
@@ -131,108 +117,35 @@ export default function RegistrationTickets({ onSelectModality }: RegistrationTi
 
         </div>
 
-        {/* Corporate / Billing Inquiry Contact details */}
-        <div 
-          onClick={() => setShowInquiryModal(true)}
-          className="mt-6 text-center p-8 border border-dashed border-outline/30 hover:border-secondary-orange cursor-pointer hover:bg-white/5 transition-all duration-300"
-        >
+        {/* Billing Inquiry Contact details */}
+        <div className="mt-6 text-center p-8 border border-dashed border-outline/30 hover:border-secondary-orange hover:bg-white/5 transition-all duration-300">
           <p className="font-sans text-sm text-on-surface-variant">
-            Para facturación o grupos corporativos:
+            Para facturación o informes:
           </p>
-          <p className="font-headline font-bold text-xl md:text-2xl mt-1.5 text-white hover:text-secondary-orange transition-colors">
-            Más informes: <span className="text-[#fe9800]">614 454 01 52</span>
-          </p>
-          <span className="inline-block mt-2 font-mono text-[9px] text-[#fe9800] tracking-wider uppercase border border-[#fe9800]/20 px-2 py-0.5">
-            📩 CLIC AQUÍ PARA COTIZAR DESCUENTOS POR VOLUMEN
-          </span>
+          <div className="flex flex-col justify-center items-center gap-4 mt-4">
+            <a 
+              href="tel:+526142278711"
+              className="font-headline font-bold text-xl md:text-2xl text-white hover:text-secondary-orange transition-colors flex items-center gap-2 select-text"
+            >
+              Más informes: <span className="text-[#fe9800]">614 227 87 11</span>
+            </a>
+            
+            <a 
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-[#05172b] hover:text-white px-5 py-2.5 font-mono text-xs font-black uppercase tracking-wider transition-all duration-200 hover:scale-105 shadow-[0_0_15px_rgba(37,211,102,0.2)] active:scale-95 cursor-pointer"
+            >
+              <svg className="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.66.986 3.292 1.503 4.883 1.504 5.428 0 9.845-4.414 9.848-9.841.002-2.63-1.018-5.101-2.871-6.958C16.6 2.002 14.127.985 11.999.985 6.574.985 2.158 5.4 2.156 10.826c-.001 1.688.455 3.336 1.32 4.793l-.988 3.606 3.693-.97c1.47.801 3.055 1.202 4.673 1.202H6.602a.01.01 0 0 0-.012.001zm11.53-3.691c-.296-.148-1.748-.862-2.019-.962-.27-.099-.467-.148-.662.148-.196.297-.76.962-.931 1.16-.171.197-.341.221-.637.074-1.28-.64-2.274-1.18-3.097-2.593-.217-.373.217-.346.621-1.152.069-.138.034-.259-.017-.358-.052-.099-.467-1.127-.64-1.54-.168-.405-.333-.351-.467-.358-.12-.006-.259-.007-.397-.007-.138 0-.363.052-.553.259-.19.208-.727.711-.727 1.733 0 1.022.744 2.01 1.848 2.158.11.015 2.137 3.262 5.178 4.57.72.311 1.282.497 1.72.636.724.23 1.381.197 1.902.12.58-.087 1.748-.714 1.993-1.401.246-.688.246-1.278.172-1.401-.074-.123-.27-.197-.566-.346z" />
+              </svg>
+              Únete al grupo de WhatsApp
+            </a>
+          </div>
         </div>
 
       </div>
 
-      {/* Corporate inquiry popup */}
-      {showInquiryModal && (
-        <div className="fixed inset-0 z-50 bg-deep-blue/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-surface-card border border-secondary-orange w-full max-w-md p-6 relative">
-            <button 
-              onClick={() => setShowInquiryModal(false)}
-              className="absolute top-4 right-4 text-on-surface-variant hover:text-white p-1"
-            >
-              <XIcon />
-            </button>
-            
-            <h4 className="font-headline font-black text-lg text-white mb-2 uppercase">SOLICITUD DE DESCUENTO CORPORATIVO</h4>
-            <p className="font-sans text-xs text-on-surface-variant mb-4">
-              Ofrecemos esquemas preferenciales para delegaciones de más de 3 integrantes de la misma organización.
-            </p>
-
-            {inquirySubmitted ? (
-              <div className="text-center py-6 space-y-3">
-                <ShieldCheck className="w-12 h-12 text-secondary-orange mx-auto animate-bounce" />
-                <p className="font-headline font-bold text-sm text-white">¡INFORME SOLICITADO!</p>
-                <p className="font-sans text-xs text-on-surface-variant">Un agente de EVM Chihuahua se comunicará en breve al 614 454 01 52 o por correo.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleInquirySubmit} className="space-y-3">
-                <div>
-                  <label className="font-mono text-[9px] text-on-surface-variant block mb-1">Nombre del Solicitante *</label>
-                  <input 
-                    type="text" 
-                    required 
-                    placeholder="Ej. Ing. Carlos Amador"
-                    value={inquiryName}
-                    onChange={(e) => setInquiryName(e.target.value)}
-                    className="w-full bg-surface-container-lowest border border-surface-variant p-2 text-xs text-white focus:outline-none focus:border-secondary-orange rounded-none"
-                  />
-                </div>
-                <div>
-                  <label className="font-mono text-[9px] text-on-surface-variant block mb-1">Empresa / Consorcio *</label>
-                  <input 
-                    type="text" 
-                    required 
-                    placeholder="Ej. Interceramic de Chihuahua"
-                    value={inquiryCompany}
-                    onChange={(e) => setInquiryCompany(e.target.value)}
-                    className="w-full bg-surface-container-lowest border border-surface-variant p-2 text-xs text-white focus:outline-none focus:border-secondary-orange rounded-none"
-                  />
-                </div>
-                <div>
-                  <label className="font-mono text-[9px] text-on-surface-variant block mb-1">Número de Asistentes en tu Grupo ({inquiryCount})</label>
-                  <input 
-                    type="range" 
-                    min={3} 
-                    max={25} 
-                    value={inquiryCount}
-                    onChange={(e) => setInquiryCount(parseInt(e.target.value))}
-                    className="w-full accent-secondary-orange mt-1.5"
-                  />
-                  <div className="flex justify-between font-mono text-[9px] text-on-surface-variant mt-1">
-                    <span>3 Personas</span>
-                    <span>25 Personas</span>
-                  </div>
-                </div>
-
-                <button 
-                  type="submit"
-                  id="btn-submit-corporate-inquiry"
-                  className="w-full bg-secondary-orange text-deep-blue py-3 font-mono text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-deep-blue transition-colors rounded-none mt-4"
-                >
-                  Enviar Petición de Cotización
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
-
     </section>
-  );
-}
-
-// Simple internal icon to avoid cluttering imports
-function XIcon() {
-  return (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-    </svg>
   );
 }
