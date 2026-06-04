@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Award, ChevronRight, FileText } from 'lucide-react';
+import { WHATSAPP_EJECUTIVO_URL } from '../constants/whatsapp';
 
 export default function ExecutiveHighlight() {
   const [showFullSemblance, setShowFullSemblance] = useState(false);
-  const whatsappUrl = import.meta.env.VITE_WHATSAPP_GROUP_URL || 'https://chat.whatsapp.com/invite/dummy';
 
   const achievements = [
     'Director General de Desarrollo Industrial en el Norte de México',
@@ -59,7 +59,7 @@ export default function ExecutiveHighlight() {
                   Únete a nuestro grupo oficial de WhatsApp para enterarte de la revelación al instante y recibir actualizaciones de la Convención:
                 </p>
                 <a
-                  href={whatsappUrl}
+                  href={WHATSAPP_EJECUTIVO_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-[#05172b] hover:text-white px-6 py-2.5 font-mono text-xs font-black uppercase tracking-wider transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(37,211,102,0.3)] active:scale-95 cursor-pointer"
