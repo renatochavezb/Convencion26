@@ -8,6 +8,7 @@ import TicketBadge from './components/TicketBadge';
 import ScheduleSection from './components/ScheduleSection';
 import ExecutiveHighlight from './components/ExecutiveHighlight';
 import LocationSection from './components/LocationSection';
+import FlightDiscountsSection from './components/FlightDiscountsSection';
 import Footer from './components/Footer';
 import { RegistrationDetails } from './types';
 import { Star, ShieldAlert, Award } from 'lucide-react';
@@ -195,6 +196,11 @@ export default function App() {
         ) : (
           <RegistrationTickets onSelectModality={(m) => setSelectedModality(m)} />
         )}
+      </div>
+
+      {/* Flight discounts — TAR & Volaris */}
+      <div id="flights" className="scroll-mt-28 reveal-on-scroll">
+        <FlightDiscountsSection />
       </div>
 
       {/* Interactive Sede / Location */}

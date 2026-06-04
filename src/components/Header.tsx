@@ -100,6 +100,13 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
           </button>
 
           <button 
+            onClick={() => handleScrollTo('flights')}
+            className="text-on-surface-variant hover:text-white leading-none tracking-widest uppercase transition-colors pointer-events-auto cursor-pointer"
+          >
+            Vuelos
+          </button>
+
+          <button 
             onClick={() => handleScrollTo('location')}
             className="text-on-surface-variant hover:text-white leading-none tracking-widest uppercase transition-colors pointer-events-auto cursor-pointer"
           >
@@ -162,6 +169,13 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
             className="text-left py-2 font-mono text-xs font-bold leading-none tracking-widest uppercase text-on-surface-variant hover:text-white transition-colors"
           >
             Registro
+          </button>
+
+          <button 
+            onClick={() => handleScrollTo('flights')}
+            className="text-left py-2 font-mono text-xs font-bold leading-none tracking-widest uppercase text-on-surface-variant hover:text-white transition-colors"
+          >
+            Vuelos
           </button>
 
           <button 
