@@ -113,6 +113,13 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
             Sede
           </button>
 
+          <button 
+            onClick={() => { window.location.hash = '#pasaporte'; }}
+            className="text-secondary-orange hover:text-white border border-secondary-orange/30 hover:border-secondary-orange px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest transition-all pointer-events-auto cursor-pointer"
+          >
+            Pasaporte 🎫
+          </button>
+
           {hasTicket ? (
             <button
               onClick={onViewTicket}
@@ -183,6 +190,16 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
             className="text-left py-2 font-mono text-xs font-bold leading-none tracking-widest uppercase text-on-surface-variant hover:text-white transition-colors"
           >
             Sede
+          </button>
+
+          <button 
+            onClick={() => {
+              setMobileMenuOpen(false);
+              window.location.hash = '#pasaporte';
+            }}
+            className="text-left py-2 font-mono text-xs font-bold leading-none tracking-widest uppercase text-secondary-orange hover:text-white transition-colors"
+          >
+            Pasaporte 🎫
           </button>
 
           {hasTicket ? (

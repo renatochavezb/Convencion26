@@ -10,19 +10,46 @@ import ExecutiveHighlight from './components/ExecutiveHighlight';
 import LocationSection from './components/LocationSection';
 import FlightDiscountsSection from './components/FlightDiscountsSection';
 import Footer from './components/Footer';
+import PassportPage from './components/PassportPage';
 import { RegistrationDetails } from './types';
-import { Star, ShieldAlert, Award } from 'lucide-react';
+import { Star, ShieldAlert, Award, RefreshCw, Ticket } from 'lucide-react';
 
 export default function App() {
   const [selectedModality, setSelectedModality] = useState<'individual' | 'pareja' | null>(null);
   const [registration, setRegistration] = useState<RegistrationDetails | null>(null);
+  const [currentHash, setCurrentHash] = useState(window.location.hash);
 
-  // Load registration from localStorage if present
+  // Listen to hash changes for simple routing
+  useEffect(() => {
+    const handleHashChange = () => {
+      setCurrentHash(window.location.hash);
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Load registration from localStorage if present and sync with database
   useEffect(() => {
     try {
       const cached = localStorage.getItem('comev_badge_2026');
       if (cached) {
-        setRegistration(JSON.parse(cached));
+        const parsed = JSON.parse(cached);
+        setRegistration(parsed);
+
+        // Sync with MongoDB backend in the background
+        if (parsed.email) {
+          fetch(`/api/register/${encodeURIComponent(parsed.email)}`)
+            .then(res => {
+              if (res.ok) return res.json();
+              throw new Error('Not found');
+            })
+            .then(data => {
+              setRegistration(data);
+              localStorage.setItem('comev_badge_2026', JSON.stringify(data));
+            })
+            .catch(err => console.log('Database sync offline/unavailable, using cached', err));
+        }
       }
     } catch (e) {
       console.error('Failed to load credentials cache', e);
@@ -51,28 +78,33 @@ export default function App() {
     };
   }, []);
 
-  const handleRegistrationSuccess = (data: RegistrationDetails) => {
+  const handleRegistrationSuccess = async (data: RegistrationDetails) => {
     setRegistration(data);
     setSelectedModality(null);
     try {
       localStorage.setItem('comev_badge_2026', JSON.stringify(data));
+      // Save to MongoDB database
+      await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
     } catch (e) {
-      console.error('Failed to cache credentials', e);
+      console.error('Failed to cache credentials or save to database', e);
     }
 
-    // Scroll smoothly to registration block to focus on the newly produced ticket
+    // Redirect directly to passport page
     setTimeout(() => {
-      const view = document.getElementById('registration-pass');
-      if (view) {
-        view.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }, 100);
+      window.location.hash = '#pasaporte';
+    }, 150);
   };
 
   const handleClearRegistration = () => {
     if (confirm('¿Estás seguro de que deseas eliminar tu carnet registrado en este dispositivo? Deberás registrarte nuevamente.')) {
       setRegistration(null);
       localStorage.removeItem('comev_badge_2026');
+      localStorage.removeItem('comev_perfil');
+      localStorage.removeItem('comev_folio');
     }
   };
 
@@ -84,11 +116,12 @@ export default function App() {
   };
 
   const handleViewTicketScroll = () => {
-    const section = document.getElementById('registration-pass');
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    window.location.hash = '#pasaporte';
   };
+
+  if (currentHash === '#pasaporte') {
+    return <PassportPage />;
+  }
 
   return (
     <div className="bg-deep-blue text-on-surface font-sans min-h-screen selection:bg-secondary-orange selection:text-deep-blue">
@@ -176,21 +209,46 @@ export default function App() {
       {/* Ticket Registrations Section */}
       <div id="registration" className="scroll-mt-28 reveal-on-scroll">
         {registration ? (
-          <div id="registration-pass" className="bg-gradient-to-b from-deep-blue via-[#041221] to-deep-blue py-12 border-t border-surface-card">
+          <div id="registration-pass" className="bg-gradient-to-b from-deep-blue via-[#041221] to-deep-blue py-16 border-t border-surface-card">
             <div className="max-w-[1280px] mx-auto px-5 md:px-[80px]">
-              
-              <div className="text-center mb-10">
-                <h3 className="font-headline font-black text-3xl uppercase text-white">TU PASE DE ACCESO</h3>
-                <p className="font-sans text-xs text-on-surface-variant mt-1">Este carnet valida tu entrada a las áreas de conferencias, talleres y comidas oficiales.</p>
-              </div>
+              <div className="max-w-xl mx-auto bg-[#001021] border-2 border-secondary-orange/40 p-8 text-center rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                <div className="absolute inset-[3px] border border-outline/10 rounded-xl pointer-events-none" />
+                <div className="absolute inset-0 grid-pattern opacity-10 pointer-events-none" />
+                
+                <div className="relative z-10 space-y-6">
+                  <div className="inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 px-4 py-1.5 font-mono text-[10px] font-bold uppercase tracking-widest border border-emerald-500/20 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
+                    REGISTRO CONFIRMADO
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-headline font-black text-white text-2xl uppercase tracking-tight">¡TU PASE ESTÁ LISTO!</h4>
+                    <p className="font-sans text-xs text-on-surface-variant mt-2 leading-relaxed max-w-sm mx-auto">
+                      Tu carnet digital y pasaporte de networking han sido generados. Accede a ellos desde tu teléfono para registrar asistencia y conectar con otros empresarios.
+                    </p>
+                  </div>
 
-              <div className="max-w-xl mx-auto">
-                <TicketBadge 
-                  registration={registration} 
-                  onClear={handleClearRegistration} 
-                />
-              </div>
+                  <div className="border-t border-outline/10 my-4" />
 
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+                    <button
+                      onClick={() => { window.location.hash = '#pasaporte'; }}
+                      className="w-full sm:w-auto bg-secondary-orange hover:bg-accent-orange text-deep-blue font-headline font-black text-xs uppercase tracking-widest py-3.5 px-6 rounded-xl transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer border-none active:scale-[0.98] shadow-md shadow-secondary-orange/10 shrink-0"
+                    >
+                      <Ticket className="w-4 h-4 text-deep-blue" />
+                      <span>Ir a mi Pasaporte Digital</span>
+                    </button>
+                    
+                    <button
+                      onClick={handleClearRegistration}
+                      className="w-full sm:w-auto border border-outline/40 text-on-surface-variant hover:text-white font-mono text-[10px] leading-none tracking-widest py-3.5 px-5 transition-all uppercase flex items-center justify-center gap-1.5 hover:bg-white/5 rounded-xl cursor-pointer shrink-0"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" />
+                      <span>Registrar Otro</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         ) : (
