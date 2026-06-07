@@ -20,6 +20,7 @@ interface PassportData {
   objetivo: string;
   sellos: number[]; // Array of indices (1 to 7) of earned stamps
   photoUrl: string;
+  bannerUrl: string;
 }
 
 const INDUSTRIAS = [
@@ -93,13 +94,15 @@ export default function PassportPage() {
     reto: '',
     objetivo: '',
     sellos: [],
-    photoUrl: ''
+    photoUrl: '',
+    bannerUrl: ''
   });
 
   const [isEditing, setIsEditing] = useState<boolean>(true);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
+  const bannerInputRef = useRef<HTMLInputElement>(null);
 
   // Initialize folio and load data
   useEffect(() => {
@@ -238,6 +241,46 @@ export default function PassportPage() {
     reader.readAsDataURL(file);
   };
 
+  const handleBannerUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      if (ev.target?.result) {
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 600;
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            }
+          } else {
+            if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+            setData(prev => ({ ...prev, bannerUrl: compressedBase64 }));
+          }
+        };
+        img.src = ev.target!.result as string;
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSave = async () => {
     localStorage.setItem('comev_perfil', JSON.stringify(data));
     
@@ -295,161 +338,203 @@ export default function PassportPage() {
           {/* LEFT COLUMN: Sticky Live Passport Badge Preview */}
           <div className="lg:col-span-5 lg:sticky lg:top-24 flex justify-center w-full">
             
-            {/* The Badge Card Container (Premium Glassmorphic Redesign) */}
-            <div className="relative w-full max-w-[420px] bg-gradient-to-b from-[#001c38]/90 to-[#001021]/95 border-2 border-secondary-orange/60 rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(254,152,0,0.15)] flex flex-col justify-between pt-4 px-4 pb-6 xs:pt-5 xs:px-5 xs:pb-7 md:p-8">
-              {/* Back button inside the card */}
-              <button
-                onClick={() => { window.location.hash = ''; }}
-                className="absolute top-4 left-4 z-30 p-2 rounded-full border border-outline/25 bg-[#000d1a]/60 text-secondary-orange hover:text-white cursor-pointer hover:border-secondary-orange transition-all duration-200"
-                aria-label="Volver a Inicio"
-              >
-                <ArrowLeft className="w-4 h-4" />
-              </button>
-
-              {/* Outer double border glow */}
-              <div className="absolute inset-[3px] border border-outline/25 rounded-xl pointer-events-none" />
-              {/* Grid Background in card */}
-              <div className="absolute inset-0 grid-pattern opacity-[0.25] pointer-events-none rounded-2xl" />
+            {/* Discord-style Profile Card Preview */}
+            <div className="relative w-full max-w-[420px] bg-[#0a0f1d] border-2 border-outline/25 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col text-on-surface">
               
-              {/* Top Orange Header bar */}
-              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-secondary-orange via-amber-500 to-secondary-orange" />
-              {/* Bottom Orange Footer bar */}
-              <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-secondary-orange via-amber-500 to-secondary-orange" />
-
-              {/* CARD CONTENT HEADER */}
-              <div className="relative z-10 text-center border-b border-outline/20 pb-2.5">
-                <span className="font-mono text-[9px] xs:text-[10px] md:text-xs font-bold text-secondary-orange tracking-widest uppercase opacity-90 block">
+              {/* 1. PROFILE HEADER BANNER */}
+              <div 
+                className="h-[100px] xs:h-[120px] relative overflow-hidden bg-gradient-to-r from-deep-blue via-[#001021] to-secondary-orange/30 shrink-0 bg-cover bg-center"
+                style={{ backgroundImage: data.bannerUrl ? `url(${data.bannerUrl})` : 'none' }}
+              >
+                {/* Mesh grid pattern */}
+                <div className="absolute inset-0 grid-pattern opacity-[0.2] pointer-events-none" />
+                {/* Tech circles or lines glow */}
+                <div className="absolute -right-10 -top-10 w-28 h-28 rounded-full bg-secondary-orange/15 blur-2xl pointer-events-none" />
+                
+                {/* Banner Text overlay */}
+                <div className="absolute bottom-2.5 right-4 font-sans text-[8px] xs:text-[9px] font-black text-secondary-orange tracking-widest uppercase opacity-85">
                   CONVENCIÓN NACIONAL * COMEV 2026
-                </span>
-                <h3 className="font-headline font-black text-2xl xs:text-3xl md:text-4xl tracking-tighter text-white uppercase mt-1 leading-none">
-                  PASAPORTE
-                </h3>
-                <h4 className="font-headline font-black text-xs xs:text-sm md:text-base tracking-[1.5px] xs:tracking-[2px] md:tracking-[3px] text-secondary-orange italic leading-none mt-1.5 pl-[1.5px] uppercase">
-                  ¡VIVA CHIHUAHUA!
-                </h4>
-                <div className="flex items-center justify-center gap-2 mt-2">
-                  <div className="w-8 h-px bg-secondary-orange/40" />
-                  <Sparkles className="w-2.5 h-2.5 text-accent-orange/80 animate-pulse" />
-                  <div className="w-8 h-px bg-secondary-orange/40" />
                 </div>
               </div>
 
-              {/* MIDDLE AREA: Photo & Identification */}
-              <div className="relative z-10 flex flex-col items-center py-2 xs:py-3 md:py-6 grow justify-center min-h-0">
-                
-                {/* Photo & Frame with pulsing border glow */}
+              {/* 2. AVATAR & BADGES ROW */}
+              <div className="relative h-[40px] px-4 xs:px-5 flex items-center justify-between shrink-0">
+                {/* Avatar (circular, overlaps banner) */}
                 <div 
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-24 h-24 xs:w-28 xs:h-28 md:w-32 md:h-32 rounded-2xl bg-[#000d1a] border-2 border-secondary-orange/60 overflow-hidden cursor-pointer group hover:border-secondary-orange transition-all duration-300 relative flex items-center justify-center mb-2 xs:mb-3 md:mb-4 shadow-[0_0_20px_rgba(254,152,0,0.2)] shrink-0"
+                  className="absolute -top-[36px] xs:-top-[42px] left-4 xs:left-5 w-18 h-18 xs:w-20 xs:h-20 rounded-full border-[5px] border-[#0a0f1d] bg-[#000d1a] overflow-hidden shadow-lg flex items-center justify-center shrink-0 cursor-pointer group hover:scale-105 transition-transform"
                 >
                   {data.photoUrl ? (
-                    <img 
-                      src={data.photoUrl} 
-                      alt="Foto de perfil" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                    />
+                    <img src={data.photoUrl} alt="Foto de perfil" className="w-full h-full object-cover group-hover:opacity-90" />
                   ) : (
                     <div className="text-center p-2">
-                      <Camera className="w-6 h-6 xs:w-8 xs:h-8 text-on-surface-variant group-hover:text-secondary-orange mx-auto mb-1 transition-colors" />
-                      <span className="font-mono text-[8px] xs:text-[9px] text-on-surface-variant font-bold tracking-widest block uppercase">
+                      <Camera className="w-5 h-5 text-on-surface-variant group-hover:text-secondary-orange mx-auto mb-0.5" />
+                      <span className="font-sans text-[6px] text-on-surface-variant font-black tracking-widest block uppercase">
                         FOTO
                       </span>
                     </div>
                   )}
-                  {/* Photo Overlay hover effect */}
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="font-mono text-xs text-white font-bold tracking-wider uppercase">
-                      Cambiar
-                    </span>
-                  </div>
                 </div>
 
-                {/* Name & Title (Larger & Premium) */}
-                <div className="text-center w-full px-2">
-                  <h5 className="font-headline font-black text-xl xs:text-2xl md:text-3xl uppercase tracking-tight text-white leading-tight break-words">
-                    {data.nombre || 'NOMBRE COMPLETO'}
-                  </h5>
-                  <p className="font-mono text-xs xs:text-sm md:text-base text-secondary-orange font-bold uppercase tracking-wider mt-0.5 md:mt-1 truncate">
-                    {data.cargo || 'CARGO / PUESTO'}
-                  </p>
-                  <p className="font-mono text-[10px] xs:text-xs md:text-sm text-on-surface-variant uppercase tracking-wider leading-none mt-1 md:mt-1.5 truncate">
-                    {data.empresa || 'EMPRESA'}
-                  </p>
+                {/* Stamps as Discord Badges */}
+                <div className="ml-auto flex flex-wrap gap-1 justify-end max-w-[200px]">
+                  {SELLOS_INFO.map(s => {
+                    const earned = data.sellos.includes(s.id);
+                    return (
+                      <div 
+                        key={s.id} 
+                        className={`w-6 h-6 xs:w-7 xs:h-7 rounded-full border flex items-center justify-center text-[9px] font-black font-headline transition-all duration-300 ${
+                          earned 
+                            ? `${s.bgClass} ${s.borderClass} ${s.textClass} scale-105 shadow-[0_0_8px_rgba(254,152,0,0.25)]` 
+                            : 'border-outline/25 bg-[#05070c] text-outline/35 border-dashed'
+                        }`}
+                        title={`${s.name}: ${earned ? 'Validado' : 'Pendiente'}`}
+                      >
+                        {s.id}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* CARD DETAILS FOOTER - HIDE FOLIO AND LARGER TEXT */}
-              <div className="relative z-10 border-t border-outline/25 pt-2.5 xs:pt-3 md:pt-4 flex flex-col gap-2.5 xs:gap-3 md:gap-4 shrink-0">
-                <div className="grid grid-cols-2 text-[9px] xs:text-[10px] md:text-xs font-mono leading-tight">
-                  <div>
-                    <span className="text-secondary-orange/80 uppercase block tracking-wider font-semibold">DELEGACIÓN</span>
-                    <span className="text-white font-bold text-xs xs:text-sm md:text-base uppercase block mt-0.5 md:mt-1 truncate">{data.delegacion || '—'}</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-secondary-orange/80 uppercase block tracking-wider font-semibold">MODALIDAD</span>
-                    <span className="text-white font-bold text-xs xs:text-sm md:text-base uppercase block mt-0.5 md:mt-1 truncate">{data.modalidad || '—'}</span>
-                  </div>
+              {/* 3. USER PROFILE INFO */}
+              <div className="px-4 xs:px-5 pt-3 pb-1.5 space-y-1 shrink-0">
+                <h5 className="font-headline font-black italic uppercase text-xl xs:text-2xl tracking-tight text-white leading-tight break-words">
+                  {data.nombre || 'NOMBRE COMPLETO'}
+                </h5>
+                <div className="flex flex-wrap items-center gap-x-2 text-[10px] font-sans font-black uppercase tracking-wider">
+                  <span className="text-secondary-orange">{data.cargo || 'CARGO / PUESTO'}</span>
+                  {data.empresa && (
+                    <>
+                      <span className="text-outline/40">•</span>
+                      <span className="text-on-surface-variant">{data.empresa}</span>
+                    </>
+                  )}
                 </div>
 
-                <div className="border-t border-outline/15 my-0" />
+                {/* Custom Status (Objective) */}
+                {data.objetivo && (
+                  <div className="flex items-start gap-1.5 bg-[#000d1a]/40 border border-outline/10 p-2 rounded-xl text-[10px] xs:text-xs font-sans text-on-surface-variant italic mt-2">
+                    <span className="text-secondary-orange text-xs leading-none">💬</span>
+                    <span className="leading-snug">"{data.objetivo}"</span>
+                  </div>
+                )}
+              </div>
 
-                {/* Earned Stamp Icons Mini list inside card */}
-                <div className="flex flex-col gap-1.5 md:gap-2">
-                  <span className="font-mono text-[9px] xs:text-[10px] md:text-xs text-secondary-orange font-bold tracking-widest text-center block uppercase">
-                    SELLOS DE ACTIVIDADES
-                  </span>
-                  
-                  {/* Minified stamp row */}
-                  <div className="flex justify-between px-1">
-                    {SELLOS_INFO.map(s => {
-                      const earned = data.sellos.includes(s.id);
-                      return (
-                        <div 
-                          key={s.id} 
-                          className={`w-7 h-7 xs:w-8 xs:h-8 md:w-9 md:h-9 rounded-full border-2 flex items-center justify-center text-xs md:text-sm font-black font-headline transition-all duration-300 ${
-                            earned 
-                              ? `${s.bgClass} ${s.borderClass} ${s.textClass} scale-105 md:scale-110 shadow-[0_0_8px_rgba(254,152,0,0.25)]` 
-                              : 'border-outline/30 bg-[#071727] text-outline'
-                          }`}
-                          title={`${s.name}: ${earned ? 'Ganado' : 'Pendiente'}`}
-                        >
-                          {s.id}
+              {/* Divider */}
+              <div className="mx-4 xs:mx-5 border-t border-outline/10 my-1.5" />
+
+              {/* 4. SCROLLABLE DETAILS AREA */}
+              <div className="px-4 xs:px-5 py-1.5 space-y-4 overflow-y-auto max-h-[320px] custom-scrollbar">
+                
+                {/* SOBRE MÍ */}
+                <div className="space-y-1">
+                  <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
+                    Sobre Mí
+                  </h6>
+                  <p className="text-[11px] text-on-surface-variant leading-relaxed">
+                    {data.descripcion || 'Sin descripción profesional.'}
+                  </p>
+                </div>
+
+                {/* RETO DE NEGOCIO */}
+                {data.reto && (
+                  <div className="space-y-1">
+                    <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
+                      Mi Mayor Reto de Negocio
+                    </h6>
+                    <p className="text-[11px] text-on-surface-variant leading-relaxed">
+                      {data.reto}
+                    </p>
+                  </div>
+                )}
+
+                {/* ROLES DE NETWORKING (BUSCO / OFREZCO) */}
+                {(data.busco.length > 0 || data.ofrezco.length > 0) && (
+                  <div className="space-y-2">
+                    <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
+                      Roles de Networking
+                    </h6>
+                    
+                    <div className="flex flex-col gap-2">
+                      {data.busco.length > 0 && (
+                        <div className="space-y-1">
+                          <span className="text-[8px] font-sans font-bold text-outline uppercase tracking-wider block">Busco en el congreso:</span>
+                          <div className="flex flex-wrap gap-1">
+                            {data.busco.map(b => (
+                              <span 
+                                key={b} 
+                                className="flex items-center gap-1 bg-[#0e1726] border border-blue-500/25 rounded px-2 py-0.5 text-[8px] font-sans font-black uppercase text-blue-300"
+                              >
+                                <span className="w-1 h-1 rounded-full bg-blue-400" />
+                                {b}
+                              </span>
+                            ))}
+                          </div>
                         </div>
-                      );
-                    })}
-                  </div>
+                      )}
 
-                  {/* Minified progress info */}
-                  <div className="flex items-center justify-between text-[10px] md:text-[11px] font-mono text-on-surface-variant mt-0.5 md:mt-1 px-1">
-                    <span>PROGRESO: {earnedCount} / 7</span>
-                    <span className="text-secondary-orange font-bold">{progressPercent}%</span>
+                      {data.ofrezco.length > 0 && (
+                        <div className="space-y-1">
+                          <span className="text-[8px] font-sans font-bold text-outline uppercase tracking-wider block">Puedo ofrecer:</span>
+                          <div className="flex flex-wrap gap-1">
+                            {data.ofrezco.map(o => (
+                              <span 
+                                key={o} 
+                                className="flex items-center gap-1 bg-[#091f16] border border-emerald-500/25 rounded px-2 py-0.5 text-[8px] font-sans font-black uppercase text-emerald-300"
+                              >
+                                <span className="w-1 h-1 rounded-full bg-emerald-400" />
+                                {o}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="w-full bg-[#0b2136] h-1.5 md:h-2 rounded-full overflow-hidden">
-                    <div 
-                      className="bg-secondary-orange h-full rounded-full transition-all duration-500 ease-out" 
-                      style={{ width: `${progressPercent}%` }}
-                    />
+                )}
+
+                {/* DETALLES DE ACREDITACIÓN */}
+                <div className="space-y-1.5">
+                  <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
+                    Detalles de Acreditación
+                  </h6>
+                  <div className="grid grid-cols-2 gap-2 bg-[#000d1a]/30 border border-outline/10 p-2 rounded-lg text-[10px] font-sans uppercase">
+                    <div>
+                      <span className="text-outline/60 text-[8px] font-black block">Delegación</span>
+                      <span className="text-white font-black block mt-0.5">{data.delegacion || '—'}</span>
+                    </div>
+                    <div>
+                      <span className="text-outline/60 text-[8px] font-black block">Modalidad</span>
+                      <span className="text-white font-black block mt-0.5">{data.modalidad || '—'}</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* QR Code section */}
-                <div className="border-t border-outline/15 my-0" />
-                <div className="flex items-center justify-between bg-[#000d1a]/60 border border-outline/20 p-2 md:p-2.5 rounded-xl">
-                  <div className="text-left font-mono">
-                    <span className="text-[8px] xs:text-[9px] md:text-[10px] text-on-surface-variant uppercase block">COMEV CONNECT</span>
-                    <span className="text-[10px] xs:text-xs md:text-sm text-white font-black uppercase block tracking-wider">NETWORKING PASS</span>
-                  </div>
-                  
-                  {/* Vector QR Code */}
-                  <div className="w-10 h-10 xs:w-11 xs:h-11 md:w-12 md:h-12 bg-white p-1 rounded-md flex items-center justify-center shrink-0 shadow-md">
-                    <svg viewBox="0 0 25 25" className="w-full h-full text-deep-blue" shapeRendering="crispEdges">
-                      <path d="M0 0h7v7H0zm1 1v5h5V1zm1 1h3v3H2zm8-2h1v3h-1zm3 0h1v1h-1zm1 0h3v1h-3zm4 0h3v7h-3zm1 1v5h1V1zm-4 1h1v1h-1zm-2 1h2v1h-2zm-3 1h2v1H8zm5 0h1v1h-1zm-5 2h1v1H8zm1 1h2v1H9zm1 1h2v1h-2zm1-8h1v1h-1zm0 3h1v1h-1zm2 1h1v1h-1zm1 0h1v2h-1zm-3 2h2v1h-2zm-5 5h1v1H0zm1 1v5h5v-5zm1 1h3v3H2zm6-2h1v3H8zm2 0h2v1h-2zm4 0h1v2h-1zm-3 1h2v1h-2zm7 0h3v1h-3zm-9 2h1v1H8zm2 0h1v2h-1zm6 0h1v1h-1zm2 0h1v3h-1zm-7 1h1v1H9zm3 0h2v1h-2zm-2 2h3v1h-3zm6 0h2v1h-2zm1 1h1v1h-1z" fill="currentColor"/>
-                    </svg>
+                {/* NETWORKING PASS / QR CODE */}
+                <div className="space-y-1.5">
+                  <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
+                    Pase de Entrada y Connect
+                  </h6>
+                  <div className="flex items-center justify-between bg-[#000d1a]/60 border border-outline/20 p-2.5 rounded-xl">
+                    <div className="text-left font-sans uppercase">
+                      <span className="text-[7px] text-on-surface-variant font-bold block">COMEV CONNECT</span>
+                      <span className="text-[10px] text-white font-black block tracking-wider">NETWORKING PASS</span>
+                    </div>
+                    
+                    <div className="w-10 h-10 bg-white p-1 rounded flex items-center justify-center shrink-0 shadow-md">
+                      <svg viewBox="0 0 25 25" className="w-full h-full text-deep-blue" shapeRendering="crispEdges">
+                        <path d="M0 0h7v7H0zm1 1v5h5V1zm1 1h3v3H2zm8-2h1v3h-1zm3 0h1v1h-1zm1 0h3v1h-3zm4 0h3v7h-3zm1 1v5h1V1zm-4 1h1v1h-1zm-2 1h2v1h-2zm-3 1h2v1H8zm5 0h1v1h-1zm-5 2h1v1H8zm1 1h2v1H9zm1 1h2v1h-2zm1-8h1v1h-1zm0 3h1v1h-1zm2 1h1v1h-1zm1 0h1v2h-1zm-3 2h2v1h-2zm-5 5h1v1H0zm1 1v5h5v-5zm1 1h3v3H2zm6-2h1v3H8zm2 0h2v1h-2zm4 0h1v2h-1zm-3 1h2v1h-2zm7 0h3v1h-3zm-9 2h1v1H8zm2 0h1v2h-1zm6 0h1v1h-1zm2 0h1v3h-1zm-7 1h1v1H9zm3 0h2v1h-2zm-2 2h3v1h-3zm6 0h2v1h-2zm1 1h1v1h-1z" fill="currentColor"/>
+                      </svg>
+                    </div>
                   </div>
                 </div>
+
               </div>
-            </div>
 
+              {/* Footer Bottom Bar decoration */}
+              <div className="h-1 bg-gradient-to-r from-secondary-orange via-amber-500 to-secondary-orange shrink-0 mt-auto" />
+            </div>
           </div>
 
           {/* RIGHT COLUMN: Form & Stamp Toggler */}
@@ -471,6 +556,15 @@ export default function PassportPage() {
               onChange={handlePhotoUpload} 
               accept="image/*" 
               capture="user"
+              className="hidden" 
+            />
+
+            {/* BANNER INPUT UNDER THE HOOD */}
+            <input 
+              type="file" 
+              ref={bannerInputRef}
+              onChange={handleBannerUpload} 
+              accept="image/*" 
               className="hidden" 
             />
 
@@ -504,6 +598,41 @@ export default function PassportPage() {
                   >
                     Subir de Galería
                   </button>
+                </div>
+              </div>
+            </div>
+
+            {/* PORTADA DE LA EMPRESA (BANNER) */}
+            <div className="bg-surface-card border border-outline/30 rounded-xl p-6 shadow-md flex flex-col sm:flex-row items-center gap-6">
+              <div className="w-32 h-16 shrink-0 rounded-lg bg-[#001021] border border-secondary-orange/50 overflow-hidden relative flex items-center justify-center shadow-inner shadow-black/60">
+                {data.bannerUrl ? (
+                  <img src={data.bannerUrl} alt="Portada de la empresa" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-r from-deep-blue via-[#001021] to-secondary-orange/30" />
+                )}
+              </div>
+              <div className="space-y-3 flex-1 text-center sm:text-left">
+                <h5 className="font-headline font-bold text-white text-base">Portada de la Empresa (Banner)</h5>
+                <p className="text-xs text-on-surface-variant font-sans leading-relaxed">
+                  Sube una foto de tu empresa o banner publicitario que se usará como fondo de la cabecera de tu pasaporte.
+                </p>
+                <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+                  <button
+                    type="button"
+                    onClick={() => bannerInputRef.current?.click()}
+                    className="flex items-center gap-1.5 px-3.5 py-2 bg-[#001021] border border-outline/30 text-white font-mono text-[10px] font-bold uppercase tracking-wider rounded-lg transition-colors hover:border-secondary-orange/50 cursor-pointer"
+                  >
+                    Subir de Galería
+                  </button>
+                  {data.bannerUrl && (
+                    <button
+                      type="button"
+                      onClick={() => setData(prev => ({ ...prev, bannerUrl: '' }))}
+                      className="flex items-center gap-1.5 px-3.5 py-2 bg-red-500/10 border border-red-500/30 text-red-400 font-mono text-[10px] font-bold uppercase tracking-wider rounded-lg transition-colors hover:bg-red-500/20 cursor-pointer"
+                    >
+                      Eliminar
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -888,16 +1017,19 @@ export default function PassportPage() {
           <div className="relative w-full md:max-w-[480px] bg-[#0a0f1d] md:border-2 md:border-outline/25 md:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col text-on-surface">
             
             {/* 1. PROFILE HEADER BANNER */}
-            <div className="h-[110px] xs:h-[130px] relative overflow-hidden bg-gradient-to-r from-deep-blue via-[#001021] to-secondary-orange/30 shrink-0">
+            <div 
+              className="h-[110px] xs:h-[130px] relative overflow-hidden bg-gradient-to-r from-deep-blue via-[#001021] to-secondary-orange/30 shrink-0 bg-cover bg-center"
+              style={{ backgroundImage: data.bannerUrl ? `url(${data.bannerUrl})` : 'none' }}
+            >
               {/* Mesh grid pattern */}
-              <div className="absolute inset-0 grid-pattern opacity-[0.3] pointer-events-none" />
+              <div className="absolute inset-0 grid-pattern opacity-[0.2] pointer-events-none" />
               {/* Tech circles or lines glow */}
               <div className="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-secondary-orange/20 blur-2xl pointer-events-none" />
               
               {/* Back Arrow button */}
               <button
                 onClick={() => { window.location.hash = ''; }}
-                className="absolute top-4 left-4 z-30 p-2 rounded-full border border-outline/25 bg-[#000d1a]/80 text-secondary-orange hover:text-white cursor-pointer hover:border-secondary-orange hover:scale-105 transition-all duration-200"
+                className="absolute top-4 left-4 z-30 p-2 rounded-full border border-outline/25 bg-[#000d1a]/80 text-secondary-orange hover:text-white cursor-pointer hover:border-secondary-orange hover:scale-105 transition-all duration-200 backdrop-blur-sm"
                 aria-label="Volver a Inicio"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -906,14 +1038,14 @@ export default function PassportPage() {
               {/* Edit Profile button */}
               <button
                 onClick={() => setIsEditing(true)}
-                className="absolute top-4 right-4 z-30 flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-secondary-orange/40 bg-[#000d1a]/80 text-secondary-orange hover:text-white cursor-pointer hover:border-secondary-orange hover:scale-105 transition-all duration-200 font-mono text-[10px] font-bold uppercase tracking-wider"
+                className="absolute top-4 right-4 z-30 flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-secondary-orange/40 bg-[#000d1a]/80 text-secondary-orange hover:text-white cursor-pointer hover:border-secondary-orange hover:scale-105 transition-all duration-200 font-sans text-[10px] font-black uppercase tracking-wider backdrop-blur-sm"
               >
                 <Edit3 className="w-3.5 h-3.5" />
                 <span>Editar</span>
               </button>
 
               {/* Banner Text overlay */}
-              <div className="absolute bottom-3 right-4 font-mono text-[9px] xs:text-[10px] font-bold text-secondary-orange tracking-widest uppercase opacity-80">
+              <div className="absolute bottom-3 right-4 font-sans text-[8px] xs:text-[9px] font-black text-secondary-orange tracking-widest uppercase opacity-85">
                 CONVENCIÓN NACIONAL * COMEV 2026
               </div>
             </div>
@@ -921,13 +1053,13 @@ export default function PassportPage() {
             {/* 2. AVATAR & BADGES ROW */}
             <div className="relative h-[45px] px-4 xs:px-6 flex items-center justify-between shrink-0">
               {/* Avatar (circular, overlaps banner) */}
-              <div className="absolute -top-[42px] xs:-top-[48px] left-4 xs:left-6 w-20 h-20 xs:w-24 xs:h-24 rounded-full border-[6px] border-[#0a0f1d] bg-[#000d1a] overflow-hidden shadow-lg flex items-center justify-center shrink-0">
+              <div className="absolute -top-[42px] xs:-top-[48px] left-4 xs:left-6 w-20 h-20 xs:w-24 xs:h-24 rounded-full border-[6px] border-[#0a0f1d] bg-[#0a0f1d] overflow-hidden shadow-lg flex items-center justify-center shrink-0">
                 {data.photoUrl ? (
                   <img src={data.photoUrl} alt="Foto de perfil" className="w-full h-full object-cover" />
                 ) : (
-                  <div className="text-center p-2">
+                  <div className="text-center p-2 bg-[#000d1a] w-full h-full flex flex-col justify-center">
                     <Camera className="w-6 h-6 xs:w-8 xs:h-8 text-on-surface-variant mx-auto mb-0.5" />
-                    <span className="font-mono text-[7px] xs:text-[8px] text-on-surface-variant font-bold tracking-widest block uppercase">
+                    <span className="font-sans text-[7px] xs:text-[8px] text-on-surface-variant font-black tracking-widest block uppercase">
                       SIN FOTO
                     </span>
                   </div>
@@ -957,14 +1089,14 @@ export default function PassportPage() {
 
             {/* 3. USER PROFILE INFO */}
             <div className="px-4 xs:px-6 pt-4 pb-2 space-y-1.5 shrink-0">
-              <h5 className="font-headline font-black text-2xl xs:text-3xl uppercase tracking-tight text-white leading-tight break-words">
+              <h5 className="font-headline font-black italic uppercase text-2xl xs:text-3xl tracking-tight text-white leading-tight break-words">
                 {data.nombre || 'NOMBRE COMPLETO'}
               </h5>
-              <div className="flex flex-wrap items-center gap-x-2 text-xs font-mono font-bold uppercase">
-                <span className="text-secondary-orange tracking-wider">{data.cargo || 'CARGO / PUESTO'}</span>
+              <div className="flex flex-wrap items-center gap-x-2 text-xs font-sans font-black uppercase tracking-wider">
+                <span className="text-secondary-orange">{data.cargo || 'CARGO / PUESTO'}</span>
                 {data.empresa && (
                   <>
-                    <span className="text-outline/40">•</span>
+                    <span className="text-outline/45">•</span>
                     <span className="text-on-surface-variant">{data.empresa}</span>
                   </>
                 )}
@@ -987,7 +1119,7 @@ export default function PassportPage() {
               
               {/* SOBRE MÍ */}
               <div className="space-y-1.5">
-                <h6 className="text-[10px] font-mono font-bold text-secondary-orange tracking-widest uppercase">
+                <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
                   Sobre Mí
                 </h6>
                 <p className="text-xs text-on-surface-variant leading-relaxed">
@@ -998,7 +1130,7 @@ export default function PassportPage() {
               {/* RETO DE NEGOCIO */}
               {data.reto && (
                 <div className="space-y-1.5">
-                  <h6 className="text-[10px] font-mono font-bold text-secondary-orange tracking-widest uppercase">
+                  <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
                     Mi Mayor Reto de Negocio
                   </h6>
                   <p className="text-xs text-on-surface-variant leading-relaxed">
@@ -1010,19 +1142,19 @@ export default function PassportPage() {
               {/* ROLES DE NETWORKING (BUSCO / OFREZCO) */}
               {(data.busco.length > 0 || data.ofrezco.length > 0) && (
                 <div className="space-y-3">
-                  <h6 className="text-[10px] font-mono font-bold text-secondary-orange tracking-widest uppercase">
+                  <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
                     Roles de Networking
                   </h6>
                   
                   <div className="flex flex-col gap-2.5">
                     {data.busco.length > 0 && (
                       <div className="space-y-1">
-                        <span className="text-[9px] font-mono text-outline uppercase tracking-wider block">Busco en el congreso:</span>
+                        <span className="text-[8px] xs:text-[9px] font-sans font-bold text-outline uppercase tracking-wider block">Busco en el congreso:</span>
                         <div className="flex flex-wrap gap-1.5">
                           {data.busco.map(b => (
                             <span 
                               key={b} 
-                              className="flex items-center gap-1.5 bg-[#0e1726] border border-blue-500/25 rounded-md px-2.5 py-1 text-[9px] xs:text-[10px] font-mono uppercase text-blue-300 font-bold"
+                              className="flex items-center gap-1.5 bg-[#0e1726] border border-blue-500/25 rounded-md px-2.5 py-1 text-[9px] xs:text-[10px] font-sans font-black uppercase text-blue-300"
                             >
                               <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
                               {b}
@@ -1034,12 +1166,12 @@ export default function PassportPage() {
 
                     {data.ofrezco.length > 0 && (
                       <div className="space-y-1">
-                        <span className="text-[9px] font-mono text-outline uppercase tracking-wider block">Puedo ofrecer:</span>
+                        <span className="text-[8px] xs:text-[9px] font-sans font-bold text-outline uppercase tracking-wider block">Puedo ofrecer:</span>
                         <div className="flex flex-wrap gap-1.5">
                           {data.ofrezco.map(o => (
                             <span 
                               key={o} 
-                              className="flex items-center gap-1.5 bg-[#091f16] border border-emerald-500/25 rounded-md px-2.5 py-1 text-[9px] xs:text-[10px] font-mono uppercase text-emerald-300 font-bold"
+                              className="flex items-center gap-1.5 bg-[#091f16] border border-emerald-500/25 rounded-md px-2.5 py-1 text-[9px] xs:text-[10px] font-sans font-black uppercase text-emerald-300"
                             >
                               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                               {o}
@@ -1054,31 +1186,31 @@ export default function PassportPage() {
 
               {/* DETALLES DE ACREDITACIÓN */}
               <div className="space-y-2">
-                <h6 className="text-[10px] font-mono font-bold text-secondary-orange tracking-widest uppercase">
+                <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
                   Detalles de Acreditación
                 </h6>
-                <div className="grid grid-cols-2 gap-3 bg-[#000d1a]/30 border border-outline/10 p-3 rounded-xl text-xs font-mono">
+                <div className="grid grid-cols-2 gap-3 bg-[#000d1a]/30 border border-outline/10 p-3 rounded-xl text-xs font-sans uppercase">
                   <div>
-                    <span className="text-outline/60 text-[9px] uppercase block">Delegación</span>
-                    <span className="text-white font-bold block mt-0.5">{data.delegacion || '—'}</span>
+                    <span className="text-outline/60 text-[8px] font-black tracking-widest block">Delegación</span>
+                    <span className="text-white font-black block mt-0.5">{data.delegacion || '—'}</span>
                   </div>
                   <div>
-                    <span className="text-outline/60 text-[9px] uppercase block">Modalidad</span>
-                    <span className="text-white font-bold block mt-0.5">{data.modalidad || '—'}</span>
+                    <span className="text-outline/60 text-[8px] font-black tracking-widest block">Modalidad</span>
+                    <span className="text-white font-black block mt-0.5">{data.modalidad || '—'}</span>
                   </div>
                 </div>
               </div>
 
               {/* NETWORKING PASS / QR CODE */}
               <div className="space-y-2">
-                <h6 className="text-[10px] font-mono font-bold text-secondary-orange tracking-widest uppercase">
+                <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
                   Pase de Entrada y Connect
                 </h6>
                 <div className="flex items-center justify-between bg-[#000d1a]/60 border border-outline/20 p-3 rounded-xl">
-                  <div className="text-left font-mono">
-                    <span className="text-[8px] xs:text-[9px] text-on-surface-variant uppercase block">COMEV CONNECT</span>
-                    <span className="text-xs text-white font-black uppercase block tracking-wider">NETWORKING PASS</span>
-                    <span className="text-[9px] text-outline block mt-1">Escanea para conectar</span>
+                  <div className="text-left font-sans uppercase">
+                    <span className="text-[8px] xs:text-[9px] text-on-surface-variant font-bold block">COMEV CONNECT</span>
+                    <span className="text-xs text-white font-black block tracking-wider">NETWORKING PASS</span>
+                    <span className="text-[9px] text-outline font-bold block mt-1">Escanea para conectar</span>
                   </div>
                   
                   <div className="w-12 h-12 bg-white p-1 rounded-md flex items-center justify-center shrink-0 shadow-md">
@@ -1092,11 +1224,11 @@ export default function PassportPage() {
               {/* SIMULADOR DE SELLOS (DESPLEGABLE / INTEGRADO) */}
               <div className="bg-[#000c17]/60 border border-outline/10 rounded-2xl p-4 space-y-3">
                 <div className="flex items-center justify-between border-b border-outline/10 pb-2">
-                  <h6 className="text-[10px] font-mono font-bold text-white tracking-wider uppercase flex items-center gap-1.5">
+                  <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-white tracking-wider uppercase flex items-center gap-1.5">
                     <Award className="w-4 h-4 text-secondary-orange" />
                     Simular Sellos de Actividades
                   </h6>
-                  <span className="text-[9px] font-mono bg-secondary-orange/15 text-secondary-orange px-2 py-0.5 rounded-full font-bold uppercase">
+                  <span className="text-[9px] font-sans bg-secondary-orange/15 text-secondary-orange px-2 py-0.5 rounded-full font-black uppercase">
                     PROGRESO: {earnedCount}/7
                   </span>
                 </div>
