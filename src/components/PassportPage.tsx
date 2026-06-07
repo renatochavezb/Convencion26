@@ -270,24 +270,12 @@ export default function PassportPage() {
   const progressPercent = Math.round((earnedCount / 7) * 100);
 
   return (
-    <div className="min-h-screen bg-deep-blue text-on-surface font-sans relative pb-20 selection:bg-secondary-orange selection:text-deep-blue">
+    <div className="min-h-screen bg-deep-blue text-on-surface font-sans relative selection:bg-secondary-orange selection:text-deep-blue">
       {/* Grid Pattern overlay */}
       <div className="absolute inset-0 grid-pattern pointer-events-none opacity-[0.8] z-0" />
 
-      {/* Main Container */}
-      <div className="relative z-10 max-w-6xl mx-auto px-3 md:px-4 pt-12 md:pt-24">
-        
-        {/* Back Link */}
-        <button
-          onClick={() => { window.location.hash = ''; }}
-          className="inline-flex items-center gap-2 font-mono text-xs text-on-surface-variant hover:text-white uppercase tracking-widest cursor-pointer transition-colors duration-200 mb-6 bg-surface-card/60 backdrop-blur-md px-4 py-2 border border-outline/30 rounded-xs"
-        >
-          <ArrowLeft className="w-4 h-4 text-secondary-orange" />
-          Volver a Inicio
-        </button>
-
-        {isEditing ? (
-          <>
+      {isEditing ? (
+        <div className="relative z-10 max-w-6xl mx-auto px-4 pt-8 md:pt-16 pb-20">
             {/* Title & Description */}
             <div className="mb-10 text-center md:text-left">
               <span className="text-secondary-orange font-bold text-xs uppercase font-mono tracking-widest">
@@ -308,7 +296,16 @@ export default function PassportPage() {
           <div className="lg:col-span-5 lg:sticky lg:top-24 flex justify-center w-full">
             
             {/* The Badge Card Container (Premium Glassmorphic Redesign) */}
-            <div className="relative w-full max-w-[420px] bg-gradient-to-b from-[#001c38]/90 to-[#001021]/95 border-2 border-secondary-orange/60 rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(254,152,0,0.15)] flex flex-col justify-between p-6 md:p-8">
+            <div className="relative w-full max-w-[420px] bg-gradient-to-b from-[#001c38]/90 to-[#001021]/95 border-2 border-secondary-orange/60 rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(254,152,0,0.15)] flex flex-col justify-between pt-4 px-4 pb-6 xs:pt-5 xs:px-5 xs:pb-7 md:p-8">
+              {/* Back button inside the card */}
+              <button
+                onClick={() => { window.location.hash = ''; }}
+                className="absolute top-4 left-4 z-30 p-2 rounded-full border border-outline/25 bg-[#000d1a]/60 text-secondary-orange hover:text-white cursor-pointer hover:border-secondary-orange transition-all duration-200"
+                aria-label="Volver a Inicio"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+
               {/* Outer double border glow */}
               <div className="absolute inset-[3px] border border-outline/25 rounded-xl pointer-events-none" />
               {/* Grid Background in card */}
@@ -320,30 +317,30 @@ export default function PassportPage() {
               <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-secondary-orange via-amber-500 to-secondary-orange" />
 
               {/* CARD CONTENT HEADER */}
-              <div className="relative z-10 text-center border-b border-outline/20 pb-4">
-                <span className="font-mono text-[10px] md:text-xs font-bold text-secondary-orange tracking-widest uppercase opacity-90 block">
-                  PASAPORTE NORTEÑO • COMEV 2026
+              <div className="relative z-10 text-center border-b border-outline/20 pb-2.5">
+                <span className="font-mono text-[9px] xs:text-[10px] md:text-xs font-bold text-secondary-orange tracking-widest uppercase opacity-90 block">
+                  CONVENCIÓN NACIONAL * COMEV 2026
                 </span>
-                <h3 className="font-headline font-black text-3xl md:text-4xl tracking-tighter text-white uppercase mt-2 leading-none">
+                <h3 className="font-headline font-black text-2xl xs:text-3xl md:text-4xl tracking-tighter text-white uppercase mt-1 leading-none">
                   PASAPORTE
                 </h3>
-                <h4 className="font-headline font-black text-sm md:text-base tracking-[6px] text-secondary-orange italic leading-none mt-1 pl-[6px]">
-                  NORTEÑO
+                <h4 className="font-headline font-black text-xs xs:text-sm md:text-base tracking-[1.5px] xs:tracking-[2px] md:tracking-[3px] text-secondary-orange italic leading-none mt-1.5 pl-[1.5px] uppercase">
+                  ¡VIVA CHIHUAHUA!
                 </h4>
-                <div className="flex items-center justify-center gap-3 mt-3">
-                  <div className="w-12 h-px bg-secondary-orange/40" />
+                <div className="flex items-center justify-center gap-2 mt-2">
+                  <div className="w-8 h-px bg-secondary-orange/40" />
                   <Sparkles className="w-2.5 h-2.5 text-accent-orange/80 animate-pulse" />
-                  <div className="w-12 h-px bg-secondary-orange/40" />
+                  <div className="w-8 h-px bg-secondary-orange/40" />
                 </div>
               </div>
 
               {/* MIDDLE AREA: Photo & Identification */}
-              <div className="relative z-10 flex flex-col items-center py-6 grow justify-center">
+              <div className="relative z-10 flex flex-col items-center py-2 xs:py-3 md:py-6 grow justify-center min-h-0">
                 
                 {/* Photo & Frame with pulsing border glow */}
                 <div 
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-32 h-32 rounded-2xl bg-[#000d1a] border-2 border-secondary-orange/60 overflow-hidden cursor-pointer group hover:border-secondary-orange transition-all duration-300 relative flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(254,152,0,0.2)]"
+                  className="w-24 h-24 xs:w-28 xs:h-28 md:w-32 md:h-32 rounded-2xl bg-[#000d1a] border-2 border-secondary-orange/60 overflow-hidden cursor-pointer group hover:border-secondary-orange transition-all duration-300 relative flex items-center justify-center mb-2 xs:mb-3 md:mb-4 shadow-[0_0_20px_rgba(254,152,0,0.2)] shrink-0"
                 >
                   {data.photoUrl ? (
                     <img 
@@ -353,8 +350,8 @@ export default function PassportPage() {
                     />
                   ) : (
                     <div className="text-center p-2">
-                      <Camera className="w-8 h-8 text-on-surface-variant group-hover:text-secondary-orange mx-auto mb-1 transition-colors" />
-                      <span className="font-mono text-[9px] text-on-surface-variant font-bold tracking-widest block uppercase">
+                      <Camera className="w-6 h-6 xs:w-8 xs:h-8 text-on-surface-variant group-hover:text-secondary-orange mx-auto mb-1 transition-colors" />
+                      <span className="font-mono text-[8px] xs:text-[9px] text-on-surface-variant font-bold tracking-widest block uppercase">
                         FOTO
                       </span>
                     </div>
@@ -369,36 +366,36 @@ export default function PassportPage() {
 
                 {/* Name & Title (Larger & Premium) */}
                 <div className="text-center w-full px-2">
-                  <h5 className="font-headline font-black text-2xl md:text-3xl uppercase tracking-tight text-white leading-tight break-words">
+                  <h5 className="font-headline font-black text-xl xs:text-2xl md:text-3xl uppercase tracking-tight text-white leading-tight break-words">
                     {data.nombre || 'NOMBRE COMPLETO'}
                   </h5>
-                  <p className="font-mono text-sm md:text-base text-secondary-orange font-bold uppercase tracking-wider mt-1 truncate">
+                  <p className="font-mono text-xs xs:text-sm md:text-base text-secondary-orange font-bold uppercase tracking-wider mt-0.5 md:mt-1 truncate">
                     {data.cargo || 'CARGO / PUESTO'}
                   </p>
-                  <p className="font-mono text-xs md:text-sm text-on-surface-variant uppercase tracking-wider leading-none mt-1.5 truncate">
+                  <p className="font-mono text-[10px] xs:text-xs md:text-sm text-on-surface-variant uppercase tracking-wider leading-none mt-1 md:mt-1.5 truncate">
                     {data.empresa || 'EMPRESA'}
                   </p>
                 </div>
               </div>
 
               {/* CARD DETAILS FOOTER - HIDE FOLIO AND LARGER TEXT */}
-              <div className="relative z-10 border-t border-outline/25 pt-4 flex flex-col gap-4">
-                <div className="grid grid-cols-2 text-[10px] md:text-xs font-mono leading-tight">
+              <div className="relative z-10 border-t border-outline/25 pt-2.5 xs:pt-3 md:pt-4 flex flex-col gap-2.5 xs:gap-3 md:gap-4 shrink-0">
+                <div className="grid grid-cols-2 text-[9px] xs:text-[10px] md:text-xs font-mono leading-tight">
                   <div>
                     <span className="text-secondary-orange/80 uppercase block tracking-wider font-semibold">DELEGACIÓN</span>
-                    <span className="text-white font-bold text-sm md:text-base uppercase block mt-1 truncate">{data.delegacion || '—'}</span>
+                    <span className="text-white font-bold text-xs xs:text-sm md:text-base uppercase block mt-0.5 md:mt-1 truncate">{data.delegacion || '—'}</span>
                   </div>
                   <div className="text-right">
                     <span className="text-secondary-orange/80 uppercase block tracking-wider font-semibold">MODALIDAD</span>
-                    <span className="text-white font-bold text-sm md:text-base uppercase block mt-1 truncate">{data.modalidad || '—'}</span>
+                    <span className="text-white font-bold text-xs xs:text-sm md:text-base uppercase block mt-0.5 md:mt-1 truncate">{data.modalidad || '—'}</span>
                   </div>
                 </div>
 
-                <div className="border-t border-outline/15 my-0.5" />
+                <div className="border-t border-outline/15 my-0" />
 
                 {/* Earned Stamp Icons Mini list inside card */}
-                <div className="flex flex-col gap-2">
-                  <span className="font-mono text-[10px] md:text-xs text-secondary-orange font-bold tracking-widest text-center block uppercase">
+                <div className="flex flex-col gap-1.5 md:gap-2">
+                  <span className="font-mono text-[9px] xs:text-[10px] md:text-xs text-secondary-orange font-bold tracking-widest text-center block uppercase">
                     SELLOS DE ACTIVIDADES
                   </span>
                   
@@ -409,9 +406,9 @@ export default function PassportPage() {
                       return (
                         <div 
                           key={s.id} 
-                          className={`w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black font-headline transition-all duration-300 ${
+                          className={`w-7 h-7 xs:w-8 xs:h-8 md:w-9 md:h-9 rounded-full border-2 flex items-center justify-center text-xs md:text-sm font-black font-headline transition-all duration-300 ${
                             earned 
-                              ? `${s.bgClass} ${s.borderClass} ${s.textClass} scale-110 shadow-[0_0_10px_rgba(254,152,0,0.35)]` 
+                              ? `${s.bgClass} ${s.borderClass} ${s.textClass} scale-105 md:scale-110 shadow-[0_0_8px_rgba(254,152,0,0.25)]` 
                               : 'border-outline/30 bg-[#071727] text-outline'
                           }`}
                           title={`${s.name}: ${earned ? 'Ganado' : 'Pendiente'}`}
@@ -423,11 +420,11 @@ export default function PassportPage() {
                   </div>
 
                   {/* Minified progress info */}
-                  <div className="flex items-center justify-between text-[11px] font-mono text-on-surface-variant mt-1 px-1">
+                  <div className="flex items-center justify-between text-[10px] md:text-[11px] font-mono text-on-surface-variant mt-0.5 md:mt-1 px-1">
                     <span>PROGRESO: {earnedCount} / 7</span>
                     <span className="text-secondary-orange font-bold">{progressPercent}%</span>
                   </div>
-                  <div className="w-full bg-[#0b2136] h-2 rounded-full overflow-hidden">
+                  <div className="w-full bg-[#0b2136] h-1.5 md:h-2 rounded-full overflow-hidden">
                     <div 
                       className="bg-secondary-orange h-full rounded-full transition-all duration-500 ease-out" 
                       style={{ width: `${progressPercent}%` }}
@@ -436,15 +433,15 @@ export default function PassportPage() {
                 </div>
 
                 {/* QR Code section */}
-                <div className="border-t border-outline/15 my-0.5" />
-                <div className="flex items-center justify-between bg-[#000d1a]/60 border border-outline/20 p-2.5 rounded-xl">
+                <div className="border-t border-outline/15 my-0" />
+                <div className="flex items-center justify-between bg-[#000d1a]/60 border border-outline/20 p-2 md:p-2.5 rounded-xl">
                   <div className="text-left font-mono">
-                    <span className="text-[9px] md:text-[10px] text-on-surface-variant uppercase block">COMEV CONNECT</span>
-                    <span className="text-xs md:text-sm text-white font-black uppercase block tracking-wider">NETWORKING PASS</span>
+                    <span className="text-[8px] xs:text-[9px] md:text-[10px] text-on-surface-variant uppercase block">COMEV CONNECT</span>
+                    <span className="text-[10px] xs:text-xs md:text-sm text-white font-black uppercase block tracking-wider">NETWORKING PASS</span>
                   </div>
                   
                   {/* Vector QR Code */}
-                  <div className="w-12 h-12 bg-white p-1 rounded-md flex items-center justify-center shrink-0 shadow-md">
+                  <div className="w-10 h-10 xs:w-11 xs:h-11 md:w-12 md:h-12 bg-white p-1 rounded-md flex items-center justify-center shrink-0 shadow-md">
                     <svg viewBox="0 0 25 25" className="w-full h-full text-deep-blue" shapeRendering="crispEdges">
                       <path d="M0 0h7v7H0zm1 1v5h5V1zm1 1h3v3H2zm8-2h1v3h-1zm3 0h1v1h-1zm1 0h3v1h-3zm4 0h3v7h-3zm1 1v5h1V1zm-4 1h1v1h-1zm-2 1h2v1h-2zm-3 1h2v1H8zm5 0h1v1h-1zm-5 2h1v1H8zm1 1h2v1H9zm1 1h2v1h-2zm1-8h1v1h-1zm0 3h1v1h-1zm2 1h1v1h-1zm1 0h1v2h-1zm-3 2h2v1h-2zm-5 5h1v1H0zm1 1v5h5v-5zm1 1h3v3H2zm6-2h1v3H8zm2 0h2v1h-2zm4 0h1v2h-1zm-3 1h2v1h-2zm7 0h3v1h-3zm-9 2h1v1H8zm2 0h1v2h-1zm6 0h1v1h-1zm2 0h1v3h-1zm-7 1h1v1H9zm3 0h2v1h-2zm-2 2h3v1h-3zm6 0h2v1h-2zm1 1h1v1h-1z" fill="currentColor"/>
                     </svg>
@@ -883,12 +880,21 @@ export default function PassportPage() {
           </div>
 
         </div>
-        </>
-        ) : (
-          <div className="flex flex-col items-center justify-center gap-6 w-full max-w-[440px] mx-auto px-2 pb-16">
-            
-            {/* Centered Passport Badge Container (Premium Glassmorphic Redesign) */}
-            <div className="relative w-full bg-gradient-to-b from-[#001c38]/90 to-[#001021]/95 border-2 border-secondary-orange/60 rounded-2xl overflow-hidden shadow-[0_25px_60px_rgba(254,152,0,0.2)] flex flex-col justify-between p-6 md:p-8">
+        </div>
+      ) : (
+        <div className="relative z-10 w-full min-h-[100dvh] flex flex-col items-center justify-start md:pt-12 md:pb-20">
+          
+          {/* Centered Passport Badge Container (Full Screen Mobile, Card on Desktop) */}
+          <div className="relative w-full md:max-w-[420px] h-[100dvh] md:h-auto md:min-h-0 bg-gradient-to-b from-[#001c38]/90 to-[#001021]/95 border-0 md:border-2 border-secondary-orange/60 rounded-none md:rounded-2xl overflow-hidden shadow-none md:shadow-[0_25px_60px_rgba(254,152,0,0.2)] flex flex-col justify-between pt-4 px-4 pb-6 xs:pt-5 xs:px-5 xs:pb-7 md:p-8 shrink-0">
+              {/* Back button inside the card */}
+              <button
+                onClick={() => { window.location.hash = ''; }}
+                className="absolute top-4 left-4 z-30 p-2 rounded-full border border-outline/25 bg-[#000d1a]/60 text-secondary-orange hover:text-white cursor-pointer hover:border-secondary-orange transition-all duration-200"
+                aria-label="Volver a Inicio"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+
               {/* Outer double border glow */}
               <div className="absolute inset-[3px] border border-outline/25 rounded-xl pointer-events-none" />
               {/* Grid Background in card */}
@@ -900,33 +906,33 @@ export default function PassportPage() {
               <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-secondary-orange via-amber-500 to-secondary-orange" />
 
               {/* CARD CONTENT HEADER */}
-              <div className="relative z-10 text-center border-b border-outline/20 pb-4">
-                <span className="font-mono text-[10px] md:text-xs font-bold text-secondary-orange tracking-widest uppercase opacity-90 block">
-                  PASAPORTE NORTEÑO • COMEV 2026
+              <div className="relative z-10 text-center border-b border-outline/20 pb-2.5">
+                <span className="font-mono text-[9px] xs:text-[10px] md:text-xs font-bold text-secondary-orange tracking-widest uppercase opacity-90 block">
+                  CONVENCIÓN NACIONAL * COMEV 2026
                 </span>
-                <h3 className="font-headline font-black text-3xl md:text-4xl tracking-tighter text-white uppercase mt-2 leading-none">
+                <h3 className="font-headline font-black text-2xl xs:text-3xl md:text-4xl tracking-tighter text-white uppercase mt-1 leading-none">
                   PASAPORTE
                 </h3>
-                <h4 className="font-headline font-black text-sm md:text-base tracking-[6px] text-secondary-orange italic leading-none mt-1 pl-[6px]">
-                  NORTEÑO
+                <h4 className="font-headline font-black text-xs xs:text-sm md:text-base tracking-[1.5px] xs:tracking-[2px] md:tracking-[3px] text-secondary-orange italic leading-none mt-1.5 pl-[1.5px] uppercase">
+                  ¡VIVA CHIHUAHUA!
                 </h4>
-                <div className="flex items-center justify-center gap-3 mt-3">
-                  <div className="w-12 h-px bg-secondary-orange/40" />
+                <div className="flex items-center justify-center gap-2 mt-2">
+                  <div className="w-8 h-px bg-secondary-orange/40" />
                   <Sparkles className="w-2.5 h-2.5 text-accent-orange/80 animate-pulse" />
-                  <div className="w-12 h-px bg-secondary-orange/40" />
+                  <div className="w-8 h-px bg-secondary-orange/40" />
                 </div>
               </div>
 
               {/* MIDDLE AREA: Photo & Identification */}
-              <div className="relative z-10 flex flex-col items-center py-6 grow justify-center">
+              <div className="relative z-10 flex flex-col items-center py-2 xs:py-3 md:py-6 grow justify-center min-h-0">
                 {/* Photo & Frame with pulsing border glow */}
-                <div className="w-32 h-32 rounded-2xl bg-[#000d1a] border-2 border-secondary-orange/60 overflow-hidden relative flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(254,152,0,0.2)]">
+                <div className="w-24 h-24 xs:w-28 xs:h-28 md:w-32 md:h-32 rounded-2xl bg-[#000d1a] border-2 border-secondary-orange/60 overflow-hidden relative flex items-center justify-center mb-2 xs:mb-3 md:mb-4 shadow-[0_0_20px_rgba(254,152,0,0.2)] shrink-0">
                   {data.photoUrl ? (
                     <img src={data.photoUrl} alt="Foto de perfil" className="w-full h-full object-cover" />
                   ) : (
                     <div className="text-center p-2">
-                      <Camera className="w-8 h-8 text-on-surface-variant mx-auto mb-1" />
-                      <span className="font-mono text-[9px] text-on-surface-variant font-bold tracking-widest block uppercase">
+                      <Camera className="w-6 h-6 xs:w-8 xs:h-8 text-on-surface-variant mx-auto mb-1" />
+                      <span className="font-mono text-[8px] xs:text-[9px] text-on-surface-variant font-bold tracking-widest block uppercase">
                         SIN FOTO
                       </span>
                     </div>
@@ -935,36 +941,36 @@ export default function PassportPage() {
 
                 {/* Name & Title (Larger & Premium) */}
                 <div className="text-center w-full px-2">
-                  <h5 className="font-headline font-black text-2xl md:text-3xl uppercase tracking-tight text-white leading-tight break-words">
+                  <h5 className="font-headline font-black text-xl xs:text-2xl md:text-3xl uppercase tracking-tight text-white leading-tight break-words">
                     {data.nombre || 'NOMBRE COMPLETO'}
                   </h5>
-                  <p className="font-mono text-sm md:text-base text-secondary-orange font-bold uppercase tracking-wider mt-1 truncate">
+                  <p className="font-mono text-xs xs:text-sm md:text-base text-secondary-orange font-bold uppercase tracking-wider mt-0.5 md:mt-1 truncate">
                     {data.cargo || 'CARGO / PUESTO'}
                   </p>
-                  <p className="font-mono text-xs md:text-sm text-on-surface-variant uppercase tracking-wider leading-none mt-1.5 truncate">
+                  <p className="font-mono text-[10px] xs:text-xs md:text-sm text-on-surface-variant uppercase tracking-wider leading-none mt-1 md:mt-1.5 truncate">
                     {data.empresa || 'EMPRESA'}
                   </p>
                 </div>
               </div>
 
               {/* CARD DETAILS FOOTER - HIDE FOLIO AND LARGER TEXT */}
-              <div className="relative z-10 border-t border-outline/25 pt-4 flex flex-col gap-4">
-                <div className="grid grid-cols-2 text-[10px] md:text-xs font-mono leading-tight">
+              <div className="relative z-10 border-t border-outline/25 pt-2.5 xs:pt-3 md:pt-4 flex flex-col gap-2.5 xs:gap-3 md:gap-4 shrink-0">
+                <div className="grid grid-cols-2 text-[9px] xs:text-[10px] md:text-xs font-mono leading-tight">
                   <div>
                     <span className="text-secondary-orange/80 uppercase block tracking-wider font-semibold">DELEGACIÓN</span>
-                    <span className="text-white font-bold text-sm md:text-base uppercase block mt-1 truncate">{data.delegacion || '—'}</span>
+                    <span className="text-white font-bold text-xs xs:text-sm md:text-base uppercase block mt-0.5 md:mt-1 truncate">{data.delegacion || '—'}</span>
                   </div>
                   <div className="text-right">
                     <span className="text-secondary-orange/80 uppercase block tracking-wider font-semibold">MODALIDAD</span>
-                    <span className="text-white font-bold text-sm md:text-base uppercase block mt-1 truncate">{data.modalidad || '—'}</span>
+                    <span className="text-white font-bold text-xs xs:text-sm md:text-base uppercase block mt-0.5 md:mt-1 truncate">{data.modalidad || '—'}</span>
                   </div>
                 </div>
 
-                <div className="border-t border-outline/15 my-0.5" />
+                <div className="border-t border-outline/15 my-0" />
 
                 {/* Earned Stamp Icons Mini list inside card */}
-                <div className="flex flex-col gap-2">
-                  <span className="font-mono text-[10px] md:text-xs text-secondary-orange font-bold tracking-widest text-center block uppercase">
+                <div className="flex flex-col gap-1.5 md:gap-2">
+                  <span className="font-mono text-[9px] xs:text-[10px] md:text-xs text-secondary-orange font-bold tracking-widest text-center block uppercase">
                     SELLOS DE ACTIVIDADES
                   </span>
                   
@@ -974,9 +980,9 @@ export default function PassportPage() {
                       return (
                         <div 
                           key={s.id} 
-                          className={`w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black font-headline transition-all duration-300 ${
+                          className={`w-7 h-7 xs:w-8 xs:h-8 md:w-9 md:h-9 rounded-full border-2 flex items-center justify-center text-xs md:text-sm font-black font-headline transition-all duration-300 ${
                             earned 
-                              ? `${s.bgClass} ${s.borderClass} ${s.textClass} scale-110 shadow-[0_0_10px_rgba(254,152,0,0.35)]` 
+                              ? `${s.bgClass} ${s.borderClass} ${s.textClass} scale-105 md:scale-110 shadow-[0_0_8px_rgba(254,152,0,0.25)]` 
                               : 'border-outline/30 bg-[#071727] text-outline'
                           }`}
                           title={`${s.name}: ${earned ? 'Ganado' : 'Pendiente'}`}
@@ -987,11 +993,11 @@ export default function PassportPage() {
                     })}
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] font-mono text-on-surface-variant mt-1 px-1">
+                  <div className="flex items-center justify-between text-[10px] md:text-[11px] font-mono text-on-surface-variant mt-0.5 md:mt-1 px-1">
                     <span>PROGRESO: {earnedCount} / 7</span>
                     <span className="text-secondary-orange font-bold">{progressPercent}%</span>
                   </div>
-                  <div className="w-full bg-[#0b2136] h-2 rounded-full overflow-hidden">
+                  <div className="w-full bg-[#0b2136] h-1.5 md:h-2 rounded-full overflow-hidden">
                     <div 
                       className="bg-secondary-orange h-full rounded-full transition-all duration-500 ease-out" 
                       style={{ width: `${progressPercent}%` }}
@@ -999,14 +1005,14 @@ export default function PassportPage() {
                   </div>
                 </div>
 
-                <div className="border-t border-outline/15 my-0.5" />
-                <div className="flex items-center justify-between bg-[#000d1a]/60 border border-outline/20 p-2.5 rounded-xl">
+                <div className="border-t border-outline/15 my-0" />
+                <div className="flex items-center justify-between bg-[#000d1a]/60 border border-outline/20 p-2 md:p-2.5 rounded-xl">
                   <div className="text-left font-mono">
-                    <span className="text-[9px] md:text-[10px] text-on-surface-variant uppercase block">COMEV CONNECT</span>
-                    <span className="text-xs md:text-sm text-white font-black uppercase block tracking-wider">NETWORKING PASS</span>
+                    <span className="text-[8px] xs:text-[9px] md:text-[10px] text-on-surface-variant uppercase block">COMEV CONNECT</span>
+                    <span className="text-[10px] xs:text-xs md:text-sm text-white font-black uppercase block tracking-wider">NETWORKING PASS</span>
                   </div>
                   
-                  <div className="w-12 h-12 bg-white p-1 rounded-md flex items-center justify-center shrink-0 shadow-md">
+                  <div className="w-10 h-10 xs:w-11 xs:h-11 md:w-12 md:h-12 bg-white p-1 rounded-md flex items-center justify-center shrink-0 shadow-md">
                     <svg viewBox="0 0 25 25" className="w-full h-full text-deep-blue" shapeRendering="crispEdges">
                       <path d="M0 0h7v7H0zm1 1v5h5V1zm1 1h3v3H2zm8-2h1v3h-1zm3 0h1v1h-1zm1 0h3v1h-3zm4 0h3v7h-3zm1 1v5h1V1zm-4 1h1v1h-1zm-2 1h2v1h-2zm-3 1h2v1H8zm5 0h1v1h-1zm-5 2h1v1H8zm1 1h2v1H9zm1 1h2v1h-2zm1-8h1v1h-1zm0 3h1v1h-1zm2 1h1v1h-1zm1 0h1v2h-1zm-3 2h2v1h-2zm-5 5h1v1H0zm1 1v5h5v-5zm1 1h3v3H2zm6-2h1v3H8zm2 0h2v1h-2zm4 0h1v2h-1zm-3 1h2v1h-2zm7 0h3v1h-3zm-9 2h1v1H8zm2 0h1v2h-1zm6 0h1v1h-1zm2 0h1v3h-1zm-7 1h1v1H9zm3 0h2v1h-2zm-2 2h3v1h-3zm6 0h2v1h-2zm1 1h1v1h-1z" fill="currentColor"/>
                     </svg>
@@ -1015,11 +1021,14 @@ export default function PassportPage() {
               </div>
             </div>
 
-            {/* Discrete Edit Button */}
-            <button
-              onClick={() => setIsEditing(true)}
-              className="flex items-center gap-2 px-5 py-3 border border-secondary-orange/30 hover:border-secondary-orange bg-[#001021]/85 backdrop-blur-md text-secondary-orange hover:text-white rounded-xl text-xs uppercase tracking-wider font-mono font-bold transition-all shadow-lg active:scale-95 duration-100 cursor-pointer w-full max-w-[440px] justify-center mt-2"
-            >
+            {/* Under-card controls (visible on scroll on mobile) */}
+            <div className="flex flex-col items-center gap-6 w-full max-w-[420px] px-4 py-6">
+              
+              {/* Discrete Edit Button */}
+              <button
+                onClick={() => setIsEditing(true)}
+                className="flex items-center gap-2 px-5 py-3 border border-secondary-orange/30 hover:border-secondary-orange bg-[#001021]/85 backdrop-blur-md text-secondary-orange hover:text-white rounded-xl text-xs uppercase tracking-wider font-mono font-bold transition-all shadow-lg active:scale-95 duration-100 cursor-pointer w-full justify-center"
+              >
               <Edit3 className="w-4 h-4" />
               Editar Información
             </button>
@@ -1126,9 +1135,8 @@ export default function PassportPage() {
             </div>
 
           </div>
-        )}
-
-      </div>
+        </div>
+      )}
 
       {/* Toast alert popup */}
       {toastMessage && (
