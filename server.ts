@@ -107,13 +107,17 @@ app.get('/api/passport/:email', async (req, res) => {
 
 // POST /api/passport
 app.post('/api/passport', async (req, res) => {
+  console.log(`[POST /api/passport] Received save request.`);
   try {
     const db = await getDb();
     const data = req.body;
+    console.log(`[POST /api/passport] Data keys: ${Object.keys(data || {}).join(', ')}`);
     if (!data.email) {
+      console.warn(`[POST /api/passport] Warning: Missing email in payload.`);
       return res.status(400).json({ error: 'Email is required' });
     }
     const email = data.email.toLowerCase().trim();
+    console.log(`[POST /api/passport] Target Email: ${email}`);
     const payload = {
       ...data,
       email,
@@ -127,17 +131,23 @@ app.post('/api/passport', async (req, res) => {
       { $set: payload },
       { upsert: true }
     );
+    console.log(`[POST /api/passport] Saved to 'passports'. Matched: ${result.matchedCount}, Upserted: ${result.upsertedCount}`);
 
     // Also save/update the photoUrl in the registrations collection if it exists
     if (payload.photoUrl) {
-      await db.collection('registrations').updateOne(
+      console.log(`[POST /api/passport] Sinking photoUrl to registrations (Length: ${payload.photoUrl.length} chars)`);
+      const regResult = await db.collection('registrations').updateOne(
         { email },
         { $set: { photoUrl: payload.photoUrl } }
       );
+      console.log(`[POST /api/passport] Sunk to 'registrations'. Matched: ${regResult.matchedCount}`);
+    } else {
+      console.log(`[POST /api/passport] No photoUrl to sink.`);
     }
 
     res.json({ success: true, matchedCount: result.matchedCount, upsertedCount: result.upsertedCount });
   } catch (err: any) {
+    console.error(`[POST /api/passport] Error during save:`, err);
     res.status(500).json({ error: err.message });
   }
 });

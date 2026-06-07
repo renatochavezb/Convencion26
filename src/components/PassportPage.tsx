@@ -882,259 +882,277 @@ export default function PassportPage() {
         </div>
         </div>
       ) : (
-        <div className="relative z-10 w-full min-h-[100dvh] flex flex-col items-center justify-start md:pt-12 md:pb-20">
+        <div className="relative z-10 w-full min-h-screen flex flex-col items-center justify-start px-0 md:px-4 py-0 md:py-12">
           
-          {/* Centered Passport Badge Container (Full Screen Mobile, Card on Desktop) */}
-          <div className="relative w-full md:max-w-[420px] h-[100dvh] md:h-auto md:min-h-0 bg-gradient-to-b from-[#001c38]/90 to-[#001021]/95 border-0 md:border-2 border-secondary-orange/60 rounded-none md:rounded-2xl overflow-hidden shadow-none md:shadow-[0_25px_60px_rgba(254,152,0,0.2)] flex flex-col justify-between pt-4 px-4 pb-6 xs:pt-5 xs:px-5 xs:pb-7 md:p-8 shrink-0">
-              {/* Back button inside the card */}
+          {/* Discord-style Profile Card */}
+          <div className="relative w-full md:max-w-[480px] bg-[#0a0f1d] md:border-2 md:border-outline/25 md:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col text-on-surface">
+            
+            {/* 1. PROFILE HEADER BANNER */}
+            <div className="h-[110px] xs:h-[130px] relative overflow-hidden bg-gradient-to-r from-deep-blue via-[#001021] to-secondary-orange/30 shrink-0">
+              {/* Mesh grid pattern */}
+              <div className="absolute inset-0 grid-pattern opacity-[0.3] pointer-events-none" />
+              {/* Tech circles or lines glow */}
+              <div className="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-secondary-orange/20 blur-2xl pointer-events-none" />
+              
+              {/* Back Arrow button */}
               <button
                 onClick={() => { window.location.hash = ''; }}
-                className="absolute top-4 left-4 z-30 p-2 rounded-full border border-outline/25 bg-[#000d1a]/60 text-secondary-orange hover:text-white cursor-pointer hover:border-secondary-orange transition-all duration-200"
+                className="absolute top-4 left-4 z-30 p-2 rounded-full border border-outline/25 bg-[#000d1a]/80 text-secondary-orange hover:text-white cursor-pointer hover:border-secondary-orange hover:scale-105 transition-all duration-200"
                 aria-label="Volver a Inicio"
               >
                 <ArrowLeft className="w-4 h-4" />
               </button>
 
-              {/* Outer double border glow */}
-              <div className="absolute inset-[3px] border border-outline/25 rounded-xl pointer-events-none" />
-              {/* Grid Background in card */}
-              <div className="absolute inset-0 grid-pattern opacity-[0.25] pointer-events-none rounded-2xl" />
-              
-              {/* Top Orange Header bar */}
-              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-secondary-orange via-amber-500 to-secondary-orange" />
-              {/* Bottom Orange Footer bar */}
-              <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-secondary-orange via-amber-500 to-secondary-orange" />
+              {/* Edit Profile button */}
+              <button
+                onClick={() => setIsEditing(true)}
+                className="absolute top-4 right-4 z-30 flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-secondary-orange/40 bg-[#000d1a]/80 text-secondary-orange hover:text-white cursor-pointer hover:border-secondary-orange hover:scale-105 transition-all duration-200 font-mono text-[10px] font-bold uppercase tracking-wider"
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+                <span>Editar</span>
+              </button>
 
-              {/* CARD CONTENT HEADER */}
-              <div className="relative z-10 text-center border-b border-outline/20 pb-2.5">
-                <span className="font-mono text-[9px] xs:text-[10px] md:text-xs font-bold text-secondary-orange tracking-widest uppercase opacity-90 block">
-                  CONVENCIÓN NACIONAL * COMEV 2026
-                </span>
-                <h3 className="font-headline font-black text-2xl xs:text-3xl md:text-4xl tracking-tighter text-white uppercase mt-1 leading-none">
-                  PASAPORTE
-                </h3>
-                <h4 className="font-headline font-black text-xs xs:text-sm md:text-base tracking-[1.5px] xs:tracking-[2px] md:tracking-[3px] text-secondary-orange italic leading-none mt-1.5 pl-[1.5px] uppercase">
-                  ¡VIVA CHIHUAHUA!
-                </h4>
-                <div className="flex items-center justify-center gap-2 mt-2">
-                  <div className="w-8 h-px bg-secondary-orange/40" />
-                  <Sparkles className="w-2.5 h-2.5 text-accent-orange/80 animate-pulse" />
-                  <div className="w-8 h-px bg-secondary-orange/40" />
-                </div>
+              {/* Banner Text overlay */}
+              <div className="absolute bottom-3 right-4 font-mono text-[9px] xs:text-[10px] font-bold text-secondary-orange tracking-widest uppercase opacity-80">
+                CONVENCIÓN NACIONAL * COMEV 2026
+              </div>
+            </div>
+
+            {/* 2. AVATAR & BADGES ROW */}
+            <div className="relative h-[45px] px-4 xs:px-6 flex items-center justify-between shrink-0">
+              {/* Avatar (circular, overlaps banner) */}
+              <div className="absolute -top-[42px] xs:-top-[48px] left-4 xs:left-6 w-20 h-20 xs:w-24 xs:h-24 rounded-full border-[6px] border-[#0a0f1d] bg-[#000d1a] overflow-hidden shadow-lg flex items-center justify-center shrink-0">
+                {data.photoUrl ? (
+                  <img src={data.photoUrl} alt="Foto de perfil" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="text-center p-2">
+                    <Camera className="w-6 h-6 xs:w-8 xs:h-8 text-on-surface-variant mx-auto mb-0.5" />
+                    <span className="font-mono text-[7px] xs:text-[8px] text-on-surface-variant font-bold tracking-widest block uppercase">
+                      SIN FOTO
+                    </span>
+                  </div>
+                )}
               </div>
 
-              {/* MIDDLE AREA: Photo & Identification */}
-              <div className="relative z-10 flex flex-col items-center py-2 xs:py-3 md:py-6 grow justify-center min-h-0">
-                {/* Photo & Frame with pulsing border glow */}
-                <div className="w-24 h-24 xs:w-28 xs:h-28 md:w-32 md:h-32 rounded-2xl bg-[#000d1a] border-2 border-secondary-orange/60 overflow-hidden relative flex items-center justify-center mb-2 xs:mb-3 md:mb-4 shadow-[0_0_20px_rgba(254,152,0,0.2)] shrink-0">
-                  {data.photoUrl ? (
-                    <img src={data.photoUrl} alt="Foto de perfil" className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="text-center p-2">
-                      <Camera className="w-6 h-6 xs:w-8 xs:h-8 text-on-surface-variant mx-auto mb-1" />
-                      <span className="font-mono text-[8px] xs:text-[9px] text-on-surface-variant font-bold tracking-widest block uppercase">
-                        SIN FOTO
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Name & Title (Larger & Premium) */}
-                <div className="text-center w-full px-2">
-                  <h5 className="font-headline font-black text-xl xs:text-2xl md:text-3xl uppercase tracking-tight text-white leading-tight break-words">
-                    {data.nombre || 'NOMBRE COMPLETO'}
-                  </h5>
-                  <p className="font-mono text-xs xs:text-sm md:text-base text-secondary-orange font-bold uppercase tracking-wider mt-0.5 md:mt-1 truncate">
-                    {data.cargo || 'CARGO / PUESTO'}
-                  </p>
-                  <p className="font-mono text-[10px] xs:text-xs md:text-sm text-on-surface-variant uppercase tracking-wider leading-none mt-1 md:mt-1.5 truncate">
-                    {data.empresa || 'EMPRESA'}
-                  </p>
-                </div>
-              </div>
-
-              {/* CARD DETAILS FOOTER - HIDE FOLIO AND LARGER TEXT */}
-              <div className="relative z-10 border-t border-outline/25 pt-2.5 xs:pt-3 md:pt-4 flex flex-col gap-2.5 xs:gap-3 md:gap-4 shrink-0">
-                <div className="grid grid-cols-2 text-[9px] xs:text-[10px] md:text-xs font-mono leading-tight">
-                  <div>
-                    <span className="text-secondary-orange/80 uppercase block tracking-wider font-semibold">DELEGACIÓN</span>
-                    <span className="text-white font-bold text-xs xs:text-sm md:text-base uppercase block mt-0.5 md:mt-1 truncate">{data.delegacion || '—'}</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-secondary-orange/80 uppercase block tracking-wider font-semibold">MODALIDAD</span>
-                    <span className="text-white font-bold text-xs xs:text-sm md:text-base uppercase block mt-0.5 md:mt-1 truncate">{data.modalidad || '—'}</span>
-                  </div>
-                </div>
-
-                <div className="border-t border-outline/15 my-0" />
-
-                {/* Earned Stamp Icons Mini list inside card */}
-                <div className="flex flex-col gap-1.5 md:gap-2">
-                  <span className="font-mono text-[9px] xs:text-[10px] md:text-xs text-secondary-orange font-bold tracking-widest text-center block uppercase">
-                    SELLOS DE ACTIVIDADES
-                  </span>
-                  
-                  <div className="flex justify-between px-1">
-                    {SELLOS_INFO.map(s => {
-                      const earned = data.sellos.includes(s.id);
-                      return (
-                        <div 
-                          key={s.id} 
-                          className={`w-7 h-7 xs:w-8 xs:h-8 md:w-9 md:h-9 rounded-full border-2 flex items-center justify-center text-xs md:text-sm font-black font-headline transition-all duration-300 ${
-                            earned 
-                              ? `${s.bgClass} ${s.borderClass} ${s.textClass} scale-105 md:scale-110 shadow-[0_0_8px_rgba(254,152,0,0.25)]` 
-                              : 'border-outline/30 bg-[#071727] text-outline'
-                          }`}
-                          title={`${s.name}: ${earned ? 'Ganado' : 'Pendiente'}`}
-                        >
-                          {s.id}
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div className="flex items-center justify-between text-[10px] md:text-[11px] font-mono text-on-surface-variant mt-0.5 md:mt-1 px-1">
-                    <span>PROGRESO: {earnedCount} / 7</span>
-                    <span className="text-secondary-orange font-bold">{progressPercent}%</span>
-                  </div>
-                  <div className="w-full bg-[#0b2136] h-1.5 md:h-2 rounded-full overflow-hidden">
+              {/* Stamps as Discord Badges */}
+              <div className="ml-auto flex flex-wrap gap-1.5 justify-end max-w-[220px]">
+                {SELLOS_INFO.map(s => {
+                  const earned = data.sellos.includes(s.id);
+                  return (
                     <div 
-                      className="bg-secondary-orange h-full rounded-full transition-all duration-500 ease-out" 
-                      style={{ width: `${progressPercent}%` }}
-                    />
+                      key={s.id} 
+                      className={`w-7 h-7 xs:w-8 xs:h-8 rounded-full border-2 flex items-center justify-center text-[10px] xs:text-xs font-black font-headline transition-all duration-300 ${
+                        earned 
+                          ? `${s.bgClass} ${s.borderClass} ${s.textClass} scale-105 shadow-[0_0_8px_rgba(254,152,0,0.3)]` 
+                          : 'border-outline/25 bg-[#05070c] text-outline/40 border-dashed'
+                      }`}
+                      title={`${s.name}: ${earned ? 'Validado' : 'Pendiente'}`}
+                    >
+                      {s.id}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 3. USER PROFILE INFO */}
+            <div className="px-4 xs:px-6 pt-4 pb-2 space-y-1.5 shrink-0">
+              <h5 className="font-headline font-black text-2xl xs:text-3xl uppercase tracking-tight text-white leading-tight break-words">
+                {data.nombre || 'NOMBRE COMPLETO'}
+              </h5>
+              <div className="flex flex-wrap items-center gap-x-2 text-xs font-mono font-bold uppercase">
+                <span className="text-secondary-orange tracking-wider">{data.cargo || 'CARGO / PUESTO'}</span>
+                {data.empresa && (
+                  <>
+                    <span className="text-outline/40">•</span>
+                    <span className="text-on-surface-variant">{data.empresa}</span>
+                  </>
+                )}
+              </div>
+
+              {/* Custom Status (Objective) */}
+              {data.objetivo && (
+                <div className="flex items-start gap-2 bg-[#000d1a]/40 border border-outline/10 p-2.5 rounded-xl text-xs font-sans text-on-surface-variant italic mt-3">
+                  <span className="text-secondary-orange text-sm leading-none">💬</span>
+                  <span className="leading-snug">"{data.objetivo}"</span>
+                </div>
+              )}
+            </div>
+
+            {/* Divider */}
+            <div className="mx-4 xs:mx-6 border-t border-outline/10 my-2" />
+
+            {/* 4. SCROLLABLE DETAILS AREA */}
+            <div className="px-4 xs:px-6 py-2 space-y-5 overflow-y-auto max-h-[calc(100vh-280px)] md:max-h-[500px] custom-scrollbar">
+              
+              {/* SOBRE MÍ */}
+              <div className="space-y-1.5">
+                <h6 className="text-[10px] font-mono font-bold text-secondary-orange tracking-widest uppercase">
+                  Sobre Mí
+                </h6>
+                <p className="text-xs text-on-surface-variant leading-relaxed">
+                  {data.descripcion || 'Sin descripción profesional.'}
+                </p>
+              </div>
+
+              {/* RETO DE NEGOCIO */}
+              {data.reto && (
+                <div className="space-y-1.5">
+                  <h6 className="text-[10px] font-mono font-bold text-secondary-orange tracking-widest uppercase">
+                    Mi Mayor Reto de Negocio
+                  </h6>
+                  <p className="text-xs text-on-surface-variant leading-relaxed">
+                    {data.reto}
+                  </p>
+                </div>
+              )}
+
+              {/* ROLES DE NETWORKING (BUSCO / OFREZCO) */}
+              {(data.busco.length > 0 || data.ofrezco.length > 0) && (
+                <div className="space-y-3">
+                  <h6 className="text-[10px] font-mono font-bold text-secondary-orange tracking-widest uppercase">
+                    Roles de Networking
+                  </h6>
+                  
+                  <div className="flex flex-col gap-2.5">
+                    {data.busco.length > 0 && (
+                      <div className="space-y-1">
+                        <span className="text-[9px] font-mono text-outline uppercase tracking-wider block">Busco en el congreso:</span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {data.busco.map(b => (
+                            <span 
+                              key={b} 
+                              className="flex items-center gap-1.5 bg-[#0e1726] border border-blue-500/25 rounded-md px-2.5 py-1 text-[9px] xs:text-[10px] font-mono uppercase text-blue-300 font-bold"
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                              {b}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {data.ofrezco.length > 0 && (
+                      <div className="space-y-1">
+                        <span className="text-[9px] font-mono text-outline uppercase tracking-wider block">Puedo ofrecer:</span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {data.ofrezco.map(o => (
+                            <span 
+                              key={o} 
+                              className="flex items-center gap-1.5 bg-[#091f16] border border-emerald-500/25 rounded-md px-2.5 py-1 text-[9px] xs:text-[10px] font-mono uppercase text-emerald-300 font-bold"
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                              {o}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
+              )}
 
-                <div className="border-t border-outline/15 my-0" />
-                <div className="flex items-center justify-between bg-[#000d1a]/60 border border-outline/20 p-2 md:p-2.5 rounded-xl">
+              {/* DETALLES DE ACREDITACIÓN */}
+              <div className="space-y-2">
+                <h6 className="text-[10px] font-mono font-bold text-secondary-orange tracking-widest uppercase">
+                  Detalles de Acreditación
+                </h6>
+                <div className="grid grid-cols-2 gap-3 bg-[#000d1a]/30 border border-outline/10 p-3 rounded-xl text-xs font-mono">
+                  <div>
+                    <span className="text-outline/60 text-[9px] uppercase block">Delegación</span>
+                    <span className="text-white font-bold block mt-0.5">{data.delegacion || '—'}</span>
+                  </div>
+                  <div>
+                    <span className="text-outline/60 text-[9px] uppercase block">Modalidad</span>
+                    <span className="text-white font-bold block mt-0.5">{data.modalidad || '—'}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* NETWORKING PASS / QR CODE */}
+              <div className="space-y-2">
+                <h6 className="text-[10px] font-mono font-bold text-secondary-orange tracking-widest uppercase">
+                  Pase de Entrada y Connect
+                </h6>
+                <div className="flex items-center justify-between bg-[#000d1a]/60 border border-outline/20 p-3 rounded-xl">
                   <div className="text-left font-mono">
-                    <span className="text-[8px] xs:text-[9px] md:text-[10px] text-on-surface-variant uppercase block">COMEV CONNECT</span>
-                    <span className="text-[10px] xs:text-xs md:text-sm text-white font-black uppercase block tracking-wider">NETWORKING PASS</span>
+                    <span className="text-[8px] xs:text-[9px] text-on-surface-variant uppercase block">COMEV CONNECT</span>
+                    <span className="text-xs text-white font-black uppercase block tracking-wider">NETWORKING PASS</span>
+                    <span className="text-[9px] text-outline block mt-1">Escanea para conectar</span>
                   </div>
                   
-                  <div className="w-10 h-10 xs:w-11 xs:h-11 md:w-12 md:h-12 bg-white p-1 rounded-md flex items-center justify-center shrink-0 shadow-md">
+                  <div className="w-12 h-12 bg-white p-1 rounded-md flex items-center justify-center shrink-0 shadow-md">
                     <svg viewBox="0 0 25 25" className="w-full h-full text-deep-blue" shapeRendering="crispEdges">
                       <path d="M0 0h7v7H0zm1 1v5h5V1zm1 1h3v3H2zm8-2h1v3h-1zm3 0h1v1h-1zm1 0h3v1h-3zm4 0h3v7h-3zm1 1v5h1V1zm-4 1h1v1h-1zm-2 1h2v1h-2zm-3 1h2v1H8zm5 0h1v1h-1zm-5 2h1v1H8zm1 1h2v1H9zm1 1h2v1h-2zm1-8h1v1h-1zm0 3h1v1h-1zm2 1h1v1h-1zm1 0h1v2h-1zm-3 2h2v1h-2zm-5 5h1v1H0zm1 1v5h5v-5zm1 1h3v3H2zm6-2h1v3H8zm2 0h2v1h-2zm4 0h1v2h-1zm-3 1h2v1h-2zm7 0h3v1h-3zm-9 2h1v1H8zm2 0h1v2h-1zm6 0h1v1h-1zm2 0h1v3h-1zm-7 1h1v1H9zm3 0h2v1h-2zm-2 2h3v1h-3zm6 0h2v1h-2zm1 1h1v1h-1z" fill="currentColor"/>
                     </svg>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Under-card controls (visible on scroll on mobile) */}
-            <div className="flex flex-col items-center gap-6 w-full max-w-[420px] px-4 py-6">
-              
-              {/* Discrete Edit Button */}
-              <button
-                onClick={() => setIsEditing(true)}
-                className="flex items-center gap-2 px-5 py-3 border border-secondary-orange/30 hover:border-secondary-orange bg-[#001021]/85 backdrop-blur-md text-secondary-orange hover:text-white rounded-xl text-xs uppercase tracking-wider font-mono font-bold transition-all shadow-lg active:scale-95 duration-100 cursor-pointer w-full justify-center"
-              >
-              <Edit3 className="w-4 h-4" />
-              Editar Información
-            </button>
-
-            {/* Activity Stamps Simulator directly on the View screen */}
-            <div className="bg-[#001021]/80 backdrop-blur-md border border-outline/25 rounded-2xl p-6 shadow-xl w-full max-w-[440px]">
-              <h4 className="font-headline font-bold text-sm text-white mb-1 flex items-center gap-2 border-b border-outline/10 pb-2 uppercase tracking-wide">
-                <Award className="w-4.5 h-4.5 text-secondary-orange" />
-                Tus Sellos de Actividades
-              </h4>
-              <p className="text-[10px] text-on-surface-variant font-mono mb-4 leading-normal">
-                Toca un sello para simular la validación de tu asistencia a las actividades oficiales:
-              </p>
-              
-              <div className="grid grid-cols-2 gap-2">
-                {SELLOS_INFO.map(s => {
-                  const earned = data.sellos.includes(s.id);
-                  return (
-                    <button
-                      type="button"
-                      key={s.id}
-                      onClick={() => handleToggleSello(s.id)}
-                      className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-left ${
-                        earned 
-                          ? `${s.bgClass} ${s.borderClass} opacity-100 shadow-[0_0_10px_rgba(254,152,0,0.1)]` 
-                          : 'bg-[#000c17]/60 border-outline/10 opacity-50 hover:opacity-100'
-                      }`}
-                    >
-                      <div 
-                        className={`w-6 h-6 rounded-full border flex items-center justify-center text-[10px] font-black font-headline shrink-0 ${
-                          earned ? `${s.borderClass} ${s.textClass}` : 'border-outline/30 text-outline border-dashed'
+              {/* SIMULADOR DE SELLOS (DESPLEGABLE / INTEGRADO) */}
+              <div className="bg-[#000c17]/60 border border-outline/10 rounded-2xl p-4 space-y-3">
+                <div className="flex items-center justify-between border-b border-outline/10 pb-2">
+                  <h6 className="text-[10px] font-mono font-bold text-white tracking-wider uppercase flex items-center gap-1.5">
+                    <Award className="w-4 h-4 text-secondary-orange" />
+                    Simular Sellos de Actividades
+                  </h6>
+                  <span className="text-[9px] font-mono bg-secondary-orange/15 text-secondary-orange px-2 py-0.5 rounded-full font-bold uppercase">
+                    PROGRESO: {earnedCount}/7
+                  </span>
+                </div>
+                
+                <p className="text-[10px] text-on-surface-variant font-sans leading-relaxed">
+                  Haz clic en las actividades del congreso para validar tu asistencia y ganar tu insignia:
+                </p>
+                
+                <div className="grid grid-cols-2 gap-2">
+                  {SELLOS_INFO.map(s => {
+                    const earned = data.sellos.includes(s.id);
+                    return (
+                      <button
+                        type="button"
+                        key={s.id}
+                        onClick={() => handleToggleSello(s.id)}
+                        className={`flex items-center gap-2 p-2 rounded-xl border transition-all duration-200 cursor-pointer text-left ${
+                          earned 
+                            ? `${s.bgClass} ${s.borderClass} opacity-100 shadow-[0_0_8px_rgba(254,152,0,0.08)]` 
+                            : 'bg-[#000c17]/80 border-outline/10 opacity-55 hover:opacity-100'
                         }`}
                       >
-                        {s.id}
-                      </div>
-                      <div className="overflow-hidden leading-tight">
-                        <span className="text-[10px] font-bold block truncate text-white">
-                          {s.name}
-                        </span>
-                      </div>
-                    </button>
-                  );
-                })}
+                        <div 
+                          className={`w-6 h-6 rounded-full border flex items-center justify-center text-[10px] font-black font-headline shrink-0 ${
+                            earned ? `${s.borderClass} ${s.textClass}` : 'border-outline/30 text-outline border-dashed'
+                          }`}
+                        >
+                          {s.id}
+                        </div>
+                        <div className="overflow-hidden leading-tight">
+                          <span className="text-[9px] xs:text-[10px] font-bold block truncate text-white">
+                            {s.name}
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Progress bar inside simulator */}
+                <div className="pt-2">
+                  <div className="w-full bg-[#0b2136] h-1.5 rounded-full overflow-hidden">
+                    <div 
+                      className="bg-secondary-orange h-full rounded-full transition-all duration-500 ease-out" 
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                  </div>
+                </div>
               </div>
-              
-              {/* Small Progress bar */}
-              <div className="mt-4 pt-3 border-t border-outline/10 flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
-                <span>Progreso: {earnedCount} de 7</span>
-                <span className="text-secondary-orange font-bold">{progressPercent}%</span>
-              </div>
+
             </div>
 
-            {/* Networking / Business Profile summary card */}
-            <div className="bg-[#001021]/85 backdrop-blur-md border border-outline/25 rounded-2xl p-6 shadow-xl w-full max-w-[440px] space-y-4">
-              <h4 className="font-headline font-bold text-sm text-white border-b border-outline/10 pb-2 uppercase tracking-wide">
-                Perfil de Networking
-              </h4>
-              
-              {data.descripcion && (
-                <div className="space-y-1">
-                  <span className="text-[9px] font-mono text-secondary-orange uppercase block tracking-wider">¿Qué hace mi empresa?</span>
-                  <p className="text-xs text-on-surface-variant leading-relaxed">{data.descripcion}</p>
-                </div>
-              )}
-
-              {data.reto && (
-                <div className="space-y-1">
-                  <span className="text-[9px] font-mono text-secondary-orange uppercase block tracking-wider">Mi Mayor Reto de Negocio</span>
-                  <p className="text-xs text-on-surface-variant leading-relaxed">{data.reto}</p>
-                </div>
-              )}
-
-              {data.objetivo && (
-                <div className="space-y-1">
-                  <span className="text-[9px] font-mono text-secondary-orange uppercase block tracking-wider">Objetivo en COMEV</span>
-                  <p className="text-xs text-on-surface-variant leading-relaxed">{data.objetivo}</p>
-                </div>
-              )}
-
-              {(data.busco.length > 0 || data.ofrezco.length > 0) && (
-                <div className="border-t border-outline/10 pt-3 grid grid-cols-2 gap-4">
-                  {data.busco.length > 0 && (
-                    <div className="space-y-1">
-                      <span className="text-[8px] font-mono text-secondary-orange uppercase block tracking-wider">Busco</span>
-                      <div className="flex flex-wrap gap-1">
-                        {data.busco.map(b => (
-                          <span key={b} className="text-[8px] bg-secondary-orange/10 border border-secondary-orange/20 text-secondary-orange px-2 py-0.5 rounded-full uppercase font-mono">{b}</span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {data.ofrezco.length > 0 && (
-                    <div className="space-y-1">
-                      <span className="text-[8px] font-mono text-secondary-orange uppercase block tracking-wider">Ofrezco</span>
-                      <div className="flex flex-wrap gap-1">
-                        {data.ofrezco.map(o => (
-                          <span key={o} className="text-[8px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full uppercase font-mono">{o}</span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
+            {/* Footer Bottom Bar decoration */}
+            <div className="h-1.5 bg-gradient-to-r from-secondary-orange via-amber-500 to-secondary-orange shrink-0 mt-auto" />
           </div>
+
         </div>
       )}
 
