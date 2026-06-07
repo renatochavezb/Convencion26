@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Camera, Check, Sparkles, Briefcase, MapPin, Award, CheckCircle, Edit3 } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 interface PassportData {
   folio: string;
@@ -38,41 +38,41 @@ const INDUSTRIAS = [
 ];
 
 const TAMANOS = [
-  { val: '1-10', label: '1–10 personas' },
-  { val: '11-50', label: '11–50 personas' },
-  { val: '51-200', label: '51–200 personas' },
+  { val: '1–10', label: '1–10 personas' },
+  { val: '11–50', label: '11–50 personas' },
+  { val: '51–200', label: '51–200 personas' },
   { val: '200+', label: '200+ personas' }
 ];
 
 const BUSQUEDAS = [
-  { val: 'clientes', label: 'Clientes' },
-  { val: 'socios', label: 'Socios' },
-  { val: 'mentores', label: 'Mentores' },
-  { val: 'inversion', label: 'Inversión' },
-  { val: 'talento', label: 'Talento' },
-  { val: 'aprendizaje', label: 'Aprendizaje' },
-  { val: 'alianzas', label: 'Alianzas comerciales' },
-  { val: 'proveedores', label: 'Proveedores' }
+  { val: 'Clientes', label: 'Clientes' },
+  { val: 'Socios', label: 'Socios' },
+  { val: 'Mentores', label: 'Mentores' },
+  { val: 'Inversión', label: 'Inversión' },
+  { val: 'Talento', label: 'Talento' },
+  { val: 'Aprendizaje', label: 'Aprendizaje' },
+  { val: 'Alianzas', label: 'Alianzas' },
+  { val: 'Proveedores', label: 'Proveedores' }
 ];
 
 const OFRECIMIENTOS = [
-  { val: 'experiencia', label: 'Experiencia sectorial' },
-  { val: 'red', label: 'Red de contactos' },
-  { val: 'capital', label: 'Capital / inversión' },
-  { val: 'mercado', label: 'Acceso a mercado' },
-  { val: 'conocimiento', label: 'Conocimiento técnico' },
-  { val: 'distribución', label: 'Distribución' },
-  { val: 'mentoría', label: 'Mentoría' }
+  { val: 'Experiencia', label: 'Experiencia' },
+  { val: 'Red de contactos', label: 'Red de contactos' },
+  { val: 'Capital', label: 'Capital' },
+  { val: 'Mercado', label: 'Mercado' },
+  { val: 'Conocimiento técnico', label: 'Conocimiento' },
+  { val: 'Distribución', label: 'Distribución' },
+  { val: 'Mentoría', label: 'Mentoría' }
 ];
 
 const SELLOS_INFO = [
-  { id: 1, name: 'Flash Back', desc: 'Jue — Rompe hielo', color: '#d946ef', bgClass: 'bg-[#1e0a2e]', borderClass: 'border-[#d946ef]', textClass: 'text-[#d946ef]' },
-  { id: 2, name: 'Hora Cero', desc: 'Vie — Inauguración', color: '#f59e0b', bgClass: 'bg-[#1c0a00]', borderClass: 'border-[#f59e0b]', textClass: 'text-[#f59e0b]' },
-  { id: 3, name: 'Liderazgo / Innovación', desc: 'Vie — Cumbre IA', color: '#06b6d4', bgClass: 'bg-[#020e1a]', borderClass: 'border-[#06b6d4]', textClass: 'text-[#06b6d4]' },
-  { id: 4, name: 'Somos COMEV', desc: 'Vie — Foto grupal', color: '#f8fafc', bgClass: 'bg-[#0f172a]', borderClass: 'border-[#f8fafc]', textClass: 'text-[#f8fafc]' },
-  { id: 5, name: 'Ejecutivo Distng.', desc: 'Vie — Gala', color: '#facc15', bgClass: 'bg-[#00082e]', borderClass: 'border-[#1d4ed8]', textClass: 'text-[#facc15]' },
-  { id: 6, name: 'Paisajes y Tradición', desc: 'Sáb — Excursión', color: '#10b981', bgClass: 'bg-[#00150a]', borderClass: 'border-[#10b981]', textClass: 'text-[#10b981]' },
-  { id: 7, name: 'Toma de Protesta', desc: 'Sáb — Cena cierre', color: '#f43f5e', bgClass: 'bg-[#1a0008]', borderClass: 'border-[#f43f5e]', textClass: 'text-[#f43f5e]' }
+  { id: 1, name: 'Flash Back', desc: 'Rompe Hielo 80s', date: 'Jue 3 Sep · Hacienda San José · 7 PM', color: '#d946ef', bgClass: 'bg-[#1e0a2e]', borderClass: 'border-[#d946ef]', textClass: 'text-[#d946ef]' },
+  { id: 2, name: 'Hora Cero', desc: 'Inauguración Oficial', date: 'Vie 4 Sep · Centro de Exposiciones', color: '#f59e0b', bgClass: 'bg-[#1c0a00]', borderClass: 'border-[#f59e0b]', textClass: 'text-[#f59e0b]' },
+  { id: 3, name: 'Liderazgo · Innovación', desc: 'Conferencias Magistrales · Néstor Guerra', date: 'Vie 4 Sep · Sala Principal', color: '#06b6d4', bgClass: 'bg-[#020e1a]', borderClass: 'border-[#06b6d4]', textClass: 'text-[#06b6d4]' },
+  { id: 4, name: 'Somos COMEV', desc: 'Foto del Recuerdo', date: 'Vie 4 Sep · Centro de Convenciones', color: '#f8fafc', bgClass: 'bg-[#0f172a]', borderClass: 'border-[#f8fafc]', textClass: 'text-[#f8fafc]' },
+  { id: 5, name: 'Ejecutivo Distinguido', desc: 'Cena de Gala · Oscar Gardea Acosta', date: 'Vie 4 Sep · Hotel María Bonita', color: '#facc15', bgClass: 'bg-[#00082e]', borderClass: 'border-[#1d4ed8]', textClass: 'text-[#facc15]' },
+  { id: 6, name: 'Paisajes y Tradición', desc: 'Experiencia Regional', date: 'Sáb 5 Sep · Excursión', color: '#10b981', bgClass: 'bg-[#00150a]', borderClass: 'border-[#10b981]', textClass: 'text-[#10b981]' },
+  { id: 7, name: 'Toma de Protesta', desc: 'Nuevo Consejo 2026–2027', date: 'Sáb 5 Sep · Cena de Cierre', color: '#f43f5e', bgClass: 'bg-[#1a0008]', borderClass: 'border-[#f43f5e]', textClass: 'text-[#f43f5e]' }
 ];
 
 export default function PassportPage() {
@@ -99,10 +99,10 @@ export default function PassportPage() {
   });
 
   const [isEditing, setIsEditing] = useState<boolean>(true);
+  const [activePage, setActivePage] = useState<number>(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
-  const bannerInputRef = useRef<HTMLInputElement>(null);
 
   // Initialize folio and load data
   useEffect(() => {
@@ -176,6 +176,21 @@ export default function PassportPage() {
     }
   }, []);
 
+  // Monitor scroll snap index
+  useEffect(() => {
+    const container = document.getElementById('pages-container');
+    if (!container) return;
+    const handleScroll = () => {
+      const pageHeight = container.clientHeight;
+      if (pageHeight <= 0) return;
+      const scrollTop = container.scrollTop;
+      const index = Math.round(scrollTop / pageHeight);
+      setActivePage(index);
+    };
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     setData(prev => ({ ...prev, [id]: value }));
@@ -197,7 +212,18 @@ export default function PassportPage() {
       const newSellos = sellos.includes(id)
         ? sellos.filter(sid => sid !== id)
         : [...sellos, id];
-      return { ...prev, sellos: newSellos };
+      
+      const updatedData = { ...prev, sellos: newSellos };
+      // Save instantly to localStorage
+      localStorage.setItem('comev_perfil', JSON.stringify(updatedData));
+      // Try background save
+      fetch('/api/passport', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedData),
+      }).catch(err => console.error('Offline stamp save failed', err));
+      
+      return updatedData;
     });
   };
 
@@ -232,47 +258,18 @@ export default function PassportPage() {
           if (ctx) {
             ctx.drawImage(img, 0, 0, width, height);
             const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
-            setData(prev => ({ ...prev, photoUrl: compressedBase64 }));
-          }
-        };
-        img.src = ev.target!.result as string;
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleBannerUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      if (ev.target?.result) {
-        const img = new Image();
-        img.onload = () => {
-          const maxDim = 600;
-          let width = img.width;
-          let height = img.height;
-          if (width > height) {
-            if (width > maxDim) {
-              height = Math.round((height * maxDim) / width);
-              width = maxDim;
-            }
-          } else {
-            if (height > maxDim) {
-              width = Math.round((width * maxDim) / height);
-              height = maxDim;
-            }
-          }
-
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            ctx.drawImage(img, 0, 0, width, height);
-            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
-            setData(prev => ({ ...prev, bannerUrl: compressedBase64 }));
+            
+            setData(prev => {
+              const updatedData = { ...prev, photoUrl: compressedBase64 };
+              localStorage.setItem('comev_perfil', JSON.stringify(updatedData));
+              // Background save
+              fetch('/api/passport', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedData),
+              }).catch(err => console.error('Offline photo save failed', err));
+              return updatedData;
+            });
           }
         };
         img.src = ev.target!.result as string;
@@ -302,6 +299,14 @@ export default function PassportPage() {
     setIsEditing(false);
   };
 
+  const openModal = () => {
+    setIsEditing(true);
+  };
+
+  const closeModal = () => {
+    setIsEditing(false);
+  };
+
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => {
@@ -309,1004 +314,1269 @@ export default function PassportPage() {
     }, 3000);
   };
 
+  const goPage = (i: number) => {
+    const container = document.getElementById('pages-container');
+    if (container) {
+      const pageHeight = container.clientHeight;
+      container.scrollTo({ top: i * pageHeight, behavior: 'smooth' });
+      setActivePage(i);
+    }
+  };
+
+  const formatName = (name: string) => {
+    if (!name) return <>TU<br/>NOMBRE</>;
+    const parts = name.trim().split(' ');
+    const first = parts[0] || '';
+    const rest = parts.slice(1).join(' ') || '';
+    return rest ? <>{first}<br/>{rest}</> : <>{first}</>;
+  };
+
   const earnedCount = data.sellos.length;
   const progressPercent = Math.round((earnedCount / 7) * 100);
 
   return (
-    <div className="min-h-screen bg-deep-blue text-on-surface font-sans relative selection:bg-secondary-orange selection:text-deep-blue">
-      {/* Grid Pattern overlay */}
-      <div className="absolute inset-0 grid-pattern pointer-events-none opacity-[0.8] z-0" />
+    <div className="passport-container">
+      <style dangerouslySetInnerHTML={{ __html: `
+        .passport-container {
+          --navy: #000f20;
+          --navy2: #040d1a;
+          --orange: #fe9800;
+          --orange2: #ffc080;
+          --border: #172b41;
+          --border2: #0b2136;
+          --border3: #0b1f35;
+          --text: #e2e8f0;
+          --dim: #64748b;
+          --muted: #334155;
+          --dark: #1e3a5f;
+          
+          background: #08121e;
+          font-family: 'JetBrains Mono', monospace;
+          max-width: 390px;
+          margin: 0 auto;
+          position: relative;
+          min-height: 100vh;
+          min-height: 100dvh;
+          box-shadow: 0 0 50px rgba(0,0,0,0.8);
+          -webkit-font-smoothing: antialiased;
+        }
+        
+        .passport-container * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
 
-      {isEditing ? (
-        <div className="relative z-10 max-w-6xl mx-auto px-4 pt-8 md:pt-16 pb-20">
-            {/* Title & Description */}
-            <div className="mb-10 text-center md:text-left">
-              <span className="text-secondary-orange font-bold text-xs uppercase font-mono tracking-widest">
-                COMEV 2026 • Convención Nacional
-              </span>
-              <h2 className="font-headline font-black text-4xl md:text-5xl uppercase tracking-tight text-white mt-1">
-                CONFIGURAR <span className="text-secondary-orange">PASAPORTE</span>
-              </h2>
-              <p className="text-on-surface-variant font-sans text-sm mt-2 max-w-2xl">
-                Completa tus datos profesionales de networking y registra tu asistencia a los 7 momentos cumbre del congreso para validar tu pasaporte digital.
-              </p>
+        .passport-container .pages {
+          height: 100vh;
+          height: 100dvh;
+          overflow-y: scroll;
+          scroll-snap-type: y mandatory;
+          scroll-behavior: smooth;
+        }
+
+        .passport-container .page {
+          scroll-snap-align: start;
+          min-height: 100vh;
+          min-height: 100dvh;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .passport-container .page::after {
+          content: '';
+          position: absolute; inset: 0;
+          background-image: repeating-linear-gradient(
+            -45deg, transparent, transparent 22px,
+            rgba(254,152,0,.022) 22px, rgba(254,152,0,.022) 23px
+          );
+          pointer-events: none; z-index: 0;
+        }
+
+        .passport-container .page::before {
+          content: '';
+          position: absolute; top: 0; left: 0; right: 0;
+          height: 3px;
+          background: linear-gradient(90deg, #fe9800, #ffc080, #fe9800);
+          z-index: 10;
+        }
+
+        .passport-container .bottom-line {
+          height: 3px;
+          background: linear-gradient(90deg, #fe9800, #ffc080, #fe9800);
+          flex-shrink: 0;
+        }
+
+        .passport-container .inner {
+          position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column;
+        }
+
+        .passport-container .topbar {
+          background: var(--navy2);
+          padding: .45rem 1.1rem;
+          display: flex; justify-content: space-between; align-items: center;
+          border-bottom: 0.5px solid var(--border);
+          flex-shrink: 0;
+        }
+
+        .passport-container .tl {
+          font-size: 8px; color: var(--dim); letter-spacing: .14em; text-transform: uppercase;
+        }
+
+        .passport-container .tr {
+          font-size: 8px; color: var(--orange); font-weight: 700; letter-spacing: .1em;
+        }
+
+        .passport-container .brand {
+          padding: .85rem 1.1rem .75rem;
+          display: flex; justify-content: space-between; align-items: center;
+          border-bottom: 0.5px solid var(--border);
+          flex-shrink: 0; background: var(--navy);
+        }
+
+        .passport-container .brand-sup {
+          font-size: 8px; color: var(--dim); letter-spacing: .16em; text-transform: uppercase; margin-bottom: .22rem;
+        }
+
+        .passport-container .brand-line1 {
+          font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; font-style: italic; color: #94a3b8; line-height: 1; margin-bottom: .16rem;
+        }
+
+        .passport-container .brand-line2 {
+          font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 900; font-style: italic; color: var(--orange); line-height: 1; letter-spacing: -.5px; white-space: nowrap;
+        }
+
+        .passport-container .brand-line2.cyan {
+          color: #06b6d4;
+        }
+
+        .passport-container .seal {
+          width: 46px; height: 46px; border-radius: 50%; border: 1.5px solid var(--orange); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+
+        .passport-container .seal-s {
+          font-size: 6px; font-weight: 700; letter-spacing: .08em; color: var(--orange); text-transform: uppercase;
+        }
+
+        .passport-container .seal-n {
+          font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 900; color: var(--orange); line-height: 1;
+        }
+
+        .passport-container .hero {
+          display: flex; flex: 1; min-height: 190px; background: var(--navy);
+        }
+
+        .passport-container .photo-col {
+          width: 120px; flex-shrink: 0;
+          background: var(--border2);
+          display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px;
+          border-right: 0.5px solid var(--border);
+          cursor: pointer; position: relative; overflow: hidden;
+        }
+
+        .passport-container .photo-col img {
+          width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;
+        }
+
+        .passport-container .photo-placeholder {
+          text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px;
+        }
+
+        .passport-container .photo-icon {
+          font-size: 26px; color: var(--dark);
+        }
+
+        .passport-container .photo-lbl {
+          font-size: 8px; color: var(--dark); text-transform: uppercase; letter-spacing: .1em; text-align: center; line-height: 1.5;
+        }
+
+        .passport-container .name-col {
+          flex: 1; padding: .85rem .9rem; display: flex; flex-direction: column; justify-content: space-between; min-width: 0;
+        }
+
+        .passport-container .pname {
+          font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 900; font-style: italic; color: #fff; line-height: 1.05; letter-spacing: -.5px; margin-bottom: .2rem;
+        }
+
+        .passport-container .pcargo {
+          font-size: 10px; font-weight: 700; color: var(--orange); letter-spacing: .07em; text-transform: uppercase; margin-bottom: .08rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+
+        .passport-container .pempresa {
+          font-size: 12px; color: #94a3b8; margin-bottom: .65rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+
+        .passport-container .meta {
+          display: flex; flex-direction: column; gap: .3rem;
+        }
+
+        .passport-container .meta-row {
+          display: flex; gap: .5rem; align-items: baseline;
+        }
+
+        .passport-container .ml {
+          font-size: 8px; color: var(--dim); letter-spacing: .1em; text-transform: uppercase; min-width: 52px;
+        }
+
+        .passport-container .mv {
+          font-size: 10px; color: var(--text); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+
+        .passport-container .badges {
+          display: flex; gap: 5px; flex-wrap: wrap; margin-top: .5rem;
+        }
+
+        .passport-container .badge {
+          font-size: 8px; padding: 2px 8px; border-radius: 3px; font-weight: 600; letter-spacing: .05em;
+        }
+
+        .passport-container .b-ind {
+          background: rgba(16,185,129,.12); color: #10b981; border: 0.5px solid rgba(16,185,129,.25);
+        }
+
+        .passport-container .b-del {
+          background: rgba(254,152,0,.12); color: var(--orange); border: 0.5px solid rgba(254,152,0,.25);
+        }
+
+        .passport-container .viva {
+          background: var(--orange);
+          padding: .38rem 1.1rem;
+          display: flex; align-items: center; justify-content: space-between;
+          flex-shrink: 0;
+        }
+
+        .passport-container .viva-t {
+          font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 900; font-style: italic; color: #000f20; letter-spacing: .5px;
+        }
+
+        .passport-container .viva-s {
+          color: #000f20; font-size: 10px; letter-spacing: 3px;
+        }
+
+        .passport-container .reto {
+          padding: .75rem 1.1rem;
+          border-bottom: 0.5px solid var(--border);
+          background: var(--navy2);
+          flex-shrink: 0;
+        }
+
+        .passport-container .reto-lbl {
+          font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); margin-bottom: .4rem; display: flex; align-items: center; gap: 6px;
+        }
+
+        .passport-container .reto-lbl::before {
+          content: ''; width: 3px; height: 10px; background: var(--orange); flex-shrink: 0;
+        }
+
+        .passport-container .reto-txt {
+          font-size: 12px; color: #94a3b8; line-height: 1.65; font-style: italic;
+        }
+
+        .passport-container .reto-txt strong {
+          color: var(--text); font-style: normal;
+        }
+
+        .passport-container .busco {
+          padding: .65rem 1.1rem;
+          border-bottom: 0.5px solid var(--border);
+          display: flex; gap: .75rem;
+          flex-shrink: 0; background: var(--navy);
+        }
+
+        .passport-container .busco-col {
+          flex: 1; min-width: 0;
+        }
+
+        .passport-container .busco-lbl {
+          font-size: 8px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin-bottom: .35rem;
+        }
+
+        .passport-container .chips {
+          display: flex; flex-wrap: wrap; gap: 4px;
+        }
+
+        .passport-container .co {
+          font-size: 9px; padding: 2px 8px; border-radius: 20px; background: rgba(254,152,0,.12); color: var(--orange); border: 0.5px solid rgba(254,152,0,.28); font-weight: 600;
+        }
+
+        .passport-container .cc {
+          font-size: 9px; padding: 2px 8px; border-radius: 20px; background: rgba(6,182,212,.1); color: #06b6d4; border: 0.5px solid rgba(6,182,212,.25); font-weight: 600;
+        }
+
+        .passport-container .sellos-strip {
+          padding: .65rem 1.1rem; border-bottom: 0.5px solid var(--border); flex-shrink: 0; background: var(--navy);
+        }
+
+        .passport-container .s-lbl {
+          font-size: 8px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin-bottom: .45rem; display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .passport-container .s-lbl span {
+          color: var(--orange); font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700;
+        }
+
+        .passport-container .s-row {
+          display: flex; gap: 6px; align-items: center; justify-content: space-between;
+        }
+
+        .passport-container .sd {
+          width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px dashed; flex-shrink: 0; transition: .3s;
+        }
+
+        .passport-container .sd.earned {
+          border-style: solid;
+        }
+
+        .passport-container .sd1 { border-color: #d946ef; }
+        .passport-container .sd2 { border-color: #f59e0b; }
+        .passport-container .sd3 { border-color: #06b6d4; }
+        .passport-container .sd4 { border-color: #f8fafc; }
+        .passport-container .sd5 { border-color: #1d4ed8; }
+        .passport-container .sd6 { border-color: #10b981; }
+        .passport-container .sd7 { border-color: #f43f5e; }
+
+        .passport-container .sd1.earned { background: #1e0a2e; }
+        .passport-container .sd2.earned { background: #1c0a00; }
+        .passport-container .sd3.earned { background: #020e1a; }
+        .passport-container .sd4.earned { background: #0f172a; }
+        .passport-container .sd5.earned { background: #00082e; }
+        .passport-container .sd6.earned { background: #00150a; }
+        .passport-container .sd7.earned { background: #1a0008; }
+
+        .passport-container .sdn {
+          font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 900;
+        }
+
+        .passport-container .sd1 .sdn { color: #d946ef; }
+        .passport-container .sd2 .sdn { color: #f59e0b; }
+        .passport-container .sd3 .sdn { color: #06b6d4; }
+        .passport-container .sd4 .sdn { color: #f8fafc; }
+        .passport-container .sd5 .sdn { color: #facc15; }
+        .passport-container .sd6 .sdn { color: #10b981; }
+        .passport-container .sd7 .sdn { color: #f43f5e; }
+
+        .passport-container .pm {
+          height: 4px; background: var(--border3); border-radius: 2px; margin-top: .45rem; overflow: hidden; display: flex; gap: 1px;
+        }
+
+        .passport-container .pm-s {
+          flex: 1; border-radius: 1px; background: var(--border2); transition: .5s;
+        }
+
+        .passport-container .pm1 { background: #d946ef; }
+        .passport-container .pm2 { background: #f59e0b; }
+        .passport-container .pm3 { background: #06b6d4; }
+        .passport-container .pm4 { background: #f8fafc; }
+        .passport-container .pm5 { background: #1d4ed8; }
+        .passport-container .pm6 { background: #10b981; }
+        .passport-container .pm7 { background: #f43f5e; }
+
+        .passport-container .folio {
+          padding: .55rem 1.1rem;
+          display: flex; justify-content: space-between; align-items: center;
+          flex-shrink: 0; background: var(--navy);
+        }
+
+        .passport-container .folio-ll {
+          font-size: 7px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); margin-bottom: .12rem;
+        }
+
+        .passport-container .folio-n {
+          font-size: 12px; font-weight: 700; color: var(--orange); letter-spacing: .06em;
+        }
+
+        .passport-container .folio-r {
+          font-size: 8px; color: var(--dim); text-align: right; line-height: 1.6;
+        }
+
+        .passport-container .folio-r strong {
+          color: #475569; display: block; font-size: 9px;
+        }
+
+        .passport-container .slist {
+          padding: .6rem 1.1rem; display: flex; flex-direction: column; gap: .45rem; flex: 1; background: var(--navy); overflow-y: auto;
+        }
+
+        .passport-container .srow {
+          display: flex; align-items: center; gap: .7rem;
+          background: var(--border3); border-radius: 8px;
+          padding: .55rem .7rem; border: 0.5px solid var(--border);
+          position: relative; overflow: hidden;
+        }
+
+        .passport-container .srow::before {
+          content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+        }
+
+        .passport-container .s1::before { background: #d946ef; }
+        .passport-container .s2::before { background: #f59e0b; }
+        .passport-container .s3::before { background: #06b6d4; }
+        .passport-container .s4::before { background: #f8fafc; }
+        .passport-container .s5::before { background: #1d4ed8; }
+        .passport-container .s6::before { background: #10b981; }
+        .passport-container .s7::before { background: #f43f5e; }
+
+        .passport-container .srow.earned {
+          border-width: 1px;
+        }
+
+        .passport-container .s1.earned { border-color: #d946ef; background: #1e0a2e; }
+        .passport-container .s2.earned { border-color: #f59e0b; background: #1c0a00; }
+        .passport-container .s3.earned { border-color: #06b6d4; background: #020e1a; }
+        .passport-container .s4.earned { border-color: #f8fafc; background: #0f172a; }
+        .passport-container .s5.earned { border-color: #1d4ed8; background: #00082e; }
+        .passport-container .s6.earned { border-color: #10b981; background: #00150a; }
+        .passport-container .s7.earned { border-color: #f43f5e; background: #1a0008; }
+
+        .passport-container .scirc {
+          width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1.5px dashed;
+        }
+
+        .passport-container .srow.earned .scirc {
+          border-style: solid;
+        }
+
+        .passport-container .s1 .scirc { border-color: #d946ef; }
+        .passport-container .s2 .scirc { border-color: #f59e0b; }
+        .passport-container .s3 .scirc { border-color: #06b6d4; }
+        .passport-container .s4 .scirc { border-color: #f8fafc; }
+        .passport-container .s5 .scirc { border-color: #1d4ed8; }
+        .passport-container .s6 .scirc { border-color: #10b981; }
+        .passport-container .s7 .scirc { border-color: #f43f5e; }
+
+        .passport-container .scn {
+          font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 900;
+        }
+
+        .passport-container .s1 .scn { color: #d946ef; }
+        .passport-container .s2 .scn { color: #f59e0b; }
+        .passport-container .s3 .scn { color: #06b6d4; }
+        .passport-container .s4 .scn { color: #f8fafc; }
+        .passport-container .s5 .scn { color: #facc15; }
+        .passport-container .s6 .scn { color: #10b981; }
+        .passport-container .s7 .scn { color: #f43f5e; }
+
+        .passport-container .sinfo {
+          flex: 1; min-width: 0;
+        }
+
+        .passport-container .sname {
+          font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 900; font-style: italic; color: #fff; margin-bottom: .08rem;
+        }
+
+        .passport-container .sev {
+          font-size: 9px; color: var(--dim); text-transform: uppercase; letter-spacing: .05em;
+        }
+
+        .passport-container .sdate {
+          font-size: 9px; color: var(--muted);
+        }
+
+        .passport-container .badge-p {
+          font-size: 7px; padding: 2px 6px; border-radius: 3px; background: var(--border3); color: var(--muted); border: 0.5px solid var(--border); font-weight: 700; display: inline-block; margin-top: .18rem; letter-spacing: .05em;
+        }
+
+        .passport-container .badge-earned {
+          background: #10b981; color: #fff; border-color: #10b981;
+        }
+
+        .passport-container .prog {
+          padding: .6rem 1.1rem .85rem; border-top: 0.5px solid var(--border); background: var(--navy); flex-shrink: 0;
+        }
+
+        .passport-container .prog-lbl {
+          font-size: 8px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin-bottom: .4rem;
+        }
+
+        .passport-container .prog-bar {
+          height: 5px; background: var(--border3); border-radius: 3px; overflow: hidden; display: flex; gap: 2px; margin-bottom: .3rem;
+        }
+
+        .passport-container .prog-txt {
+          display: flex; justify-content: space-between; font-size: 9px; color: var(--dim);
+        }
+
+        .passport-container .prog-txt strong {
+          color: var(--orange);
+        }
+
+        .passport-container .qrc {
+          margin: .7rem 1.1rem;
+          background: var(--border3); border: 0.5px solid #06b6d4; border-radius: 10px;
+          padding: .75rem; display: flex; align-items: center; gap: .8rem;
+          flex-shrink: 0;
+        }
+
+        .passport-container .qrb {
+          width: 62px; height: 62px; flex-shrink: 0; background: #e2e8f0; border-radius: 5px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; padding: 5px;
+        }
+
+        .passport-container .qb {
+          background: #000; border-radius: 1px;
+        }
+
+        .passport-container .qw {
+          background: transparent;
+        }
+
+        .passport-container .qrl {
+          font-size: 8px; letter-spacing: .1; text-transform: uppercase; color: #06b6d4; margin-bottom: .18rem;
+        }
+
+        .passport-container .qrn {
+          font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 900; color: #fff; margin-bottom: .08rem;
+        }
+
+        .passport-container .qrf {
+          font-size: 9px; color: var(--dim);
+        }
+
+        .passport-container .qrs {
+          font-size: 8px; color: #06b6d4; margin-top: .28rem; letter-spacing: .05em;
+        }
+
+        .passport-container .sec-div {
+          padding: .6rem 1.1rem; font-size: 9px; color: var(--orange); letter-spacing: .14em; text-transform: uppercase;
+          border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 7px;
+          background: var(--navy2); flex-shrink: 0;
+        }
+
+        .passport-container .sec-div::before {
+          content: ''; width: 3px; height: 12px; background: var(--orange); flex-shrink: 0;
+        }
+
+        .passport-container .nsec {
+          padding: .6rem 1.1rem .5rem; display: flex; flex-direction: column; gap: .4rem; flex: 1; background: var(--navy); overflow-y: auto;
+        }
+
+        .passport-container .nf {
+          background: var(--border3); border-radius: 7px; padding: .55rem .7rem; border: 0.5px solid var(--border);
+        }
+
+        .passport-container .nfl {
+          font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); margin-bottom: .25rem;
+        }
+
+        .passport-container .nfv {
+          font-size: 11px; color: #94a3b8; line-height: 1.55;
+        }
+
+        .passport-container .nfe {
+          font-size: 11px; color: var(--muted); font-style: italic;
+        }
+
+        .passport-container .cr {
+          display: flex; flex-wrap: wrap; gap: 4px; margin-top: .2rem;
+        }
+
+        .passport-container .btn-edit {
+          display: block; margin: .5rem 1.1rem 1.1rem;
+          background: transparent; border: 1px solid var(--orange); color: var(--orange);
+          border-radius: 8px; padding: .65rem;
+          font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
+          text-align: center; cursor: pointer; letter-spacing: .04em;
+          transition: .15s; flex-shrink: 0;
+        }
+
+        .passport-container .btn-edit:hover {
+          background: var(--orange); color: #000f20;
+        }
+
+        .passport-container .dots {
+          position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+          display: flex; flex-direction: column; gap: 6px; z-index: 100;
+        }
+
+        .passport-container .dot {
+          width: 5px; height: 5px; border-radius: 50%; background: var(--border); cursor: pointer; transition: .2s;
+        }
+
+        .passport-container .dot.active {
+          background: var(--orange); height: 14px; border-radius: 3px;
+        }
+
+        .passport-container .modal {
+          position: absolute; inset: 0;
+          background: rgba(0,9,20,.97); z-index: 200;
+          overflow-y: auto; padding: 1.25rem 1.25rem 3rem;
+          max-width: 390px; margin: 0 auto;
+        }
+
+        .passport-container .modal-header {
+          display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); padding-bottom: .75rem;
+        }
+
+        .passport-container .modal-title {
+          font-family: 'Montserrat', sans-serif; font-size: 16px; font-weight: 900; font-style: italic; color: #fff;
+        }
+
+        .passport-container .modal-title span {
+          color: var(--orange);
+        }
+
+        .passport-container .modal-close {
+          background: none; border: none; color: var(--dim); font-size: 20px; cursor: pointer; line-height: 1; outline: none;
+        }
+
+        .passport-container .f-group {
+          margin-bottom: .75rem;
+        }
+
+        .passport-container .f-label {
+          font-size: 8px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); display: block; margin-bottom: .3rem;
+        }
+
+        .passport-container .f-input {
+          width: 100%; background: #040d1a; border: 0.5px solid var(--border);
+          border-radius: 6px; padding: .55rem .75rem;
+          color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 12px;
+          outline: none; transition: .2s;
+        }
+
+        .passport-container .f-input:focus {
+          border-color: var(--orange);
+        }
+
+        .passport-container .f-input::placeholder {
+          color: var(--muted);
+        }
+
+        .passport-container select.f-input option {
+          background: #040d1a;
+        }
+
+        .passport-container textarea.f-input {
+          resize: vertical; min-height: 72px; line-height: 1.6;
+        }
+
+        .passport-container .two {
+          display: grid; grid-template-columns: 1fr 1fr; gap: .65rem;
+        }
+
+        .passport-container .m-chip {
+          font-size: 10px; padding: 4px 10px; border-radius: 20px; cursor: pointer;
+          border: 0.5px solid var(--border); color: var(--dim); transition: .15s;
+        }
+
+        .passport-container .m-chip:hover {
+          border-color: var(--orange); color: var(--orange);
+        }
+
+        .passport-container .m-chip.active {
+          background: var(--orange); border-color: var(--orange); color: #000f20; font-weight: 700;
+        }
+
+        .passport-container .chips-wrap {
+          display: flex; flex-wrap: wrap; gap: 6px; margin-top: .3rem;
+        }
+
+        .passport-container .modal-sec {
+          font-size: 9px; color: var(--orange); letter-spacing: .14em; text-transform: uppercase; display: flex; align-items: center; gap: 6px; margin: .75rem 0 .5rem; padding-bottom: .4rem; border-bottom: 0.5px solid var(--border);
+        }
+
+        .passport-container .modal-sec::before {
+          content: ''; width: 3px; height: 11px; background: var(--orange);
+        }
+
+        .passport-container .btn-save {
+          width: 100%; background: var(--orange); color: #000f20; border: none; border-radius: 8px;
+          padding: .85rem; font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 900;
+          letter-spacing: .05em; cursor: pointer; margin-top: 1.5rem; transition: .15s;
+        }
+
+        .passport-container .btn-save:hover {
+          background: var(--orange2);
+        }
+
+        .passport-container .topbar button {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          background: transparent;
+          border: none;
+          color: var(--dim);
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 8px;
+          letter-spacing: .14em;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition: color 0.15s;
+        }
+        .passport-container .topbar button:hover {
+          color: #fff;
+        }
+
+        /* Toast Popup */
+        .toast-popup {
+          position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+          z-index: 300; background: #10b981; border: 1.5px solid #10b981; text-align: center;
+          color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: bold;
+          padding: 8px 16px; border-radius: 6px; width: calc(100% - 40px); max-width: 350px;
+          box-shadow: 0 10px 20px rgba(0,0,0,0.3); pointer-events: none;
+        }
+      `}} />
+
+      {/* PAGE DOTS INDICATOR */}
+      {!isEditing && (
+        <div className="dots">
+          <div className={`dot ${activePage === 0 ? 'active' : ''}`} onClick={() => goPage(0)}></div>
+          <div className={`dot ${activePage === 1 ? 'active' : ''}`} onClick={() => goPage(1)}></div>
+          <div className={`dot ${activePage === 2 ? 'active' : ''}`} onClick={() => goPage(2)}></div>
+        </div>
+      )}
+
+      {/* SCROLLABLE VERTICAL SNAPPING PAGES */}
+      <div className="pages" id="pages-container">
+        
+        {/* ─── PÁGINA 1 — EL PASAPORTE ─── */}
+        <div className="page" id="page-0" style={{ background: 'var(--navy)' }}>
+          <div className="inner">
+            <div className="topbar">
+              <button onClick={() => { window.location.hash = ''; }}>
+                <ArrowLeft className="w-3 h-3" /> VOLVER
+              </button>
+              <span className="tr">EVM</span>
+            </div>
+            
+            <div className="brand">
+              <div>
+                <div className="brand-sup">Convención Nacional · Sep 3–5 · Chihuahua</div>
+                <div className="brand-line1">Pasaporte</div>
+                <div className="brand-line2">¡VIVA CHIHUAHUA!</div>
+              </div>
+              <div className="seal">
+                <div className="seal-s">COMEV</div>
+                <div className="seal-n">26</div>
+                <div className="seal-s">MX</div>
+              </div>
             </div>
 
-            {/* Layout Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* LEFT COLUMN: Sticky Live Passport Badge Preview */}
-          <div className="lg:col-span-5 lg:sticky lg:top-24 flex justify-center w-full">
-            
-            {/* Discord-style Profile Card Preview */}
-            <div className="relative w-full max-w-[420px] bg-[#0a0f1d] border-2 border-outline/25 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col text-on-surface">
+            <div className="hero">
+              <div className="photo-col" onClick={() => fileInputRef.current?.click()}>
+                {data.photoUrl ? (
+                  <img src={data.photoUrl} alt="foto del participante" style={{ display: 'block' }} />
+                ) : (
+                  <div className="photo-placeholder">
+                    <span className="photo-icon">📷</span>
+                    <span className="photo-lbl">Tap para<br/>agregar<br/>foto</span>
+                  </div>
+                )}
+              </div>
               
-              {/* 1. PROFILE HEADER BANNER */}
-              <div 
-                className="h-[100px] xs:h-[120px] relative overflow-hidden bg-gradient-to-r from-deep-blue via-[#001021] to-secondary-orange/30 shrink-0 bg-cover bg-center"
-                style={{ backgroundImage: data.bannerUrl ? `url(${data.bannerUrl})` : 'none' }}
-              >
-                {/* Mesh grid pattern */}
-                <div className="absolute inset-0 grid-pattern opacity-[0.2] pointer-events-none" />
-                {/* Tech circles or lines glow */}
-                <div className="absolute -right-10 -top-10 w-28 h-28 rounded-full bg-secondary-orange/15 blur-2xl pointer-events-none" />
-                
-                {/* Banner Text overlay */}
-                <div className="absolute bottom-2.5 right-4 font-sans text-[8px] xs:text-[9px] font-black text-secondary-orange tracking-widest uppercase opacity-85">
-                  CONVENCIÓN NACIONAL * COMEV 2026
+              <div className="name-col">
+                <div>
+                  <div className="pname">{formatName(data.nombre)}</div>
+                  <div className="pcargo">{data.cargo || 'Cargo'}</div>
+                  <div className="pempresa">{data.empresa || 'Empresa'}</div>
+                  <div className="meta">
+                    <div className="meta-row">
+                      <span className="ml">Delegación</span>
+                      <span className="mv">{data.delegacion || '—'}</span>
+                    </div>
+                    <div className="meta-row">
+                      <span className="ml">Industria</span>
+                      <span className="mv">{data.industria || '—'}</span>
+                    </div>
+                    <div className="meta-row">
+                      <span className="ml">Empresa</span>
+                      <span className="mv">{data.tamano ? `${data.tamano} personas` : '—'}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="badges">
+                  <span className="badge b-ind">{data.modalidad || '—'}</span>
+                  <span className="badge b-del">{data.delegacion ? data.delegacion.toUpperCase() : 'EVM'}</span>
                 </div>
               </div>
+            </div>
 
-              {/* 2. AVATAR & BADGES ROW */}
-              <div className="relative h-[40px] px-4 xs:px-5 flex items-center justify-between shrink-0">
-                {/* Avatar (circular, overlaps banner) */}
-                <div 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="absolute -top-[36px] xs:-top-[42px] left-4 xs:left-5 w-18 h-18 xs:w-20 xs:h-20 rounded-full border-[5px] border-[#0a0f1d] bg-[#000d1a] overflow-hidden shadow-lg flex items-center justify-center shrink-0 cursor-pointer group hover:scale-105 transition-transform"
-                >
-                  {data.photoUrl ? (
-                    <img src={data.photoUrl} alt="Foto de perfil" className="w-full h-full object-cover group-hover:opacity-90" />
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              onChange={handlePhotoUpload} 
+              accept="image/*" 
+              style={{ display: 'none' }} 
+            />
+
+            <div className="viva">
+              <span className="viva-t">¡VIVA CHIHUAHUA!</span>
+              <span className="viva-s">★ ★ ★</span>
+            </div>
+
+            <div className="reto">
+              <div className="reto-lbl">Mi reto de negocio</div>
+              <div className="reto-txt">
+                {data.reto ? (
+                  <>"{data.reto}"</>
+                ) : (
+                  <em style={{ color: '#1e3a5f' }}>Completa tu perfil para mostrar tu reto de negocio...</em>
+                )}
+              </div>
+            </div>
+
+            <div className="busco">
+              <div className="busco-col">
+                <div className="busco-lbl">Busco en COMEV</div>
+                <div className="chips">
+                  {data.busco.length > 0 ? (
+                    data.busco.map(v => (
+                      <span key={v} className="co">{v}</span>
+                    ))
                   ) : (
-                    <div className="text-center p-2">
-                      <Camera className="w-5 h-5 text-on-surface-variant group-hover:text-secondary-orange mx-auto mb-0.5" />
-                      <span className="font-sans text-[6px] text-on-surface-variant font-black tracking-widest block uppercase">
-                        FOTO
-                      </span>
-                    </div>
+                    <span style={{ fontSize: '10px', color: '#1e3a5f' }}>—</span>
                   )}
                 </div>
-
-                {/* Stamps as Discord Badges */}
-                <div className="ml-auto flex flex-wrap gap-1 justify-end max-w-[200px]">
-                  {SELLOS_INFO.map(s => {
-                    const earned = data.sellos.includes(s.id);
-                    return (
-                      <div 
-                        key={s.id} 
-                        className={`w-6 h-6 xs:w-7 xs:h-7 rounded-full border flex items-center justify-center text-[9px] font-black font-headline transition-all duration-300 ${
-                          earned 
-                            ? `${s.bgClass} ${s.borderClass} ${s.textClass} scale-105 shadow-[0_0_8px_rgba(254,152,0,0.25)]` 
-                            : 'border-outline/25 bg-[#05070c] text-outline/35 border-dashed'
-                        }`}
-                        title={`${s.name}: ${earned ? 'Validado' : 'Pendiente'}`}
-                      >
-                        {s.id}
-                      </div>
-                    );
-                  })}
-                </div>
               </div>
-
-              {/* 3. USER PROFILE INFO */}
-              <div className="px-4 xs:px-5 pt-3 pb-1.5 space-y-1 shrink-0">
-                <h5 className="font-headline font-black italic uppercase text-xl xs:text-2xl tracking-tight text-white leading-tight break-words">
-                  {data.nombre || 'NOMBRE COMPLETO'}
-                </h5>
-                {(data.cargo || data.empresa) && (
-                  <div className="flex flex-wrap items-center gap-x-2 text-[10px] font-sans font-black uppercase tracking-wider">
-                    {data.cargo && <span className="text-secondary-orange">{data.cargo}</span>}
-                    {data.cargo && data.empresa && <span className="text-outline/40">•</span>}
-                    {data.empresa && <span className="text-on-surface-variant">{data.empresa}</span>}
-                  </div>
-                )}
-
-                {/* Custom Status (Objective) */}
-                {data.objetivo && (
-                  <div className="flex items-start gap-1.5 bg-[#000d1a]/40 border border-outline/10 p-2 rounded-xl text-[10px] xs:text-xs font-sans text-on-surface-variant italic mt-2">
-                    <span className="text-secondary-orange text-xs leading-none">💬</span>
-                    <span className="leading-snug">"{data.objetivo}"</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Divider */}
-              <div className="mx-4 xs:mx-5 border-t border-outline/10 my-1.5" />
-
-              {/* 4. SCROLLABLE DETAILS AREA */}
-              <div className="px-4 xs:px-5 py-1.5 space-y-4 overflow-y-auto max-h-[320px] custom-scrollbar">
-                
-                {/* SOBRE LA EMPRESA */}
-                {data.descripcion && (
-                  <div className="space-y-1">
-                    <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                      Sobre la Empresa
-                    </h6>
-                    <p className="text-[11px] text-on-surface-variant leading-relaxed">
-                      {data.descripcion}
-                    </p>
-                  </div>
-                )}
-
-                {/* RETO DE NEGOCIO */}
-                {data.reto && (
-                  <div className="space-y-1">
-                    <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                      Mi Mayor Reto de Negocio
-                    </h6>
-                    <p className="text-[11px] text-on-surface-variant leading-relaxed">
-                      {data.reto}
-                    </p>
-                  </div>
-                )}
-
-                {/* ROLES DE NETWORKING (BUSCO / OFREZCO) */}
-                {(data.busco.length > 0 || data.ofrezco.length > 0) && (
-                  <div className="space-y-2">
-                    <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                      Roles de Networking
-                    </h6>
-                    
-                    <div className="flex flex-col gap-2">
-                      {data.busco.length > 0 && (
-                        <div className="space-y-1">
-                          <span className="text-[8px] font-sans font-bold text-outline uppercase tracking-wider block">Busco en el congreso:</span>
-                          <div className="flex flex-wrap gap-1">
-                            {data.busco.map(b => (
-                              <span 
-                                key={b} 
-                                className="flex items-center gap-1 bg-[#0e1726] border border-blue-500/25 rounded px-2 py-0.5 text-[8px] font-sans font-black uppercase text-blue-300"
-                              >
-                                <span className="w-1 h-1 rounded-full bg-blue-400" />
-                                {b}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {data.ofrezco.length > 0 && (
-                        <div className="space-y-1">
-                          <span className="text-[8px] font-sans font-bold text-outline uppercase tracking-wider block">Puedo ofrecer:</span>
-                          <div className="flex flex-wrap gap-1">
-                            {data.ofrezco.map(o => (
-                              <span 
-                                key={o} 
-                                className="flex items-center gap-1 bg-[#091f16] border border-emerald-500/25 rounded px-2 py-0.5 text-[8px] font-sans font-black uppercase text-emerald-300"
-                              >
-                                <span className="w-1 h-1 rounded-full bg-emerald-400" />
-                                {o}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* DETALLES DE ACREDITACIÓN */}
-                {(data.delegacion || data.modalidad) && (
-                  <div className="space-y-1.5">
-                    <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                      Detalles de Acreditación
-                    </h6>
-                    <div className="grid grid-cols-2 gap-2 bg-[#000d1a]/30 border border-outline/10 p-2 rounded-lg text-[10px] font-sans uppercase">
-                      {data.delegacion && (
-                        <div>
-                          <span className="text-outline/60 text-[8px] font-black block">Delegación</span>
-                          <span className="text-white font-black block mt-0.5">{data.delegacion}</span>
-                        </div>
-                      )}
-                      {data.modalidad && (
-                        <div>
-                          <span className="text-outline/60 text-[8px] font-black block">Modalidad</span>
-                          <span className="text-white font-black block mt-0.5">{data.modalidad}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* NETWORKING PASS / QR CODE */}
-                <div className="space-y-1.5">
-                  <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                    Pase de Entrada y Connect
-                  </h6>
-                  <div className="flex items-center justify-between bg-[#000d1a]/60 border border-outline/20 p-2.5 rounded-xl">
-                    <div className="text-left font-sans uppercase">
-                      <span className="text-[7px] text-on-surface-variant font-bold block">COMEV CONNECT</span>
-                      <span className="text-[10px] text-white font-black block tracking-wider">NETWORKING PASS</span>
-                    </div>
-                    
-                    <div className="w-10 h-10 bg-white p-1 rounded flex items-center justify-center shrink-0 shadow-md">
-                      <svg viewBox="0 0 25 25" className="w-full h-full text-deep-blue" shapeRendering="crispEdges">
-                        <path d="M0 0h7v7H0zm1 1v5h5V1zm1 1h3v3H2zm8-2h1v3h-1zm3 0h1v1h-1zm1 0h3v1h-3zm4 0h3v7h-3zm1 1v5h1V1zm-4 1h1v1h-1zm-2 1h2v1h-2zm-3 1h2v1H8zm5 0h1v1h-1zm-5 2h1v1H8zm1 1h2v1H9zm1 1h2v1h-2zm1-8h1v1h-1zm0 3h1v1h-1zm2 1h1v1h-1zm1 0h1v2h-1zm-3 2h2v1h-2zm-5 5h1v1H0zm1 1v5h5v-5zm1 1h3v3H2zm6-2h1v3H8zm2 0h2v1h-2zm4 0h1v2h-1zm-3 1h2v1h-2zm7 0h3v1h-3zm-9 2h1v1H8zm2 0h1v2h-1zm6 0h1v1h-1zm2 0h1v3h-1zm-7 1h1v1H9zm3 0h2v1h-2zm-2 2h3v1h-3zm6 0h2v1h-2zm1 1h1v1h-1z" fill="currentColor"/>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Footer Bottom Bar decoration */}
-              <div className="h-1 bg-gradient-to-r from-secondary-orange via-amber-500 to-secondary-orange shrink-0 mt-auto" />
-            </div>
-          </div>
-
-          {/* RIGHT COLUMN: Form & Stamp Toggler */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
-            
-            {/* FILE INPUT UNDER THE HOOD */}
-            <input 
-              type="file" 
-              ref={fileInputRef}
-              onChange={handlePhotoUpload} 
-              accept="image/*" 
-              className="hidden" 
-            />
-
-            {/* CAMERA INPUT UNDER THE HOOD */}
-            <input 
-              type="file" 
-              ref={cameraInputRef}
-              onChange={handlePhotoUpload} 
-              accept="image/*" 
-              capture="user"
-              className="hidden" 
-            />
-
-            {/* BANNER INPUT UNDER THE HOOD */}
-            <input 
-              type="file" 
-              ref={bannerInputRef}
-              onChange={handleBannerUpload} 
-              accept="image/*" 
-              className="hidden" 
-            />
-
-            {/* FOTO DE PERFIL */}
-            <div className="bg-surface-card border border-outline/30 rounded-xl p-6 shadow-md flex flex-col sm:flex-row items-center gap-6">
-              <div className="w-24 h-24 shrink-0 rounded-lg bg-[#001021] border border-secondary-orange/50 overflow-hidden relative flex items-center justify-center shadow-inner shadow-black/60">
-                {data.photoUrl ? (
-                  <img src={data.photoUrl} alt="Foto de perfil" className="w-full h-full object-cover" />
-                ) : (
-                  <Camera className="w-8 h-8 text-on-surface-variant" />
-                )}
-              </div>
-              <div className="space-y-3 flex-1 text-center sm:text-left">
-                <h5 className="font-headline font-bold text-white text-base">Foto del Pasaporte</h5>
-                <p className="text-xs text-on-surface-variant font-sans leading-relaxed">
-                  Sube una imagen desde tu galería o utiliza la cámara de tu teléfono para capturar tu foto de perfil.
-                </p>
-                <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-                  <button
-                    type="button"
-                    onClick={() => cameraInputRef.current?.click()}
-                    className="flex items-center gap-1.5 px-3.5 py-2 bg-secondary-orange hover:bg-accent-orange text-deep-blue font-mono text-[10px] font-black uppercase tracking-wider rounded-lg transition-all duration-150 cursor-pointer border-none shadow-md"
-                  >
-                    <Camera className="w-3.5 h-3.5" />
-                    Tomar Foto con Cámara
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center gap-1.5 px-3.5 py-2 bg-[#001021] border border-outline/30 text-white font-mono text-[10px] font-bold uppercase tracking-wider rounded-lg transition-colors hover:border-secondary-orange/50 cursor-pointer"
-                  >
-                    Subir de Galería
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* PORTADA DE LA EMPRESA (BANNER) */}
-            <div className="bg-surface-card border border-outline/30 rounded-xl p-6 shadow-md flex flex-col sm:flex-row items-center gap-6">
-              <div className="w-32 h-16 shrink-0 rounded-lg bg-[#001021] border border-secondary-orange/50 overflow-hidden relative flex items-center justify-center shadow-inner shadow-black/60">
-                {data.bannerUrl ? (
-                  <img src={data.bannerUrl} alt="Portada de la empresa" className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-r from-deep-blue via-[#001021] to-secondary-orange/30" />
-                )}
-              </div>
-              <div className="space-y-3 flex-1 text-center sm:text-left">
-                <h5 className="font-headline font-bold text-white text-base">Portada de la Empresa (Banner)</h5>
-                <p className="text-xs text-on-surface-variant font-sans leading-relaxed">
-                  Sube una foto de tu empresa o banner publicitario que se usará como fondo de la cabecera de tu pasaporte.
-                </p>
-                <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-                  <button
-                    type="button"
-                    onClick={() => bannerInputRef.current?.click()}
-                    className="flex items-center gap-1.5 px-3.5 py-2 bg-[#001021] border border-outline/30 text-white font-mono text-[10px] font-bold uppercase tracking-wider rounded-lg transition-colors hover:border-secondary-orange/50 cursor-pointer"
-                  >
-                    Subir de Galería
-                  </button>
-                  {data.bannerUrl && (
-                    <button
-                      type="button"
-                      onClick={() => setData(prev => ({ ...prev, bannerUrl: '' }))}
-                      className="flex items-center gap-1.5 px-3.5 py-2 bg-red-500/10 border border-red-500/30 text-red-400 font-mono text-[10px] font-bold uppercase tracking-wider rounded-lg transition-colors hover:bg-red-500/20 cursor-pointer"
-                    >
-                      Eliminar
-                    </button>
+              <div className="busco-col">
+                <div className="busco-lbl">Puedo ofrecer</div>
+                <div className="chips">
+                  {data.ofrezco.length > 0 ? (
+                    data.ofrezco.map(v => (
+                      <span key={v} className="cc">{v}</span>
+                    ))
+                  ) : (
+                    <span style={{ fontSize: '10px', color: '#1e3a5f' }}>—</span>
                   )}
                 </div>
               </div>
             </div>
 
-            {/* SECCIÓN 1: DATOS PERSONALES */}
-            <div className="bg-surface-card border border-outline/30 rounded-xl p-6 shadow-md">
-              <h4 className="font-headline font-bold text-lg text-white mb-4 flex items-center gap-2 border-b border-outline/20 pb-2">
-                <Briefcase className="w-5 h-5 text-secondary-orange" />
-                Datos del Congresista
-              </h4>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="nombre" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    Nombre completo
-                  </label>
-                  <input
-                    type="text"
-                    id="nombre"
-                    value={data.nombre}
-                    onChange={handleChange}
-                    placeholder="Tu nombre completo"
-                    className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="cargo" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    Cargo / Puesto
-                  </label>
-                  <input
-                    type="text"
-                    id="cargo"
-                    value={data.cargo}
-                    onChange={handleChange}
-                    placeholder="Director, Gerente, Consultor..."
-                    className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="empresa" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    Empresa / Organización
-                  </label>
-                  <input
-                    type="text"
-                    id="empresa"
-                    value={data.empresa}
-                    onChange={handleChange}
-                    placeholder="Nombre de tu empresa"
-                    className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="delegacion" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    Delegación EVM
-                  </label>
-                  <input
-                    type="text"
-                    id="delegacion"
-                    value={data.delegacion}
-                    onChange={handleChange}
-                    placeholder="Chihuahua, MTY, CDMX..."
-                    className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="whatsapp" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    WhatsApp
-                  </label>
-                  <input
-                    type="tel"
-                    id="whatsapp"
-                    value={data.whatsapp}
-                    onChange={handleChange}
-                    placeholder="+52 614 000 0000"
-                    className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="linkedin" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    LinkedIn URL
-                  </label>
-                  <input
-                    type="text"
-                    id="linkedin"
-                    value={data.linkedin}
-                    onChange={handleChange}
-                    placeholder="linkedin.com/in/nombre"
-                    className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="email" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    Correo Electrónico
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={data.email}
-                    onChange={handleChange}
-                    placeholder="correo@empresa.com"
-                    className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="modalidad" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    Modalidad de Asistencia
-                  </label>
-                  <select
-                    id="modalidad"
-                    value={data.modalidad}
-                    onChange={handleChange}
-                    className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200 cursor-pointer appearance-none"
-                  >
-                    <option value="">Seleccionar</option>
-                    <option value="individual">Individual</option>
-                    <option value="pareja">Pareja</option>
-                  </select>
-                </div>
+            <div className="sellos-strip">
+              <div className="s-lbl">
+                Sellos del congreso <span>{earnedCount} / 7</span>
               </div>
-            </div>
-
-            {/* SECCIÓN 2: PERFIL DE NEGOCIO */}
-            <div className="bg-surface-card border border-outline/30 rounded-xl p-6 shadow-md">
-              <h4 className="font-headline font-bold text-lg text-white mb-4 flex items-center gap-2 border-b border-outline/20 pb-2">
-                <MapPin className="w-5 h-5 text-secondary-orange" />
-                Perfil de Negocio
-              </h4>
-
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="descripcion" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    ¿A qué se dedica tu empresa?
-                  </label>
-                  <textarea
-                    id="descripcion"
-                    value={data.descripcion}
-                    onChange={handleChange}
-                    placeholder="Describe brevemente tu empresa, productos o servicios..."
-                    rows={3}
-                    className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200 resize-y"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="industria" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                      Industria
-                    </label>
-                    <select
-                      id="industria"
-                      value={data.industria}
-                      onChange={handleChange}
-                      className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200 cursor-pointer"
-                    >
-                      <option value="">Seleccionar</option>
-                      {INDUSTRIAS.map(ind => (
-                        <option key={ind} value={ind}>{ind}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="tamano" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                      Tamaño de Empresa
-                    </label>
-                    <select
-                      id="tamano"
-                      value={data.tamano}
-                      onChange={handleChange}
-                      className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200 cursor-pointer"
-                    >
-                      <option value="">Seleccionar</option>
-                      {TAMANOS.map(t => (
-                        <option key={t.val} value={t.val}>{t.label}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* SECCIÓN 3: COMEV CONNECT - NETWORKING */}
-            <div className="bg-surface-card border border-outline/30 rounded-xl p-6 shadow-md">
-              <h4 className="font-headline font-bold text-lg text-white mb-4 flex items-center gap-2 border-b border-outline/20 pb-2">
-                <Sparkles className="w-5 h-5 text-secondary-orange" />
-                COMEV Connect • Networking
-              </h4>
-
-              <div className="flex flex-col gap-5">
-                
-                {/* ¿Qué buscas? */}
-                <div className="flex flex-col gap-2">
-                  <label className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    ¿Qué buscas en COMEV? <span className="text-outline font-normal font-sans">(elige todos los que apliquen)</span>
-                  </label>
-                  <div className="flex flex-wrap gap-2 mt-1">
-                    {BUSQUEDAS.map(b => {
-                      const active = data.busco.includes(b.val);
-                      return (
-                        <button
-                          type="button"
-                          key={b.val}
-                          onClick={() => handleToggleChip('busco', b.val)}
-                          className={`font-mono text-xs px-3.5 py-1.5 rounded-full border transition-all duration-150 cursor-pointer ${
-                            active 
-                              ? 'bg-secondary-orange border-secondary-orange text-deep-blue font-bold shadow-md shadow-secondary-orange/10' 
-                              : 'bg-[#001021] border-outline/40 text-on-surface-variant hover:border-secondary-orange/40 hover:text-white'
-                          }`}
-                        >
-                          {b.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* ¿Qué ofreces? */}
-                <div className="flex flex-col gap-2">
-                  <label className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    ¿Qué puedes ofrecer? <span className="text-outline font-normal font-sans">(elige todos los que apliquen)</span>
-                  </label>
-                  <div className="flex flex-wrap gap-2 mt-1">
-                    {OFRECIMIENTOS.map(o => {
-                      const active = data.ofrezco.includes(o.val);
-                      return (
-                        <button
-                          type="button"
-                          key={o.val}
-                          onClick={() => handleToggleChip('ofrezco', o.val)}
-                          className={`font-mono text-xs px-3.5 py-1.5 rounded-full border transition-all duration-150 cursor-pointer ${
-                            active 
-                              ? 'bg-secondary-orange border-secondary-orange text-deep-blue font-bold shadow-md shadow-secondary-orange/10' 
-                              : 'bg-[#001021] border-outline/40 text-on-surface-variant hover:border-secondary-orange/40 hover:text-white'
-                          }`}
-                        >
-                          {o.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Reto de Negocio */}
-                <div className="flex flex-col gap-1.5 mt-2">
-                  <label htmlFor="reto" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    ¿Cuál es tu mayor reto de negocio hoy?
-                  </label>
-                  <textarea
-                    id="reto"
-                    value={data.reto}
-                    onChange={handleChange}
-                    placeholder="Sé específico — este campo es el más valioso para conectarte con las personas correctas..."
-                    rows={3}
-                    className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200 resize-y"
-                  />
-                </div>
-
-                {/* Objetivo */}
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="objetivo" className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
-                    Al terminar COMEV 2026, quiero haber logrado...
-                  </label>
-                  <textarea
-                    id="objetivo"
-                    value={data.objetivo}
-                    onChange={handleChange}
-                    placeholder="Tu resultado esperado del congreso..."
-                    rows={2}
-                    className="w-full bg-[#001021] border border-outline/40 hover:border-secondary-orange/50 focus:border-secondary-orange focus:bg-[#0d1e30] rounded-lg px-4 py-2.5 font-mono text-sm text-white outline-none transition-all duration-200 resize-y"
-                  />
-                </div>
-
-              </div>
-            </div>
-
-            {/* SECCIÓN 4: SIMULADOR DE SELLOS DEL CONGRESO */}
-            <div className="bg-surface-card border border-outline/30 rounded-xl p-6 shadow-md">
-              <h4 className="font-headline font-bold text-lg text-white mb-1 flex items-center gap-2 border-b border-outline/20 pb-2">
-                <Award className="w-5 h-5 text-secondary-orange" />
-                Simulador de Sellos del Congreso
-              </h4>
-              <p className="text-xs text-on-surface-variant font-mono mb-4">
-                Tus 7 momentos clave — Haz clic en cada uno para marcarlos como completados y ganar el sello correspondiente:
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                {SELLOS_INFO.map(s => {
-                  const earned = data.sellos.includes(s.id);
-                  return (
-                    <button
-                      type="button"
-                      key={s.id}
-                      onClick={() => handleToggleSello(s.id)}
-                      className={`flex items-center gap-3 p-3 rounded-lg border transition-all duration-250 cursor-pointer text-left ${
-                        earned 
-                          ? `${s.bgClass} ${s.borderClass} shadow-md shadow-black/20` 
-                          : 'bg-[#001021]/80 border-outline/30 hover:border-outline/60 opacity-60 hover:opacity-100'
-                      }`}
-                    >
-                      {/* Stamp Circle representation */}
-                      <div 
-                        className={`w-9 h-9 rounded-full border-2 flex items-center justify-center shrink-0 text-sm font-black font-headline transition-colors ${
-                          earned 
-                            ? `${s.borderClass} ${s.textClass} border-solid` 
-                            : 'border-outline/40 border-dashed text-outline'
-                        }`}
-                      >
-                        {s.id}
-                      </div>
-
-                      {/* Info Text */}
-                      <div className="overflow-hidden leading-tight">
-                        <span className={`text-[11px] font-bold block truncate ${earned ? 'text-white' : 'text-on-surface-variant'}`}>
-                          {s.name}
-                        </span>
-                        <span className="text-[9px] text-on-surface-variant block mt-0.5 truncate font-mono">
-                          {s.desc}
-                        </span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Progress Summary bottom */}
-              <div className="mt-6 p-4 bg-[#001021]/60 rounded-xl border border-outline/20 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="w-full sm:w-auto text-center sm:text-left leading-snug">
-                  <span className="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-wider block">
-                    PROGRESO DEL PASAPORTE
-                  </span>
-                  <span className="font-headline font-black text-xl text-white mt-1 block">
-                    {earnedCount} de 7 momentos completados
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <div className="text-right">
-                    <span className="font-mono text-2xl font-black text-secondary-orange block">
-                      {progressPercent}%
-                    </span>
-                  </div>
-                  {earnedCount === 7 && (
-                    <div className="bg-[#10b981]/15 text-[#10b981] p-1 rounded-full animate-bounce">
-                      <CheckCircle className="w-8 h-8" />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* GUARDAR BUTTON */}
-            <div className="flex flex-col gap-3">
-              <button
-                type="button"
-                onClick={handleSave}
-                className="w-full bg-secondary-orange hover:bg-accent-orange text-deep-blue font-headline font-black py-4 px-6 uppercase text-base tracking-widest flex items-center justify-center gap-3 cursor-pointer select-none active:scale-[0.99] transition-all duration-150 btn-glow-orange border-none rounded-xl"
-              >
-                <Sparkles className="w-5 h-5 text-deep-blue" />
-                <span>Guardar mi Pasaporte</span>
-                <Sparkles className="w-5 h-5 text-deep-blue" />
-              </button>
-
-              <div className="text-center italic font-headline font-black text-sm text-secondary-orange tracking-widest mt-2">
-                ¡VIVA CHIHUAHUA!
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-        </div>
-      ) : (
-        <div className="relative z-10 w-full min-h-screen flex flex-col items-center justify-start px-0 md:px-4 py-0 md:py-12">
-          
-          {/* Discord-style Profile Card */}
-          <div className="relative w-full md:max-w-[480px] bg-[#0a0f1d] md:border-2 md:border-outline/25 md:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col text-on-surface">
-            
-            {/* 1. PROFILE HEADER BANNER */}
-            <div 
-              className="h-[110px] xs:h-[130px] relative overflow-hidden bg-gradient-to-r from-deep-blue via-[#001021] to-secondary-orange/30 shrink-0 bg-cover bg-center"
-              style={{ backgroundImage: data.bannerUrl ? `url(${data.bannerUrl})` : 'none' }}
-            >
-              {/* Mesh grid pattern */}
-              <div className="absolute inset-0 grid-pattern opacity-[0.2] pointer-events-none" />
-              {/* Tech circles or lines glow */}
-              <div className="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-secondary-orange/20 blur-2xl pointer-events-none" />
-              
-              {/* Back Arrow button */}
-              <button
-                onClick={() => { window.location.hash = ''; }}
-                className="absolute top-4 left-4 z-30 p-2 rounded-full border border-outline/25 bg-[#000d1a]/80 text-secondary-orange hover:text-white cursor-pointer hover:border-secondary-orange hover:scale-105 transition-all duration-200 backdrop-blur-sm"
-                aria-label="Volver a Inicio"
-              >
-                <ArrowLeft className="w-4 h-4" />
-              </button>
-
-              {/* Edit Profile button */}
-              <button
-                onClick={() => setIsEditing(true)}
-                className="absolute top-4 right-4 z-30 flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-secondary-orange/40 bg-[#000d1a]/80 text-secondary-orange hover:text-white cursor-pointer hover:border-secondary-orange hover:scale-105 transition-all duration-200 font-sans text-[10px] font-black uppercase tracking-wider backdrop-blur-sm"
-              >
-                <Edit3 className="w-3.5 h-3.5" />
-                <span>Editar</span>
-              </button>
-
-              {/* Banner Text overlay */}
-              <div className="absolute bottom-3 right-4 font-sans text-[8px] xs:text-[9px] font-black text-secondary-orange tracking-widest uppercase opacity-85">
-                CONVENCIÓN NACIONAL * COMEV 2026
-              </div>
-            </div>
-
-            {/* 2. AVATAR & BADGES ROW */}
-            <div className="relative h-[45px] px-4 xs:px-6 flex items-center justify-between shrink-0">
-              {/* Avatar (circular, overlaps banner) */}
-              <div className="absolute -top-[42px] xs:-top-[48px] left-4 xs:left-6 w-20 h-20 xs:w-24 xs:h-24 rounded-full border-[6px] border-[#0a0f1d] bg-[#0a0f1d] overflow-hidden shadow-lg flex items-center justify-center shrink-0">
-                {data.photoUrl ? (
-                  <img src={data.photoUrl} alt="Foto de perfil" className="w-full h-full object-cover" />
-                ) : (
-                  <div className="text-center p-2 bg-[#000d1a] w-full h-full flex flex-col justify-center">
-                    <Camera className="w-6 h-6 xs:w-8 xs:h-8 text-on-surface-variant mx-auto mb-0.5" />
-                    <span className="font-sans text-[7px] xs:text-[8px] text-on-surface-variant font-black tracking-widest block uppercase">
-                      SIN FOTO
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Stamps as Discord Badges */}
-              <div className="ml-auto flex flex-wrap gap-1.5 justify-end max-w-[220px]">
+              <div className="s-row">
                 {SELLOS_INFO.map(s => {
                   const earned = data.sellos.includes(s.id);
                   return (
                     <div 
                       key={s.id} 
-                      className={`w-7 h-7 xs:w-8 xs:h-8 rounded-full border-2 flex items-center justify-center text-[10px] xs:text-xs font-black font-headline transition-all duration-300 ${
-                        earned 
-                          ? `${s.bgClass} ${s.borderClass} ${s.textClass} scale-105 shadow-[0_0_8px_rgba(254,152,0,0.3)]` 
-                          : 'border-outline/25 bg-[#05070c] text-outline/40 border-dashed'
-                      }`}
-                      title={`${s.name}: ${earned ? 'Validado' : 'Pendiente'}`}
+                      className={`sd sd${s.id} ${earned ? 'earned' : ''}`}
+                      onClick={() => handleToggleSello(s.id)}
+                      style={{ cursor: 'pointer' }}
                     >
-                      {s.id}
+                      <div className="sdn">{s.id}</div>
                     </div>
+                  );
+                })}
+              </div>
+              <div className="pm">
+                {SELLOS_INFO.map(s => {
+                  const earned = data.sellos.includes(s.id);
+                  return (
+                    <div 
+                      key={s.id} 
+                      className={`pm-s ${earned ? `pm${s.id}` : ''}`} 
+                      style={{ background: earned ? s.color : '' }}
+                    />
                   );
                 })}
               </div>
             </div>
 
-            {/* 3. USER PROFILE INFO */}
-            <div className="px-4 xs:px-6 pt-4 pb-2 space-y-1.5 shrink-0">
-              <h5 className="font-headline font-black italic uppercase text-2xl xs:text-3xl tracking-tight text-white leading-tight break-words">
-                {data.nombre || 'NOMBRE COMPLETO'}
-              </h5>
-              {(data.cargo || data.empresa) && (
-                <div className="flex flex-wrap items-center gap-x-2 text-xs font-sans font-black uppercase tracking-wider">
-                  {data.cargo && <span className="text-secondary-orange">{data.cargo}</span>}
-                  {data.cargo && data.empresa && <span className="text-outline/45">•</span>}
-                  {data.empresa && <span className="text-on-surface-variant">{data.empresa}</span>}
-                </div>
-              )}
+            <div className="folio">
+              <div>
+                <div className="folio-ll">Número de folio</div>
+                <div className="folio-n">{data.folio || 'CMV-000000'}</div>
+              </div>
+              <div className="folio-r">
+                <strong>Sep 3–5 · 2026</strong>
+                Hotel María Bonita<br/>Chihuahua, México
+              </div>
+            </div>
+            
+            <div className="bottom-line"></div>
+          </div>
+        </div>
 
-              {/* Custom Status (Objective) */}
-              {data.objetivo && (
-                <div className="flex items-start gap-2 bg-[#000d1a]/40 border border-outline/10 p-2.5 rounded-xl text-xs font-sans text-on-surface-variant italic mt-3">
-                  <span className="text-secondary-orange text-sm leading-none">💬</span>
-                  <span className="leading-snug">"{data.objetivo}"</span>
-                </div>
-              )}
+        {/* ─── PÁGINA 2 — TUS SELLOS ─── */}
+        <div className="page" id="page-1" style={{ background: 'var(--navy)' }}>
+          <div className="inner">
+            <div className="topbar">
+              <button onClick={() => { window.location.hash = ''; }}>
+                <ArrowLeft className="w-3 h-3" /> VOLVER
+              </button>
+              <span className="tr" style={{ color: 'var(--orange)' }}>{earnedCount} / 7</span>
+            </div>
+            
+            <div className="brand" style={{ padding: '.7rem 1.1rem' }}>
+              <div>
+                <div className="brand-sup">Tus momentos · COMEV 2026</div>
+                <div className="brand-line1">Pasaporte</div>
+                <div className="brand-line2">TUS SELLOS</div>
+              </div>
             </div>
 
-            {/* Divider */}
-            <div className="mx-4 xs:mx-6 border-t border-outline/10 my-2" />
-
-            {/* 4. SCROLLABLE DETAILS AREA */}
-            <div className="px-4 xs:px-6 py-2 space-y-5 overflow-y-auto max-h-[calc(100vh-280px)] md:max-h-[500px] custom-scrollbar">
-              
-              {/* SOBRE LA EMPRESA */}
-              {data.descripcion && (
-                <div className="space-y-1.5">
-                  <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                    Sobre la Empresa
-                  </h6>
-                  <p className="text-xs text-on-surface-variant leading-relaxed">
-                    {data.descripcion}
-                  </p>
-                </div>
-              )}
-
-              {/* RETO DE NEGOCIO */}
-              {data.reto && (
-                <div className="space-y-1.5">
-                  <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                    Mi Mayor Reto de Negocio
-                  </h6>
-                  <p className="text-xs text-on-surface-variant leading-relaxed">
-                    {data.reto}
-                  </p>
-                </div>
-              )}
-
-              {/* ROLES DE NETWORKING (BUSCO / OFREZCO) */}
-              {(data.busco.length > 0 || data.ofrezco.length > 0) && (
-                <div className="space-y-3">
-                  <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                    Roles de Networking
-                  </h6>
-                  
-                  <div className="flex flex-col gap-2.5">
-                    {data.busco.length > 0 && (
-                      <div className="space-y-1">
-                        <span className="text-[8px] xs:text-[9px] font-sans font-bold text-outline uppercase tracking-wider block">Busco en el congreso:</span>
-                        <div className="flex flex-wrap gap-1.5">
-                          {data.busco.map(b => (
-                            <span 
-                              key={b} 
-                              className="flex items-center gap-1.5 bg-[#0e1726] border border-blue-500/25 rounded-md px-2.5 py-1 text-[9px] xs:text-[10px] font-sans font-black uppercase text-blue-300"
-                            >
-                              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-                              {b}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {data.ofrezco.length > 0 && (
-                      <div className="space-y-1">
-                        <span className="text-[8px] xs:text-[9px] font-sans font-bold text-outline uppercase tracking-wider block">Puedo ofrecer:</span>
-                        <div className="flex flex-wrap gap-1.5">
-                          {data.ofrezco.map(o => (
-                            <span 
-                              key={o} 
-                              className="flex items-center gap-1.5 bg-[#091f16] border border-emerald-500/25 rounded-md px-2.5 py-1 text-[9px] xs:text-[10px] font-sans font-black uppercase text-emerald-300"
-                            >
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                              {o}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+            <div className="slist">
+              {SELLOS_INFO.map(s => {
+                const earned = data.sellos.includes(s.id);
+                return (
+                  <div 
+                    key={s.id} 
+                    className={`srow s${s.id} ${earned ? 'earned' : ''}`}
+                    onClick={() => handleToggleSello(s.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className="scirc">
+                      <div className="scn">{s.id}</div>
+                    </div>
+                    <div className="sinfo">
+                      <div className="sname">{s.name}</div>
+                      <div className="sev">{s.desc}</div>
+                      <div className="sdate">{s.date}</div>
+                      <span className={`badge-p ${earned ? 'badge-earned' : ''}`}>
+                        {earned ? '✓ OBTENIDO' : 'PENDIENTE'}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )}
+                );
+              })}
+            </div>
 
-              {/* DETALLES DE ACREDITACIÓN */}
-              {(data.delegacion || data.modalidad) && (
-                <div className="space-y-2">
-                  <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                    Detalles de Acreditación
-                  </h6>
-                  <div className="grid grid-cols-2 gap-3 bg-[#000d1a]/30 border border-outline/10 p-3 rounded-xl text-xs font-sans uppercase">
-                    {data.delegacion && (
-                      <div>
-                        <span className="text-outline/60 text-[8px] font-black tracking-widest block">Delegación</span>
-                        <span className="text-white font-black block mt-0.5">{data.delegacion}</span>
-                      </div>
-                    )}
-                    {data.modalidad && (
-                      <div>
-                        <span className="text-outline/60 text-[8px] font-black tracking-widest block">Modalidad</span>
-                        <span className="text-white font-black block mt-0.5">{data.modalidad}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* NETWORKING PASS / QR CODE */}
-              <div className="space-y-2">
-                <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                  Pase de Entrada y Connect
-                </h6>
-                <div className="flex items-center justify-between bg-[#000d1a]/60 border border-outline/20 p-3 rounded-xl">
-                  <div className="text-left font-sans uppercase">
-                    <span className="text-[8px] xs:text-[9px] text-on-surface-variant font-bold block">COMEV CONNECT</span>
-                    <span className="text-xs text-white font-black block tracking-wider">NETWORKING PASS</span>
-                    <span className="text-[9px] text-outline font-bold block mt-1">Escanea para conectar</span>
-                  </div>
-                  
-                  <div className="w-12 h-12 bg-white p-1 rounded-md flex items-center justify-center shrink-0 shadow-md">
-                    <svg viewBox="0 0 25 25" className="w-full h-full text-deep-blue" shapeRendering="crispEdges">
-                      <path d="M0 0h7v7H0zm1 1v5h5V1zm1 1h3v3H2zm8-2h1v3h-1zm3 0h1v1h-1zm1 0h3v1h-3zm4 0h3v7h-3zm1 1v5h1V1zm-4 1h1v1h-1zm-2 1h2v1h-2zm-3 1h2v1H8zm5 0h1v1h-1zm-5 2h1v1H8zm1 1h2v1H9zm1 1h2v1h-2zm1-8h1v1h-1zm0 3h1v1h-1zm2 1h1v1h-1zm1 0h1v2h-1zm-3 2h2v1h-2zm-5 5h1v1H0zm1 1v5h5v-5zm1 1h3v3H2zm6-2h1v3H8zm2 0h2v1h-2zm4 0h1v2h-1zm-3 1h2v1h-2zm7 0h3v1h-3zm-9 2h1v1H8zm2 0h1v2h-1zm6 0h1v1h-1zm2 0h1v3h-1zm-7 1h1v1H9zm3 0h2v1h-2zm-2 2h3v1h-3zm6 0h2v1h-2zm1 1h1v1h-1z" fill="currentColor"/>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              {/* SIMULADOR DE SELLOS (DESPLEGABLE / INTEGRADO) */}
-              <div className="bg-[#000c17]/60 border border-outline/10 rounded-2xl p-4 space-y-3">
-                <div className="flex items-center justify-between border-b border-outline/10 pb-2">
-                  <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-white tracking-wider uppercase flex items-center gap-1.5">
-                    <Award className="w-4 h-4 text-secondary-orange" />
-                    Simular Sellos de Actividades
-                  </h6>
-                  <span className="text-[9px] font-sans bg-secondary-orange/15 text-secondary-orange px-2 py-0.5 rounded-full font-black uppercase">
-                    PROGRESO: {earnedCount}/7
-                  </span>
-                </div>
-                
-                <p className="text-[10px] text-on-surface-variant font-sans leading-relaxed">
-                  Haz clic en las actividades del congreso para validar tu asistencia y ganar tu insignia:
-                </p>
-                
-                <div className="grid grid-cols-2 gap-2">
-                  {SELLOS_INFO.map(s => {
-                    const earned = data.sellos.includes(s.id);
-                    return (
-                      <button
-                        type="button"
-                        key={s.id}
-                        onClick={() => handleToggleSello(s.id)}
-                        className={`flex items-center gap-2 p-2 rounded-xl border transition-all duration-200 cursor-pointer text-left ${
-                          earned 
-                            ? `${s.bgClass} ${s.borderClass} opacity-100 shadow-[0_0_8px_rgba(254,152,0,0.08)]` 
-                            : 'bg-[#000c17]/80 border-outline/10 opacity-55 hover:opacity-100'
-                        }`}
-                      >
-                        <div 
-                          className={`w-6 h-6 rounded-full border flex items-center justify-center text-[10px] font-black font-headline shrink-0 ${
-                            earned ? `${s.borderClass} ${s.textClass}` : 'border-outline/30 text-outline border-dashed'
-                          }`}
-                        >
-                          {s.id}
-                        </div>
-                        <div className="overflow-hidden leading-tight">
-                          <span className="text-[9px] xs:text-[10px] font-bold block truncate text-white">
-                            {s.name}
-                          </span>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Progress bar inside simulator */}
-                <div className="pt-2">
-                  <div className="w-full bg-[#0b2136] h-1.5 rounded-full overflow-hidden">
+            <div className="prog">
+              <div className="prog-lbl">Progreso del Pasaporte</div>
+              <div className="prog-bar">
+                {SELLOS_INFO.map(s => {
+                  const earned = data.sellos.includes(s.id);
+                  return (
                     <div 
-                      className="bg-secondary-orange h-full rounded-full transition-all duration-500 ease-out" 
-                      style={{ width: `${progressPercent}%` }}
+                      key={s.id}
+                      className={`pm-s ${earned ? `pm${s.id}` : ''}`}
+                      style={{ background: earned ? s.color : '' }}
                     />
-                  </div>
-                </div>
+                  );
+                })}
               </div>
+              <div className="prog-txt">
+                <span>{earnedCount} / 7 sellos completados</span>
+                <strong>{progressPercent}%</strong>
+              </div>
+            </div>
+            
+            <div className="bottom-line"></div>
+          </div>
+        </div>
 
+        {/* ─── PÁGINA 3 — COMEV CONNECT ─── */}
+        <div className="page" id="page-2" style={{ background: 'var(--navy)' }}>
+          <div className="inner">
+            <div className="topbar">
+              <button onClick={() => { window.location.hash = ''; }}>
+                <ArrowLeft className="w-3 h-3" /> VOLVER
+              </button>
+              <span className="tr" style={{ color: '#06b6d4' }}>Networking Pass</span>
             </div>
 
-            {/* Footer Bottom Bar decoration */}
-            <div className="h-1.5 bg-gradient-to-r from-secondary-orange via-amber-500 to-secondary-orange shrink-0 mt-auto" />
+            <div className="brand" style={{ padding: '.7rem 1.1rem' }}>
+              <div>
+                <div className="brand-sup">Tu pase de networking digital</div>
+                <div className="brand-line1">Pasaporte</div>
+                <div className="brand-line2 cyan">COMEV CONNECT</div>
+              </div>
+            </div>
+
+            <div className="qrc">
+              <div className="qrb">
+                <div className="qb"></div><div className="qb"></div><div className="qb"></div><div className="qw"></div><div className="qb"></div><div className="qb"></div><div className="qb"></div>
+                <div className="qb"></div><div className="qw"></div><div className="qb"></div><div className="qw"></div><div className="qb"></div><div className="qw"></div><div className="qb"></div>
+                <div className="qb"></div><div className="qb"></div><div className="qb"></div><div className="qw"></div><div className="qb"></div><div className="qb"></div><div className="qb"></div>
+                <div className="qw"></div><div className="qb"></div><div className="qw"></div><div className="qb"></div><div className="qw"></div><div className="qb"></div><div className="qw"></div>
+                <div className="qb"></div><div className="qw"></div><div className="qb"></div><div className="qb"></div><div className="qb"></div><div className="qw"></div><div className="qb"></div>
+                <div className="qb"></div><div className="qw"></div><div className="qb"></div><div className="qw"></div><div className="qb"></div><div className="qw"></div><div className="qb"></div>
+                <div className="qb"></div><div className="qb"></div><div className="qb"></div><div className="qw"></div><div className="qb"></div><div className="qb"></div><div className="qb"></div>
+              </div>
+              <div>
+                <div className="qrl">Networking Pass</div>
+                <div className="qrn">{data.nombre || 'Tu nombre'}</div>
+                <div className="qrf">{data.folio || 'CMV-000000'}</div>
+                <div className="qrs">↗ Escanea para conectar</div>
+              </div>
+            </div>
+
+            <div className="sec-div">Mi perfil de networking</div>
+            
+            <div className="nsec">
+              <div className="nf">
+                <div className="nfl">Mi empresa hace...</div>
+                <div className="nfv">
+                  {data.descripcion ? data.descripcion : <span className="nfe">Completa tu perfil...</span>}
+                </div>
+              </div>
+              <div className="nf">
+                <div className="nfl">Busco en COMEV</div>
+                <div className="cr">
+                  {data.busco.length > 0 ? (
+                    data.busco.map(v => (
+                      <span key={v} className="co">{v}</span>
+                    ))
+                  ) : (
+                    <span className="nfe">—</span>
+                  )}
+                </div>
+              </div>
+              <div className="nf">
+                <div className="nfl">Puedo ofrecer</div>
+                <div className="cr">
+                  {data.ofrezco.length > 0 ? (
+                    data.ofrezco.map(v => (
+                      <span key={v} className="cc">{v}</span>
+                    ))
+                  ) : (
+                    <span className="nfe">—</span>
+                  )}
+                </div>
+              </div>
+              <div className="nf">
+                <div className="nfl">Mi reto de negocio</div>
+                <div className="nfv" style={{ fontStyle: data.reto ? 'normal' : 'italic', color: data.reto ? '#e2e8f0' : '#64748b' }}>
+                  {data.reto ? `"${data.reto}"` : 'Sin definir...'}
+                </div>
+              </div>
+              <div className="nf">
+                <div className="nfl">Al terminar COMEV quiero haber logrado...</div>
+                <div className="nfv">
+                  {data.objetivo ? data.objetivo : <span className="nfe">Sin definir...</span>}
+                </div>
+              </div>
+            </div>
+
+            <button className="btn-edit" onClick={openModal}>✏ Editar mi perfil</button>
+            <div className="bottom-line"></div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* ─── MODAL — EDITAR PERFIL ─── */}
+      {isEditing && (
+        <div className="modal open">
+          <div className="modal-header">
+            <div className="modal-title">Editar <span>Perfil</span></div>
+            <button className="modal-close" onClick={closeModal}>✕</button>
           </div>
 
+          <div className="modal-sec">Datos personales</div>
+          
+          <div className="f-group">
+            <label className="f-label">Nombre completo</label>
+            <input 
+              type="text" 
+              className="f-input" 
+              id="nombre" 
+              value={data.nombre} 
+              onChange={handleChange} 
+              placeholder="Tu nombre completo"
+            />
+          </div>
+          
+          <div className="two">
+            <div className="f-group">
+              <label className="f-label">Cargo</label>
+              <input 
+                type="text" 
+                className="f-input" 
+                id="cargo" 
+                value={data.cargo} 
+                onChange={handleChange} 
+                placeholder="Director..."
+              />
+            </div>
+            <div className="f-group">
+              <label className="f-label">Modalidad</label>
+              <select 
+                className="f-input" 
+                id="modalidad" 
+                value={data.modalidad} 
+                onChange={handleChange}
+              >
+                <option value="">—</option>
+                <option value="individual">Individual</option>
+                <option value="pareja">Pareja</option>
+              </select>
+            </div>
+          </div>
+          
+          <div className="f-group">
+            <label className="f-label">Empresa</label>
+            <input 
+              type="text" 
+              className="f-input" 
+              id="empresa" 
+              value={data.empresa} 
+              onChange={handleChange} 
+              placeholder="Nombre de tu empresa"
+            />
+          </div>
+          
+          <div className="two">
+            <div className="f-group">
+              <label className="f-label">Delegación EVM</label>
+              <input 
+                type="text" 
+                className="f-input" 
+                id="delegacion" 
+                value={data.delegacion} 
+                onChange={handleChange} 
+                placeholder="Chihuahua..."
+              />
+            </div>
+            <div className="f-group">
+              <label className="f-label">WhatsApp</label>
+              <input 
+                type="tel" 
+                className="f-input" 
+                id="whatsapp" 
+                value={data.whatsapp} 
+                onChange={handleChange} 
+                placeholder="+52 614..."
+              />
+            </div>
+          </div>
+          
+          <div className="two">
+            <div className="f-group">
+              <label className="f-label">Email</label>
+              <input 
+                type="email" 
+                className="f-input" 
+                id="email" 
+                value={data.email} 
+                onChange={handleChange} 
+                placeholder="correo@empresa.com"
+              />
+            </div>
+            <div className="f-group">
+              <label className="f-label">LinkedIn</label>
+              <input 
+                type="text" 
+                className="f-input" 
+                id="linkedin" 
+                value={data.linkedin} 
+                onChange={handleChange} 
+                placeholder="linkedin.com/in/..."
+              />
+            </div>
+          </div>
+
+          <div className="modal-sec">Perfil de negocio</div>
+          
+          <div className="f-group">
+            <label className="f-label">¿A qué se dedica tu empresa?</label>
+            <textarea 
+              className="f-input" 
+              id="descripcion" 
+              value={data.descripcion} 
+              onChange={handleChange} 
+              placeholder="Describe brevemente..."
+            />
+          </div>
+          
+          <div className="two">
+            <div className="f-group">
+              <label className="f-label">Industria</label>
+              <select 
+                className="f-input" 
+                id="industria" 
+                value={data.industria} 
+                onChange={handleChange}
+              >
+                <option value="">Seleccionar</option>
+                {INDUSTRIAS.map(ind => (
+                  <option key={ind} value={ind}>{ind}</option>
+                ))}
+              </select>
+            </div>
+            <div className="f-group">
+              <label className="f-label">Tamaño</label>
+              <select 
+                className="f-input" 
+                id="tamano" 
+                value={data.tamano} 
+                onChange={handleChange}
+              >
+                <option value="">Seleccionar</option>
+                {TAMANOS.map(t => (
+                  <option key={t.val} value={t.val}>{t.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="modal-sec">COMEV Connect — Networking</div>
+          
+          <div className="f-group">
+            <label className="f-label">¿Qué buscas en COMEV?</label>
+            <div className="chips-wrap" id="m-busco">
+              {BUSQUEDAS.map(b => {
+                const active = data.busco.includes(b.val);
+                return (
+                  <div 
+                    key={b.val} 
+                    className={`m-chip ${active ? 'active' : ''}`}
+                    onClick={() => handleToggleChip('busco', b.val)}
+                  >
+                    {b.label}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          
+          <div className="f-group">
+            <label className="f-label">¿Qué puedes ofrecer?</label>
+            <div className="chips-wrap" id="m-ofrezco">
+              {OFRECIMIENTOS.map(o => {
+                const active = data.ofrezco.includes(o.val);
+                return (
+                  <div 
+                    key={o.val} 
+                    className={`m-chip ${active ? 'active' : ''}`}
+                    onClick={() => handleToggleChip('ofrezco', o.val)}
+                  >
+                    {o.label}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          
+          <div className="f-group">
+            <label className="f-label">Tu mayor reto de negocio hoy</label>
+            <textarea 
+              className="f-input" 
+              id="reto" 
+              value={data.reto} 
+              onChange={handleChange} 
+              style={{ minHeight: '80px' }} 
+              placeholder="Sé específico — este campo conecta con las personas correctas..."
+            />
+          </div>
+          
+          <div className="f-group">
+            <label className="f-label">Al terminar COMEV quiero haber logrado...</label>
+            <textarea 
+              className="f-input" 
+              id="objetivo" 
+              value={data.objetivo} 
+              onChange={handleChange} 
+              style={{ minHeight: '64px' }} 
+              placeholder="Tu resultado esperado..."
+            />
+          </div>
+
+          <button className="btn-save" onClick={handleSave}>★ Guardar Pasaporte ★</button>
         </div>
       )}
 
-      {/* Toast alert popup */}
+      {/* TOAST ALERT POPUP */}
       {toastMessage && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#10b981] border border-[#10b981] text-white px-6 py-3 rounded-lg shadow-xl font-mono text-xs font-bold uppercase tracking-wider animate-fadeIn flex items-center gap-2">
-          <Check className="w-4 h-4 text-white" />
+        <div className="toast-popup">
           {toastMessage}
         </div>
       )}
+
     </div>
   );
 }
