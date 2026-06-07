@@ -162,6 +162,10 @@ app.get('*', (req, res, next) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`[Backend Server] listening on http://localhost:${PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`[Backend Server] listening on http://localhost:${PORT}`);
+  });
+}
+
+export default app;

@@ -281,6 +281,12 @@ export default function PassportPage() {
   const handleSave = async () => {
     localStorage.setItem('comev_perfil', JSON.stringify(data));
     
+    if (!data.email || !data.email.trim()) {
+      showToast('⚠️ Guardado localmente (Se requiere email para guardar en base de datos)');
+      setIsEditing(false);
+      return;
+    }
+    
     try {
       const res = await fetch('/api/passport', {
         method: 'POST',
@@ -290,11 +296,18 @@ export default function PassportPage() {
       if (res.ok) {
         showToast('✓ Pasaporte guardado en base de datos');
       } else {
-        showToast('✓ Pasaporte guardado (Local)');
+        let errMsg = '';
+        try {
+          const errData = await res.json();
+          errMsg = errData.error || res.statusText;
+        } catch {
+          errMsg = `Estado ${res.status}`;
+        }
+        showToast(`⚠️ Guardado localmente (Error del servidor: ${errMsg})`);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error saving passport to database:', err);
-      showToast('✓ Pasaporte guardado (Local)');
+      showToast(`⚠️ Guardado localmente (Error de red: ${err.message || 'Sin conexión'})`);
     }
     setIsEditing(false);
   };
