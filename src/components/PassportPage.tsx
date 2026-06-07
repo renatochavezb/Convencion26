@@ -367,6 +367,10 @@ export default function PassportPage() {
           padding: 0;
         }
 
+        .passport-container .desktop-header {
+          display: none;
+        }
+
         .passport-container .pages {
           height: 100vh;
           height: 100dvh;
@@ -897,6 +901,12 @@ export default function PassportPage() {
           background: var(--orange); height: 14px; border-radius: 3px;
         }
 
+        .passport-container .modal-backdrop {
+          position: absolute;
+          inset: 0;
+          z-index: 250;
+        }
+
         .passport-container .modal {
           position: absolute; inset: 0;
           background: rgba(0,9,20,.97); z-index: 200;
@@ -1016,7 +1026,111 @@ export default function PassportPage() {
           padding: 8px 16px; border-radius: 6px; width: calc(100% - 40px); max-width: 350px;
           box-shadow: 0 10px 20px rgba(0,0,0,0.3); pointer-events: none;
         }
+
+        /* ─── RESPONSIVE PC STYLES ─── */
+        @media (min-width: 1024px) {
+          .passport-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 5rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #08121e;
+            box-shadow: none;
+          }
+
+          .passport-container .desktop-header {
+            display: block;
+            text-align: center;
+            margin-bottom: 2.5rem;
+          }
+
+          .passport-container .dh-sup {
+            color: var(--orange);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .2em;
+          }
+
+          .passport-container .dh-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            font-style: italic;
+            color: #fff;
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+          }
+
+          .passport-container .dh-desc {
+            color: var(--dim);
+            font-size: 12px;
+            margin-top: 0.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          .passport-container .pages {
+            height: auto;
+            overflow-y: visible;
+            scroll-snap-type: none;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1150px;
+          }
+
+          .passport-container .page {
+            scroll-snap-align: none;
+            min-height: 700px;
+            height: 700px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+          }
+
+          .passport-container .dots {
+            display: none;
+          }
+
+          .passport-container .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 250;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .passport-container .modal {
+            position: relative;
+            inset: auto;
+            width: 480px;
+            height: 90vh;
+            max-height: 720px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
+            margin: 0;
+          }
+        }
       `}} />
+
+      {/* DESKTOP HEADER */}
+      <div className="desktop-header">
+        <span className="dh-sup">COMEV 2026 • Convención Nacional</span>
+        <h2 className="dh-title">MI PASAPORTE <span className="text-secondary-orange">DIGITAL</span></h2>
+        <p className="dh-desc">Accede a tus datos de networking, código QR de ingreso y sellos de asistencia.</p>
+      </div>
 
       {/* PAGE DOTS INDICATOR */}
       {!isEditing && (
@@ -1351,222 +1465,224 @@ export default function PassportPage() {
 
       {/* ─── MODAL — EDITAR PERFIL ─── */}
       {isEditing && (
-        <div className="modal open">
-          <div className="modal-header">
-            <div className="modal-title">Editar <span>Perfil</span></div>
-            <button className="modal-close" onClick={closeModal}>✕</button>
-          </div>
+        <div className="modal-backdrop">
+          <div className="modal open">
+            <div className="modal-header">
+              <div className="modal-title">Editar <span>Perfil</span></div>
+              <button className="modal-close" onClick={closeModal}>✕</button>
+            </div>
 
-          <div className="modal-sec">Datos personales</div>
-          
-          <div className="f-group">
-            <label className="f-label">Nombre completo</label>
-            <input 
-              type="text" 
-              className="f-input" 
-              id="nombre" 
-              value={data.nombre} 
-              onChange={handleChange} 
-              placeholder="Tu nombre completo"
-            />
-          </div>
-          
-          <div className="two">
+            <div className="modal-sec">Datos personales</div>
+            
             <div className="f-group">
-              <label className="f-label">Cargo</label>
+              <label className="f-label">Nombre completo</label>
               <input 
                 type="text" 
                 className="f-input" 
-                id="cargo" 
-                value={data.cargo} 
+                id="nombre" 
+                value={data.nombre} 
                 onChange={handleChange} 
-                placeholder="Director..."
+                placeholder="Tu nombre completo"
               />
             </div>
-            <div className="f-group">
-              <label className="f-label">Modalidad</label>
-              <select 
-                className="f-input" 
-                id="modalidad" 
-                value={data.modalidad} 
-                onChange={handleChange}
-              >
-                <option value="">—</option>
-                <option value="individual">Individual</option>
-                <option value="pareja">Pareja</option>
-              </select>
+            
+            <div className="two">
+              <div className="f-group">
+                <label className="f-label">Cargo</label>
+                <input 
+                  type="text" 
+                  className="f-input" 
+                  id="cargo" 
+                  value={data.cargo} 
+                  onChange={handleChange} 
+                  placeholder="Director..."
+                />
+              </div>
+              <div className="f-group">
+                <label className="f-label">Modalidad</label>
+                <select 
+                  className="f-input" 
+                  id="modalidad" 
+                  value={data.modalidad} 
+                  onChange={handleChange}
+                >
+                  <option value="">—</option>
+                  <option value="individual">Individual</option>
+                  <option value="pareja">Pareja</option>
+                </select>
+              </div>
             </div>
-          </div>
-          
-          <div className="f-group">
-            <label className="f-label">Empresa</label>
-            <input 
-              type="text" 
-              className="f-input" 
-              id="empresa" 
-              value={data.empresa} 
-              onChange={handleChange} 
-              placeholder="Nombre de tu empresa"
-            />
-          </div>
-          
-          <div className="two">
+            
             <div className="f-group">
-              <label className="f-label">Delegación EVM</label>
+              <label className="f-label">Empresa</label>
               <input 
                 type="text" 
                 className="f-input" 
-                id="delegacion" 
-                value={data.delegacion} 
+                id="empresa" 
+                value={data.empresa} 
                 onChange={handleChange} 
-                placeholder="Chihuahua..."
+                placeholder="Nombre de tu empresa"
               />
             </div>
-            <div className="f-group">
-              <label className="f-label">WhatsApp</label>
-              <input 
-                type="tel" 
-                className="f-input" 
-                id="whatsapp" 
-                value={data.whatsapp} 
-                onChange={handleChange} 
-                placeholder="+52 614..."
-              />
+            
+            <div className="two">
+              <div className="f-group">
+                <label className="f-label">Delegación EVM</label>
+                <input 
+                  type="text" 
+                  className="f-input" 
+                  id="delegacion" 
+                  value={data.delegacion} 
+                  onChange={handleChange} 
+                  placeholder="Chihuahua..."
+                />
+              </div>
+              <div className="f-group">
+                <label className="f-label">WhatsApp</label>
+                <input 
+                  type="tel" 
+                  className="f-input" 
+                  id="whatsapp" 
+                  value={data.whatsapp} 
+                  onChange={handleChange} 
+                  placeholder="+52 614..."
+                />
+              </div>
             </div>
-          </div>
-          
-          <div className="two">
-            <div className="f-group">
-              <label className="f-label">Email</label>
-              <input 
-                type="email" 
-                className="f-input" 
-                id="email" 
-                value={data.email} 
-                onChange={handleChange} 
-                placeholder="correo@empresa.com"
-              />
+            
+            <div className="two">
+              <div className="f-group">
+                <label className="f-label">Email</label>
+                <input 
+                  type="email" 
+                  className="f-input" 
+                  id="email" 
+                  value={data.email} 
+                  onChange={handleChange} 
+                  placeholder="correo@empresa.com"
+                />
+              </div>
+              <div className="f-group">
+                <label className="f-label">LinkedIn</label>
+                <input 
+                  type="text" 
+                  className="f-input" 
+                  id="linkedin" 
+                  value={data.linkedin} 
+                  onChange={handleChange} 
+                  placeholder="linkedin.com/in/..."
+                />
+              </div>
             </div>
-            <div className="f-group">
-              <label className="f-label">LinkedIn</label>
-              <input 
-                type="text" 
-                className="f-input" 
-                id="linkedin" 
-                value={data.linkedin} 
-                onChange={handleChange} 
-                placeholder="linkedin.com/in/..."
-              />
-            </div>
-          </div>
 
-          <div className="modal-sec">Perfil de negocio</div>
-          
-          <div className="f-group">
-            <label className="f-label">¿A qué se dedica tu empresa?</label>
-            <textarea 
-              className="f-input" 
-              id="descripcion" 
-              value={data.descripcion} 
-              onChange={handleChange} 
-              placeholder="Describe brevemente..."
-            />
-          </div>
-          
-          <div className="two">
+            <div className="modal-sec">Perfil de negocio</div>
+            
             <div className="f-group">
-              <label className="f-label">Industria</label>
-              <select 
+              <label className="f-label">¿A qué se dedica tu empresa?</label>
+              <textarea 
                 className="f-input" 
-                id="industria" 
-                value={data.industria} 
-                onChange={handleChange}
-              >
-                <option value="">Seleccionar</option>
-                {INDUSTRIAS.map(ind => (
-                  <option key={ind} value={ind}>{ind}</option>
-                ))}
-              </select>
+                id="descripcion" 
+                value={data.descripcion} 
+                onChange={handleChange} 
+                placeholder="Describe brevemente..."
+              />
             </div>
+            
+            <div className="two">
+              <div className="f-group">
+                <label className="f-label">Industria</label>
+                <select 
+                  className="f-input" 
+                  id="industria" 
+                  value={data.industria} 
+                  onChange={handleChange}
+                >
+                  <option value="">Seleccionar</option>
+                  {INDUSTRIAS.map(ind => (
+                    <option key={ind} value={ind}>{ind}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="f-group">
+                <label className="f-label">Tamaño</label>
+                <select 
+                  className="f-input" 
+                  id="tamano" 
+                  value={data.tamano} 
+                  onChange={handleChange}
+                >
+                  <option value="">Seleccionar</option>
+                  {TAMANOS.map(t => (
+                    <option key={t.val} value={t.val}>{t.label}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="modal-sec">COMEV Connect — Networking</div>
+            
             <div className="f-group">
-              <label className="f-label">Tamaño</label>
-              <select 
+              <label className="f-label">¿Qué buscas en COMEV?</label>
+              <div className="chips-wrap" id="m-busco">
+                {BUSQUEDAS.map(b => {
+                  const active = data.busco.includes(b.val);
+                  return (
+                    <div 
+                      key={b.val} 
+                      className={`m-chip ${active ? 'active' : ''}`}
+                      onClick={() => handleToggleChip('busco', b.val)}
+                    >
+                      {b.label}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            
+            <div className="f-group">
+              <label className="f-label">¿Qué puedes ofrecer?</label>
+              <div className="chips-wrap" id="m-ofrezco">
+                {OFRECIMIENTOS.map(o => {
+                  const active = data.ofrezco.includes(o.val);
+                  return (
+                    <div 
+                      key={o.val} 
+                      className={`m-chip ${active ? 'active' : ''}`}
+                      onClick={() => handleToggleChip('ofrezco', o.val)}
+                    >
+                      {o.label}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            
+            <div className="f-group">
+              <label className="f-label">Tu mayor reto de negocio hoy</label>
+              <textarea 
                 className="f-input" 
-                id="tamano" 
-                value={data.tamano} 
-                onChange={handleChange}
-              >
-                <option value="">Seleccionar</option>
-                {TAMANOS.map(t => (
-                  <option key={t.val} value={t.val}>{t.label}</option>
-                ))}
-              </select>
+                id="reto" 
+                value={data.reto} 
+                onChange={handleChange} 
+                style={{ minHeight: '80px' }} 
+                placeholder="Sé específico — este campo conecta con las personas correctas..."
+              />
             </div>
-          </div>
+            
+            <div className="f-group">
+              <label className="f-label">Al terminar COMEV quiero haber logrado...</label>
+              <textarea 
+                className="f-input" 
+                id="objetivo" 
+                value={data.objetivo} 
+                onChange={handleChange} 
+                style={{ minHeight: '64px' }} 
+                placeholder="Tu resultado esperado..."
+              />
+            </div>
 
-          <div className="modal-sec">COMEV Connect — Networking</div>
-          
-          <div className="f-group">
-            <label className="f-label">¿Qué buscas en COMEV?</label>
-            <div className="chips-wrap" id="m-busco">
-              {BUSQUEDAS.map(b => {
-                const active = data.busco.includes(b.val);
-                return (
-                  <div 
-                    key={b.val} 
-                    className={`m-chip ${active ? 'active' : ''}`}
-                    onClick={() => handleToggleChip('busco', b.val)}
-                  >
-                    {b.label}
-                  </div>
-                );
-              })}
-            </div>
+            <button className="btn-save" onClick={handleSave}>★ Guardar Pasaporte ★</button>
           </div>
-          
-          <div className="f-group">
-            <label className="f-label">¿Qué puedes ofrecer?</label>
-            <div className="chips-wrap" id="m-ofrezco">
-              {OFRECIMIENTOS.map(o => {
-                const active = data.ofrezco.includes(o.val);
-                return (
-                  <div 
-                    key={o.val} 
-                    className={`m-chip ${active ? 'active' : ''}`}
-                    onClick={() => handleToggleChip('ofrezco', o.val)}
-                  >
-                    {o.label}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          
-          <div className="f-group">
-            <label className="f-label">Tu mayor reto de negocio hoy</label>
-            <textarea 
-              className="f-input" 
-              id="reto" 
-              value={data.reto} 
-              onChange={handleChange} 
-              style={{ minHeight: '80px' }} 
-              placeholder="Sé específico — este campo conecta con las personas correctas..."
-            />
-          </div>
-          
-          <div className="f-group">
-            <label className="f-label">Al terminar COMEV quiero haber logrado...</label>
-            <textarea 
-              className="f-input" 
-              id="objetivo" 
-              value={data.objetivo} 
-              onChange={handleChange} 
-              style={{ minHeight: '64px' }} 
-              placeholder="Tu resultado esperado..."
-            />
-          </div>
-
-          <button className="btn-save" onClick={handleSave}>★ Guardar Pasaporte ★</button>
         </div>
       )}
 
