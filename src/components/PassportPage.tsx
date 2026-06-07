@@ -402,15 +402,13 @@ export default function PassportPage() {
                 <h5 className="font-headline font-black italic uppercase text-xl xs:text-2xl tracking-tight text-white leading-tight break-words">
                   {data.nombre || 'NOMBRE COMPLETO'}
                 </h5>
-                <div className="flex flex-wrap items-center gap-x-2 text-[10px] font-sans font-black uppercase tracking-wider">
-                  <span className="text-secondary-orange">{data.cargo || 'CARGO / PUESTO'}</span>
-                  {data.empresa && (
-                    <>
-                      <span className="text-outline/40">•</span>
-                      <span className="text-on-surface-variant">{data.empresa}</span>
-                    </>
-                  )}
-                </div>
+                {(data.cargo || data.empresa) && (
+                  <div className="flex flex-wrap items-center gap-x-2 text-[10px] font-sans font-black uppercase tracking-wider">
+                    {data.cargo && <span className="text-secondary-orange">{data.cargo}</span>}
+                    {data.cargo && data.empresa && <span className="text-outline/40">•</span>}
+                    {data.empresa && <span className="text-on-surface-variant">{data.empresa}</span>}
+                  </div>
+                )}
 
                 {/* Custom Status (Objective) */}
                 {data.objetivo && (
@@ -427,15 +425,17 @@ export default function PassportPage() {
               {/* 4. SCROLLABLE DETAILS AREA */}
               <div className="px-4 xs:px-5 py-1.5 space-y-4 overflow-y-auto max-h-[320px] custom-scrollbar">
                 
-                {/* SOBRE MÍ */}
-                <div className="space-y-1">
-                  <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                    Sobre Mí
-                  </h6>
-                  <p className="text-[11px] text-on-surface-variant leading-relaxed">
-                    {data.descripcion || 'Sin descripción profesional.'}
-                  </p>
-                </div>
+                {/* SOBRE LA EMPRESA */}
+                {data.descripcion && (
+                  <div className="space-y-1">
+                    <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
+                      Sobre la Empresa
+                    </h6>
+                    <p className="text-[11px] text-on-surface-variant leading-relaxed">
+                      {data.descripcion}
+                    </p>
+                  </div>
+                )}
 
                 {/* RETO DE NEGOCIO */}
                 {data.reto && (
@@ -495,21 +495,27 @@ export default function PassportPage() {
                 )}
 
                 {/* DETALLES DE ACREDITACIÓN */}
-                <div className="space-y-1.5">
-                  <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                    Detalles de Acreditación
-                  </h6>
-                  <div className="grid grid-cols-2 gap-2 bg-[#000d1a]/30 border border-outline/10 p-2 rounded-lg text-[10px] font-sans uppercase">
-                    <div>
-                      <span className="text-outline/60 text-[8px] font-black block">Delegación</span>
-                      <span className="text-white font-black block mt-0.5">{data.delegacion || '—'}</span>
-                    </div>
-                    <div>
-                      <span className="text-outline/60 text-[8px] font-black block">Modalidad</span>
-                      <span className="text-white font-black block mt-0.5">{data.modalidad || '—'}</span>
+                {(data.delegacion || data.modalidad) && (
+                  <div className="space-y-1.5">
+                    <h6 className="text-[9px] font-sans font-black text-secondary-orange tracking-widest uppercase">
+                      Detalles de Acreditación
+                    </h6>
+                    <div className="grid grid-cols-2 gap-2 bg-[#000d1a]/30 border border-outline/10 p-2 rounded-lg text-[10px] font-sans uppercase">
+                      {data.delegacion && (
+                        <div>
+                          <span className="text-outline/60 text-[8px] font-black block">Delegación</span>
+                          <span className="text-white font-black block mt-0.5">{data.delegacion}</span>
+                        </div>
+                      )}
+                      {data.modalidad && (
+                        <div>
+                          <span className="text-outline/60 text-[8px] font-black block">Modalidad</span>
+                          <span className="text-white font-black block mt-0.5">{data.modalidad}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
+                )}
 
                 {/* NETWORKING PASS / QR CODE */}
                 <div className="space-y-1.5">
@@ -1092,15 +1098,13 @@ export default function PassportPage() {
               <h5 className="font-headline font-black italic uppercase text-2xl xs:text-3xl tracking-tight text-white leading-tight break-words">
                 {data.nombre || 'NOMBRE COMPLETO'}
               </h5>
-              <div className="flex flex-wrap items-center gap-x-2 text-xs font-sans font-black uppercase tracking-wider">
-                <span className="text-secondary-orange">{data.cargo || 'CARGO / PUESTO'}</span>
-                {data.empresa && (
-                  <>
-                    <span className="text-outline/45">•</span>
-                    <span className="text-on-surface-variant">{data.empresa}</span>
-                  </>
-                )}
-              </div>
+              {(data.cargo || data.empresa) && (
+                <div className="flex flex-wrap items-center gap-x-2 text-xs font-sans font-black uppercase tracking-wider">
+                  {data.cargo && <span className="text-secondary-orange">{data.cargo}</span>}
+                  {data.cargo && data.empresa && <span className="text-outline/45">•</span>}
+                  {data.empresa && <span className="text-on-surface-variant">{data.empresa}</span>}
+                </div>
+              )}
 
               {/* Custom Status (Objective) */}
               {data.objetivo && (
@@ -1117,15 +1121,17 @@ export default function PassportPage() {
             {/* 4. SCROLLABLE DETAILS AREA */}
             <div className="px-4 xs:px-6 py-2 space-y-5 overflow-y-auto max-h-[calc(100vh-280px)] md:max-h-[500px] custom-scrollbar">
               
-              {/* SOBRE MÍ */}
-              <div className="space-y-1.5">
-                <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                  Sobre Mí
-                </h6>
-                <p className="text-xs text-on-surface-variant leading-relaxed">
-                  {data.descripcion || 'Sin descripción profesional.'}
-                </p>
-              </div>
+              {/* SOBRE LA EMPRESA */}
+              {data.descripcion && (
+                <div className="space-y-1.5">
+                  <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
+                    Sobre la Empresa
+                  </h6>
+                  <p className="text-xs text-on-surface-variant leading-relaxed">
+                    {data.descripcion}
+                  </p>
+                </div>
+              )}
 
               {/* RETO DE NEGOCIO */}
               {data.reto && (
@@ -1185,21 +1191,27 @@ export default function PassportPage() {
               )}
 
               {/* DETALLES DE ACREDITACIÓN */}
-              <div className="space-y-2">
-                <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
-                  Detalles de Acreditación
-                </h6>
-                <div className="grid grid-cols-2 gap-3 bg-[#000d1a]/30 border border-outline/10 p-3 rounded-xl text-xs font-sans uppercase">
-                  <div>
-                    <span className="text-outline/60 text-[8px] font-black tracking-widest block">Delegación</span>
-                    <span className="text-white font-black block mt-0.5">{data.delegacion || '—'}</span>
-                  </div>
-                  <div>
-                    <span className="text-outline/60 text-[8px] font-black tracking-widest block">Modalidad</span>
-                    <span className="text-white font-black block mt-0.5">{data.modalidad || '—'}</span>
+              {(data.delegacion || data.modalidad) && (
+                <div className="space-y-2">
+                  <h6 className="text-[10px] xs:text-[11px] font-sans font-black text-secondary-orange tracking-widest uppercase">
+                    Detalles de Acreditación
+                  </h6>
+                  <div className="grid grid-cols-2 gap-3 bg-[#000d1a]/30 border border-outline/10 p-3 rounded-xl text-xs font-sans uppercase">
+                    {data.delegacion && (
+                      <div>
+                        <span className="text-outline/60 text-[8px] font-black tracking-widest block">Delegación</span>
+                        <span className="text-white font-black block mt-0.5">{data.delegacion}</span>
+                      </div>
+                    )}
+                    {data.modalidad && (
+                      <div>
+                        <span className="text-outline/60 text-[8px] font-black tracking-widest block">Modalidad</span>
+                        <span className="text-white font-black block mt-0.5">{data.modalidad}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* NETWORKING PASS / QR CODE */}
               <div className="space-y-2">
