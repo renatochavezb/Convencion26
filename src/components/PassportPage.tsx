@@ -120,7 +120,7 @@ export default function PassportPage() {
         const parsed = JSON.parse(savedProfile);
         initialData = { ...parsed };
         initialEmail = parsed.email || '';
-        if (parsed.nombre && parsed.photoUrl) {
+        if (parsed.nombre) {
           setIsEditing(false);
         }
       } catch (e) {
@@ -165,7 +165,7 @@ export default function PassportPage() {
             folio: folio || dbData.folio || prev.folio
           }));
           localStorage.setItem('comev_perfil', JSON.stringify({ ...initialData, ...dbData }));
-          if (dbData.nombre && dbData.photoUrl) {
+          if (dbData.nombre) {
             setIsEditing(false);
           }
         })
@@ -205,7 +205,34 @@ export default function PassportPage() {
     const reader = new FileReader();
     reader.onload = (ev) => {
       if (ev.target?.result) {
-        setData(prev => ({ ...prev, photoUrl: ev.target!.result as string }));
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 400;
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            }
+          } else {
+            if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+            setData(prev => ({ ...prev, photoUrl: compressedBase64 }));
+          }
+        };
+        img.src = ev.target!.result as string;
       }
     };
     reader.readAsDataURL(file);

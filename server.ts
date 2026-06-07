@@ -127,6 +127,15 @@ app.post('/api/passport', async (req, res) => {
       { $set: payload },
       { upsert: true }
     );
+
+    // Also save/update the photoUrl in the registrations collection if it exists
+    if (payload.photoUrl) {
+      await db.collection('registrations').updateOne(
+        { email },
+        { $set: { photoUrl: payload.photoUrl } }
+      );
+    }
+
     res.json({ success: true, matchedCount: result.matchedCount, upsertedCount: result.upsertedCount });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
