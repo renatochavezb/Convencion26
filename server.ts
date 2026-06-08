@@ -16,6 +16,15 @@ const DB_NAME = process.env.MONGODB_DB_NAME || 'convencion26';
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
+// Normalize request URL path for Vercel vs Local environment compatibility.
+// If Vercel strips the '/api' prefix, we add it back so Express routing matches.
+app.use((req, res, next) => {
+  if (req.url && !req.url.startsWith('/api')) {
+    req.url = '/api' + req.url;
+  }
+  next();
+});
+
 let dbClient: MongoClient | null = null;
 
 async function getDb() {
