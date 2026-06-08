@@ -303,11 +303,15 @@ export default function PassportPage() {
         } catch {
           errMsg = `Estado ${res.status}`;
         }
-        showToast(`⚠️ Guardado localmente (Error del servidor: ${errMsg})`);
+        if (res.status === 404 || errMsg.includes('Not Found') || errMsg.includes('FUNCTION_INVOCATION_FAILED')) {
+          showToast('⚠️ Guardado localmente. El servidor API no está disponible — ejecuta npm run dev:all en local o revisa Vercel.');
+        } else {
+          showToast(`⚠️ Guardado localmente (Error del servidor: ${errMsg})`);
+        }
       }
     } catch (err: any) {
       console.error('Error saving passport to database:', err);
-      showToast(`⚠️ Guardado localmente (Error de red: ${err.message || 'Sin conexión'})`);
+      showToast('⚠️ Guardado localmente. No hay conexión con el servidor — en local usa npm run dev:all.');
     }
     setIsEditing(false);
   };
