@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { ArrowLeft, X } from 'lucide-react';
 
 interface PassportData {
   folio: string;
@@ -101,6 +102,7 @@ export default function PassportPage() {
   const [isEditing, setIsEditing] = useState<boolean>(true);
   const [activePage, setActivePage] = useState<number>(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [expandedSello, setExpandedSello] = useState<number | null>(null);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -190,6 +192,22 @@ export default function PassportPage() {
     container.addEventListener('scroll', handleScroll);
     return () => container.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (expandedSello === null) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setExpandedSello(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [expandedSello]);
+
+  const openSelloView = (id: number) => setExpandedSello(id);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
@@ -643,11 +661,12 @@ export default function PassportPage() {
         }
 
         .passport-container .sd {
-          width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px dashed; flex-shrink: 0; transition: .3s;
+          width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px dashed; flex-shrink: 0; transition: .3s;
         }
 
         .passport-container .sd.earned {
-          border-style: solid;
+          border: none;
+          background: transparent;
         }
 
         .passport-container .sd1 { border-color: #d946ef; }
@@ -658,13 +677,9 @@ export default function PassportPage() {
         .passport-container .sd6 { border-color: #10b981; }
         .passport-container .sd7 { border-color: #f43f5e; }
 
-        .passport-container .sd1.earned { background: #1e0a2e; }
-        .passport-container .sd2.earned { background: #1c0a00; }
-        .passport-container .sd3.earned { background: #020e1a; }
-        .passport-container .sd4.earned { background: #0f172a; }
-        .passport-container .sd5.earned { background: #00082e; }
-        .passport-container .sd6.earned { background: #00150a; }
-        .passport-container .sd7.earned { background: #1a0008; }
+        .passport-container .sd.earned img {
+          filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
+        }
 
         .passport-container .sdn {
           font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 900;
@@ -717,82 +732,328 @@ export default function PassportPage() {
         }
 
         .passport-container .slist {
-          padding: .6rem 1.1rem; display: flex; flex-direction: column; gap: .45rem; flex: 1; background: var(--navy); overflow-y: auto;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.65rem 0.4rem;
+          padding: 0.5rem 0.55rem 0.75rem;
+          flex: 1;
+          background: var(--navy);
+          overflow-y: auto;
+          align-content: start;
         }
 
-        .passport-container .srow {
-          display: flex; align-items: center; gap: .7rem;
-          background: var(--border3); border-radius: 8px;
-          padding: .55rem .7rem; border: 0.5px solid var(--border);
-          position: relative; overflow: hidden;
+        .passport-container .s-card {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          padding: 0.1rem 0.05rem 0.35rem;
+          cursor: pointer;
+          transition: transform 0.2s ease;
+          background: transparent;
+          border: none;
         }
 
-        .passport-container .srow::before {
-          content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+        .passport-container .s-card:active {
+          transform: scale(0.96);
         }
 
-        .passport-container .s1::before { background: #d946ef; }
-        .passport-container .s2::before { background: #f59e0b; }
-        .passport-container .s3::before { background: #06b6d4; }
-        .passport-container .s4::before { background: #f8fafc; }
-        .passport-container .s5::before { background: #1d4ed8; }
-        .passport-container .s6::before { background: #10b981; }
-        .passport-container .s7::before { background: #f43f5e; }
-
-        .passport-container .srow.earned {
-          border-width: 1px;
+        .passport-container .s-card:last-child:nth-child(odd) {
+          grid-column: 1 / -1;
+          max-width: 46%;
+          margin: 0 auto;
         }
 
-        .passport-container .s1.earned { border-color: #d946ef; background: #1e0a2e; }
-        .passport-container .s2.earned { border-color: #f59e0b; background: #1c0a00; }
-        .passport-container .s3.earned { border-color: #06b6d4; background: #020e1a; }
-        .passport-container .s4.earned { border-color: #f8fafc; background: #0f172a; }
-        .passport-container .s5.earned { border-color: #1d4ed8; background: #00082e; }
-        .passport-container .s6.earned { border-color: #10b981; background: #00150a; }
-        .passport-container .s7.earned { border-color: #f43f5e; background: #1a0008; }
-
-        .passport-container .scirc {
-          width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1.5px dashed;
+        .passport-container .s-stamp {
+          width: min(48vw, 168px);
+          height: min(48vw, 168px);
+          max-width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 0.3rem;
         }
 
-        .passport-container .srow.earned .scirc {
-          border-style: solid;
+        .passport-container .s-stamp-img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          pointer-events: none;
         }
 
-        .passport-container .s1 .scirc { border-color: #d946ef; }
-        .passport-container .s2 .scirc { border-color: #f59e0b; }
-        .passport-container .s3 .scirc { border-color: #06b6d4; }
-        .passport-container .s4 .scirc { border-color: #f8fafc; }
-        .passport-container .s5 .scirc { border-color: #1d4ed8; }
-        .passport-container .s6 .scirc { border-color: #10b981; }
-        .passport-container .s7 .scirc { border-color: #f43f5e; }
-
-        .passport-container .scn {
-          font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 900;
+        .passport-container .s-card.earned .s-stamp-img {
+          filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.55));
         }
 
-        .passport-container .s1 .scn { color: #d946ef; }
-        .passport-container .s2 .scn { color: #f59e0b; }
-        .passport-container .s3 .scn { color: #06b6d4; }
-        .passport-container .s4 .scn { color: #f8fafc; }
-        .passport-container .s5 .scn { color: #facc15; }
-        .passport-container .s6 .scn { color: #10b981; }
-        .passport-container .s7 .scn { color: #f43f5e; }
+        .passport-container .s1.earned .s-stamp-img { filter: drop-shadow(0 0 16px rgba(217, 70, 239, 0.55)) drop-shadow(0 6px 12px rgba(0,0,0,0.5)); }
+        .passport-container .s2.earned .s-stamp-img { filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.55)) drop-shadow(0 6px 12px rgba(0,0,0,0.5)); }
+        .passport-container .s3.earned .s-stamp-img { filter: drop-shadow(0 0 16px rgba(6, 182, 212, 0.55)) drop-shadow(0 6px 12px rgba(0,0,0,0.5)); }
+        .passport-container .s4.earned .s-stamp-img { filter: drop-shadow(0 0 16px rgba(248, 250, 252, 0.35)) drop-shadow(0 6px 12px rgba(0,0,0,0.5)); }
+        .passport-container .s5.earned .s-stamp-img { filter: drop-shadow(0 0 16px rgba(250, 204, 21, 0.5)) drop-shadow(0 6px 12px rgba(0,0,0,0.5)); }
+        .passport-container .s6.earned .s-stamp-img { filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.55)) drop-shadow(0 6px 12px rgba(0,0,0,0.5)); }
+        .passport-container .s7.earned .s-stamp-img { filter: drop-shadow(0 0 16px rgba(244, 63, 94, 0.55)) drop-shadow(0 6px 12px rgba(0,0,0,0.5)); }
 
-        .passport-container .sinfo {
-          flex: 1; min-width: 0;
+        .passport-container .s-stamp-ghost {
+          width: 82%;
+          height: 82%;
+          border-radius: 50%;
+          border: 2px dashed;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0.38;
+        }
+
+        .passport-container .s1 .s-stamp-ghost { border-color: #d946ef; }
+        .passport-container .s2 .s-stamp-ghost { border-color: #f59e0b; }
+        .passport-container .s3 .s-stamp-ghost { border-color: #06b6d4; }
+        .passport-container .s4 .s-stamp-ghost { border-color: #f8fafc; }
+        .passport-container .s5 .s-stamp-ghost { border-color: #1d4ed8; }
+        .passport-container .s6 .s-stamp-ghost { border-color: #10b981; }
+        .passport-container .s7 .s-stamp-ghost { border-color: #f43f5e; }
+
+        .passport-container .s-stamp-num {
+          font-family: 'Montserrat', sans-serif;
+          font-size: 36px;
+          font-weight: 900;
+        }
+
+        .passport-container .s1 .s-stamp-num { color: #d946ef; }
+        .passport-container .s2 .s-stamp-num { color: #f59e0b; }
+        .passport-container .s3 .s-stamp-num { color: #06b6d4; }
+        .passport-container .s4 .s-stamp-num { color: #f8fafc; }
+        .passport-container .s5 .s-stamp-num { color: #facc15; }
+        .passport-container .s6 .s-stamp-num { color: #10b981; }
+        .passport-container .s7 .s-stamp-num { color: #f43f5e; }
+
+        .passport-container .s-card-info {
+          width: 100%;
+          padding: 0 0.15rem;
         }
 
         .passport-container .sname {
-          font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 900; font-style: italic; color: #fff; margin-bottom: .08rem;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 10px;
+          font-weight: 900;
+          font-style: italic;
+          color: #fff;
+          margin-bottom: 0.08rem;
+          line-height: 1.15;
+        }
+
+        .passport-container .s-card.pending .sname {
+          color: #64748b;
         }
 
         .passport-container .sev {
-          font-size: 9px; color: var(--dim); text-transform: uppercase; letter-spacing: .05em;
+          font-size: 7px;
+          color: var(--dim);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          line-height: 1.3;
         }
 
         .passport-container .sdate {
-          font-size: 9px; color: var(--muted);
+          font-size: 7px;
+          color: var(--muted);
+          margin-top: 0.1rem;
+          line-height: 1.3;
+        }
+
+        .passport-container .s-card .badge-p {
+          margin-top: 0.12rem;
+          font-size: 6.5px;
+          padding: 1px 5px;
+        }
+
+        .sello-lightbox {
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
+          width: 100vw;
+          height: 100vh;
+          height: 100dvh;
+          background: rgba(0, 8, 20, 0.96);
+          backdrop-filter: blur(12px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: stretch;
+          padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+          animation: fadeIn 0.2s ease;
+          font-family: 'JetBrains Mono', monospace;
+          box-sizing: border-box;
+        }
+
+        .sello-lightbox-close {
+          position: absolute;
+          top: max(1rem, env(safe-area-inset-top, 1rem));
+          right: max(1rem, env(safe-area-inset-right, 1rem));
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          background: rgba(255, 255, 255, 0.06);
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background 0.2s;
+          z-index: 2;
+        }
+
+        .sello-lightbox-close:hover {
+          background: rgba(254, 152, 0, 0.2);
+          border-color: #fe9800;
+        }
+
+        .sello-lightbox-body {
+          flex: 1;
+          width: 100%;
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 3.5rem 1rem 0.5rem;
+          box-sizing: border-box;
+        }
+
+        .sello-lightbox-stamp {
+          flex: 1;
+          width: 100%;
+          min-height: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .sello-lightbox-img {
+          width: min(92vw, calc(100dvh - 11rem), 92vmin);
+          height: min(92vw, calc(100dvh - 11rem), 92vmin);
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+          pointer-events: none;
+        }
+
+        .sello-lightbox-ghost {
+          width: min(72vw, calc(100dvh - 14rem), 72vmin);
+          height: min(72vw, calc(100dvh - 14rem), 72vmin);
+          border-radius: 50%;
+          border: 3px dashed;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0.45;
+        }
+
+        .sello-lightbox-num {
+          font-family: 'Montserrat', sans-serif;
+          font-size: clamp(72px, 22vmin, 160px);
+          font-weight: 900;
+        }
+
+        .sello-lightbox-info {
+          flex-shrink: 0;
+          text-align: center;
+          width: 100%;
+          max-width: min(92vw, 520px);
+          padding: 0.75rem 1rem 1.25rem;
+          box-sizing: border-box;
+        }
+
+        .sello-lightbox-name {
+          font-family: 'Montserrat', sans-serif;
+          font-size: clamp(17px, 4.5vw, 28px);
+          font-weight: 900;
+          font-style: italic;
+          color: #fff;
+          margin-bottom: 0.35rem;
+          line-height: 1.15;
+        }
+
+        .sello-lightbox-desc {
+          font-size: clamp(10px, 2.5vw, 13px);
+          color: #64748b;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          line-height: 1.5;
+        }
+
+        .sello-lightbox-date {
+          font-size: clamp(10px, 2.5vw, 13px);
+          color: #334155;
+          margin-top: 0.35rem;
+          line-height: 1.5;
+        }
+
+        .sello-lightbox-badge {
+          display: inline-block;
+          margin-top: 0.65rem;
+          font-size: clamp(9px, 2.2vw, 11px);
+          padding: 4px 14px;
+          border-radius: 20px;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+        }
+
+        .sello-lightbox-hint {
+          flex-shrink: 0;
+          padding-bottom: max(1rem, env(safe-area-inset-bottom, 1rem));
+          font-size: 9px;
+          color: #64748b;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+        }
+
+        @media (min-width: 768px) {
+          .sello-lightbox-img {
+            width: min(78vmin, calc(100dvh - 10rem), 900px);
+            height: min(78vmin, calc(100dvh - 10rem), 900px);
+          }
+
+          .sello-lightbox-ghost {
+            width: min(60vmin, calc(100dvh - 12rem), 680px);
+            height: min(60vmin, calc(100dvh - 12rem), 680px);
+          }
+
+          .sello-lightbox-body {
+            padding: 4rem 2rem 1rem;
+          }
+        }
+
+        @media (min-width: 1200px) {
+          .sello-lightbox-img {
+            width: min(72vmin, calc(100dvh - 9rem), 1100px);
+            height: min(72vmin, calc(100dvh - 9rem), 1100px);
+          }
+        }
+
+        @media (orientation: landscape) and (max-height: 500px) {
+          .sello-lightbox-body {
+            flex-direction: row;
+            gap: 1.5rem;
+            padding: 2.5rem 2rem 0.5rem;
+            align-items: center;
+          }
+
+          .sello-lightbox-stamp {
+            flex: 1.2;
+          }
+
+          .sello-lightbox-info {
+            flex: 0.8;
+            text-align: left;
+            padding: 0;
+            max-width: 40vw;
+          }
+
+          .sello-lightbox-img {
+            width: min(85dvh, 85vw, 600px);
+            height: min(85dvh, 85vw, 600px);
+          }
         }
 
         .passport-container .badge-p {
@@ -1285,10 +1546,14 @@ export default function PassportPage() {
                     <div 
                       key={s.id} 
                       className={`sd sd${s.id} ${earned ? 'earned' : ''}`}
-                      onClick={() => handleToggleSello(s.id)}
+                      onClick={() => openSelloView(s.id)}
                       style={{ cursor: 'pointer' }}
                     >
-                      <div className="sdn">{s.id}</div>
+                      {earned ? (
+                        <img src={`/assets/sello_${s.id}.svg`} alt={s.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                      ) : (
+                        <div className="sdn">{s.id}</div>
+                      )}
                     </div>
                   );
                 })}
@@ -1344,16 +1609,25 @@ export default function PassportPage() {
               {SELLOS_INFO.map(s => {
                 const earned = data.sellos.includes(s.id);
                 return (
-                  <div 
-                    key={s.id} 
-                    className={`srow s${s.id} ${earned ? 'earned' : ''}`}
-                    onClick={() => handleToggleSello(s.id)}
-                    style={{ cursor: 'pointer' }}
+                  <div
+                    key={s.id}
+                    className={`s-card s${s.id} ${earned ? 'earned' : 'pending'}`}
+                    onClick={() => openSelloView(s.id)}
                   >
-                    <div className="scirc">
-                      <div className="scn">{s.id}</div>
+                    <div className="s-stamp">
+                      {earned ? (
+                        <img
+                          src={`/assets/sello_${s.id}.svg`}
+                          alt={s.name}
+                          className="s-stamp-img"
+                        />
+                      ) : (
+                        <div className="s-stamp-ghost">
+                          <span className="s-stamp-num">{s.id}</span>
+                        </div>
+                      )}
                     </div>
-                    <div className="sinfo">
+                    <div className="s-card-info">
                       <div className="sname">{s.name}</div>
                       <div className="sev">{s.desc}</div>
                       <div className="sdate">{s.date}</div>
@@ -1709,6 +1983,65 @@ export default function PassportPage() {
           {toastMessage}
         </div>
       )}
+
+      {/* SELLO LIGHTBOX — portal a body = pantalla completa real (móvil + PC) */}
+      {expandedSello !== null && typeof document !== 'undefined' && createPortal((() => {
+        const s = SELLOS_INFO.find(x => x.id === expandedSello)!;
+        const earned = data.sellos.includes(s.id);
+        return (
+          <div
+            className="sello-lightbox"
+            onClick={() => setExpandedSello(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Sello: ${s.name}`}
+          >
+            <button
+              type="button"
+              className="sello-lightbox-close"
+              onClick={(e) => { e.stopPropagation(); setExpandedSello(null); }}
+              aria-label="Cerrar"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="sello-lightbox-body" onClick={(e) => e.stopPropagation()}>
+              <div className={`sello-lightbox-stamp s${s.id} ${earned ? 'earned' : 'pending'}`}>
+                {earned ? (
+                  <img
+                    src={`/assets/sello_${s.id}.svg`}
+                    alt={s.name}
+                    className={`sello-lightbox-img s${s.id}`}
+                    style={{ filter: `drop-shadow(0 0 28px ${s.color}88) drop-shadow(0 8px 24px rgba(0,0,0,0.6))` }}
+                  />
+                ) : (
+                  <div className="sello-lightbox-ghost" style={{ borderColor: s.color }}>
+                    <span className="sello-lightbox-num" style={{ color: s.color }}>{s.id}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="sello-lightbox-info">
+                <div className="sello-lightbox-name">{s.name}</div>
+                <div className="sello-lightbox-desc">{s.desc}</div>
+                <div className="sello-lightbox-date">{s.date}</div>
+                <span
+                  className="sello-lightbox-badge"
+                  style={{
+                    background: earned ? '#10b981' : 'rgba(255,255,255,0.08)',
+                    color: earned ? '#fff' : '#64748b',
+                    border: earned ? 'none' : '1px solid #172b41',
+                  }}
+                >
+                  {earned ? '✓ OBTENIDO' : 'PENDIENTE'}
+                </span>
+              </div>
+            </div>
+
+            <p className="sello-lightbox-hint">Toca fuera para cerrar</p>
+          </div>
+        );
+      })(), document.body)}
 
     </div>
   );
