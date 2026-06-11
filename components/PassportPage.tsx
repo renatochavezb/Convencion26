@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { ArrowLeft, X } from 'lucide-react';
+import { SELLOS_INFO, parseSelloParam } from '@/constants/sellos';
+import { claimSelloQr, toggleSelloManual, isSelloQrLocked } from '@/lib/sellos';
 
 interface PassportData {
   folio: string;
@@ -19,7 +21,8 @@ interface PassportData {
   ofrezco: string[];
   reto: string;
   objetivo: string;
-  sellos: number[]; // Array of indices (1 to 7) of earned stamps
+  sellos: number[];
+  sellosQr?: number[];
   photoUrl: string;
   bannerUrl: string;
 }
@@ -66,15 +69,7 @@ const OFRECIMIENTOS = [
   { val: 'Mentoría', label: 'Mentoría' }
 ];
 
-const SELLOS_INFO = [
-  { id: 1, name: 'Flash Back', desc: 'Rompe Hielo 80s', date: 'Jue 3 Sep · Hacienda San José · 7 PM', color: '#d946ef', bgClass: 'bg-[#1e0a2e]', borderClass: 'border-[#d946ef]', textClass: 'text-[#d946ef]' },
-  { id: 2, name: 'Hora Cero', desc: 'Inauguración Oficial', date: 'Vie 4 Sep · Centro de Exposiciones', color: '#f59e0b', bgClass: 'bg-[#1c0a00]', borderClass: 'border-[#f59e0b]', textClass: 'text-[#f59e0b]' },
-  { id: 3, name: 'Liderazgo · Innovación', desc: 'Conferencias Magistrales · Néstor Guerra', date: 'Vie 4 Sep · Sala Principal', color: '#06b6d4', bgClass: 'bg-[#020e1a]', borderClass: 'border-[#06b6d4]', textClass: 'text-[#06b6d4]' },
-  { id: 4, name: 'Somos COMEV', desc: 'Foto del Recuerdo', date: 'Vie 4 Sep · Centro de Convenciones', color: '#f8fafc', bgClass: 'bg-[#0f172a]', borderClass: 'border-[#f8fafc]', textClass: 'text-[#f8fafc]' },
-  { id: 5, name: 'Ejecutivo Distinguido', desc: 'Cena de Gala · Oscar Gardea Acosta', date: 'Vie 4 Sep · Hotel María Bonita', color: '#facc15', bgClass: 'bg-[#00082e]', borderClass: 'border-[#1d4ed8]', textClass: 'text-[#facc15]' },
-  { id: 6, name: 'Paisajes y Tradición', desc: 'Experiencia Regional', date: 'Sáb 5 Sep · Excursión', color: '#10b981', bgClass: 'bg-[#00150a]', borderClass: 'border-[#10b981]', textClass: 'text-[#10b981]' },
-  { id: 7, name: 'Toma de Protesta', desc: 'Nuevo Consejo 2026–2027', date: 'Sáb 5 Sep · Cena de Cierre', color: '#f43f5e', bgClass: 'bg-[#1a0008]', borderClass: 'border-[#f43f5e]', textClass: 'text-[#f43f5e]' }
-];
+const PENDING_SELLO_KEY = 'comev_pending_sello';
 
 export default function PassportPage() {
   const [data, setData] = useState<PassportData>({
@@ -95,6 +90,7 @@ export default function PassportPage() {
     reto: '',
     objetivo: '',
     sellos: [],
+    sellosQr: [],
     photoUrl: '',
     bannerUrl: ''
   });
@@ -105,6 +101,9 @@ export default function PassportPage() {
   const [expandedSello, setExpandedSello] = useState<number | null>(null);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressTriggered = useRef(false);
+  const qrClaimProcessed = useRef(false);
 
   // Initialize folio and load data
   useEffect(() => {
@@ -153,7 +152,8 @@ export default function PassportPage() {
       ...prev,
       ...initialData,
       folio: folio || initialData.folio || prev.folio,
-      sellos: initialData.sellos || []
+      sellos: initialData.sellos || [],
+      sellosQr: initialData.sellosQr || []
     }));
 
     // 3. Fetch from MongoDB database to get the latest info
@@ -224,25 +224,128 @@ export default function PassportPage() {
     });
   };
 
-  const handleToggleSello = (id: number) => {
-    setData(prev => {
-      const sellos = prev.sellos;
-      const newSellos = sellos.includes(id)
-        ? sellos.filter(sid => sid !== id)
-        : [...sellos, id];
-      
-      const updatedData = { ...prev, sellos: newSellos };
-      // Save instantly to localStorage
-      localStorage.setItem('comev_perfil', JSON.stringify(updatedData));
-      // Try background save
+  const goPage = (i: number) => {
+    const container = document.getElementById('pages-container');
+    if (container) {
+      const pageHeight = container.clientHeight;
+      container.scrollTo({ top: i * pageHeight, behavior: 'smooth' });
+      setActivePage(i);
+    }
+  };
+
+  const persistPassport = useCallback((updatedData: PassportData) => {
+    localStorage.setItem('comev_perfil', JSON.stringify(updatedData));
+    if (updatedData.email?.trim()) {
       fetch('/api/passport', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedData),
-      }).catch(err => console.error('Offline stamp save failed', err));
-      
+      }).catch(err => console.error('Offline passport save failed', err));
+    }
+  }, []);
+
+  const handleToggleSello = (id: number) => {
+    setData(prev => {
+      const result = toggleSelloManual(prev, id);
+      if (result.action === 'locked') {
+        setToastMessage('Este sello fue verificado por QR y no se puede quitar');
+        setTimeout(() => setToastMessage(null), 3000);
+        return prev;
+      }
+      const updatedData = { ...prev, sellos: result.sellos, sellosQr: result.sellosQr };
+      persistPassport(updatedData);
+      setToastMessage(
+        result.action === 'added' ? `✓ Sello ${id} agregado manualmente` : `Sello ${id} quitado`
+      );
+      setTimeout(() => setToastMessage(null), 3000);
       return updatedData;
     });
+  };
+
+  useEffect(() => {
+    if (qrClaimProcessed.current) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl = parseSelloParam(params.get('sello'));
+    if (fromUrl) {
+      sessionStorage.setItem(PENDING_SELLO_KEY, String(fromUrl));
+      const cleanUrl = `${window.location.pathname}${window.location.hash || '#pasaporte'}`;
+      window.history.replaceState({}, '', cleanUrl);
+    }
+
+    const pending = parseSelloParam(sessionStorage.getItem(PENDING_SELLO_KEY));
+    if (!pending) return;
+
+    qrClaimProcessed.current = true;
+    sessionStorage.removeItem(PENDING_SELLO_KEY);
+
+    let base: PassportData = {
+      folio: '',
+      nombre: '',
+      cargo: '',
+      empresa: '',
+      delegacion: '',
+      whatsapp: '',
+      linkedin: '',
+      email: '',
+      modalidad: '',
+      descripcion: '',
+      industria: '',
+      tamano: '',
+      busco: [],
+      ofrezco: [],
+      reto: '',
+      objetivo: '',
+      sellos: [],
+      sellosQr: [],
+      photoUrl: '',
+      bannerUrl: '',
+    };
+
+    const savedProfile = localStorage.getItem('comev_perfil');
+    if (savedProfile) {
+      try {
+        base = { ...base, ...JSON.parse(savedProfile) };
+      } catch (e) {
+        console.error('Error parsing profile for QR claim', e);
+      }
+    }
+
+    const result = claimSelloQr(base, pending);
+    const updated = { ...base, sellos: result.sellos, sellosQr: result.sellosQr };
+    setData(updated);
+    persistPassport(updated);
+    setToastMessage(
+      result.isNew
+        ? `✓ Sello ${pending} registrado por QR`
+        : `✓ Sello ${pending} ya estaba en tu pasaporte`
+    );
+    setTimeout(() => setToastMessage(null), 3500);
+    setExpandedSello(pending);
+    setTimeout(() => goPage(1), 300);
+  }, [persistPassport]);
+
+  const startLongPress = (id: number) => {
+    longPressTriggered.current = false;
+    longPressTimer.current = setTimeout(() => {
+      longPressTriggered.current = true;
+      handleToggleSello(id);
+    }, 650);
+  };
+
+  const cancelLongPress = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
+  const handleSelloCardClick = (id: number) => {
+    if (longPressTriggered.current) {
+      longPressTriggered.current = false;
+      return;
+    }
+    openSelloView(id);
   };
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -347,15 +450,6 @@ export default function PassportPage() {
     setTimeout(() => {
       setToastMessage(null);
     }, 3000);
-  };
-
-  const goPage = (i: number) => {
-    const container = document.getElementById('pages-container');
-    if (container) {
-      const pageHeight = container.clientHeight;
-      container.scrollTo({ top: i * pageHeight, behavior: 'smooth' });
-      setActivePage(i);
-    }
   };
 
   const formatName = (name: string) => {
@@ -731,6 +825,16 @@ export default function PassportPage() {
           color: #475569; display: block; font-size: 9px;
         }
 
+        .passport-container .slist-hint {
+          font-size: 8px;
+          color: var(--muted);
+          text-align: center;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          padding: 0 0.75rem 0.35rem;
+          line-height: 1.4;
+        }
+
         .passport-container .slist {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -1008,6 +1112,47 @@ export default function PassportPage() {
           text-transform: uppercase;
         }
 
+        .sello-lightbox-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          justify-content: center;
+          margin-top: 0.75rem;
+        }
+
+        .sello-lightbox-action-btn {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          padding: 6px 14px;
+          border-radius: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          background: rgba(255, 255, 255, 0.06);
+          color: #94a3b8;
+          cursor: pointer;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
+        }
+
+        .sello-lightbox-action-btn:hover {
+          border-color: #fe9800;
+          color: #fe9800;
+        }
+
+        .sello-lightbox-action-btn.danger:hover {
+          border-color: #f43f5e;
+          color: #f43f5e;
+        }
+
+        .sello-lightbox-qr-note {
+          font-size: 9px;
+          color: #64748b;
+          margin-top: 0.5rem;
+          line-height: 1.5;
+          letter-spacing: 0.04em;
+        }
+
         @media (min-width: 768px) {
           .sello-lightbox-img {
             width: min(78vmin, calc(100dvh - 10rem), 900px);
@@ -1062,6 +1207,10 @@ export default function PassportPage() {
 
         .passport-container .badge-earned {
           background: #10b981; color: #fff; border-color: #10b981;
+        }
+
+        .passport-container .badge-qr {
+          background: #1d4ed8; color: #fff; border-color: #1d4ed8;
         }
 
         .passport-container .prog {
@@ -1605,14 +1754,24 @@ export default function PassportPage() {
               </div>
             </div>
 
+            <p className="slist-hint">Toca un sello para verlo · Mantén presionado para agregar o quitar manualmente</p>
+
             <div className="slist">
               {SELLOS_INFO.map(s => {
                 const earned = data.sellos.includes(s.id);
+                const qrLocked = isSelloQrLocked(data, s.id);
                 return (
                   <div
                     key={s.id}
-                    className={`s-card s${s.id} ${earned ? 'earned' : 'pending'}`}
-                    onClick={() => openSelloView(s.id)}
+                    className={`s-card s${s.id} ${earned ? 'earned' : 'pending'} ${qrLocked ? 'qr-locked' : ''}`}
+                    onClick={() => handleSelloCardClick(s.id)}
+                    onTouchStart={() => startLongPress(s.id)}
+                    onTouchEnd={cancelLongPress}
+                    onTouchMove={cancelLongPress}
+                    onMouseDown={() => startLongPress(s.id)}
+                    onMouseUp={cancelLongPress}
+                    onMouseLeave={cancelLongPress}
+                    onContextMenu={(e) => e.preventDefault()}
                   >
                     <div className="s-stamp">
                       {earned ? (
@@ -1631,8 +1790,8 @@ export default function PassportPage() {
                       <div className="sname">{s.name}</div>
                       <div className="sev">{s.desc}</div>
                       <div className="sdate">{s.date}</div>
-                      <span className={`badge-p ${earned ? 'badge-earned' : ''}`}>
-                        {earned ? '✓ OBTENIDO' : 'PENDIENTE'}
+                      <span className={`badge-p ${earned ? (qrLocked ? 'badge-qr' : 'badge-earned') : ''}`}>
+                        {earned ? (qrLocked ? '✓ QR' : '✓ OBTENIDO') : 'PENDIENTE'}
                       </span>
                     </div>
                   </div>
@@ -1988,6 +2147,7 @@ export default function PassportPage() {
       {expandedSello !== null && typeof document !== 'undefined' && createPortal((() => {
         const s = SELLOS_INFO.find(x => x.id === expandedSello)!;
         const earned = data.sellos.includes(s.id);
+        const qrLocked = isSelloQrLocked(data, s.id);
         return (
           <div
             className="sello-lightbox"
@@ -2028,13 +2188,41 @@ export default function PassportPage() {
                 <span
                   className="sello-lightbox-badge"
                   style={{
-                    background: earned ? '#10b981' : 'rgba(255,255,255,0.08)',
+                    background: earned ? (qrLocked ? '#1d4ed8' : '#10b981') : 'rgba(255,255,255,0.08)',
                     color: earned ? '#fff' : '#64748b',
                     border: earned ? 'none' : '1px solid #172b41',
                   }}
                 >
-                  {earned ? '✓ OBTENIDO' : 'PENDIENTE'}
+                  {earned ? (qrLocked ? '✓ VERIFICADO POR QR' : '✓ OBTENIDO') : 'PENDIENTE'}
                 </span>
+
+                <div className="sello-lightbox-actions">
+                  {!earned && (
+                    <button
+                      type="button"
+                      className="sello-lightbox-action-btn"
+                      onClick={() => handleToggleSello(s.id)}
+                    >
+                      + Agregar manualmente
+                    </button>
+                  )}
+                  {earned && !qrLocked && (
+                    <button
+                      type="button"
+                      className="sello-lightbox-action-btn danger"
+                      onClick={() => { handleToggleSello(s.id); setExpandedSello(null); }}
+                    >
+                      Quitar sello
+                    </button>
+                  )}
+                </div>
+
+                {earned && qrLocked && (
+                  <p className="sello-lightbox-qr-note">Este sello fue registrado al escanear el QR del evento y no puede eliminarse.</p>
+                )}
+                {!earned && (
+                  <p className="sello-lightbox-qr-note">Escanea el código QR en la estación del evento para obtener este sello de forma permanente.</p>
+                )}
               </div>
             </div>
 

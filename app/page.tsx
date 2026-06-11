@@ -23,7 +23,11 @@ export default function App() {
 
   // Set initial hash after mount (client-side only)
   useEffect(() => {
-    setCurrentHash(window.location.hash);
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('sello') && !window.location.hash) {
+      window.location.hash = '#pasaporte';
+    }
+    setCurrentHash(window.location.hash || (params.has('sello') ? '#pasaporte' : ''));
     
     const handleHashChange = () => {
       setCurrentHash(window.location.hash);

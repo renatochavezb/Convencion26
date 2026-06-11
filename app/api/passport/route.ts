@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/libs/mongo';
+import { mergeSelloState } from '@/lib/sellos';
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,9 +11,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
     const email = data.email.toLowerCase().trim();
+
+    const existing = await db.collection('passports').findOne({ email });
+    const { sellos, sellosQr } = mergeSelloState(existing, {
+      sellos: data.sellos,
+      sellosQr: data.sellosQr,
+    });
+
     const payload = {
       ...data,
       email,
+      sellos,
+      sellosQr,
       updatedAt: new Date().toISOString()
     };
 
