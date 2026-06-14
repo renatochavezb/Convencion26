@@ -270,7 +270,7 @@ export default function App() {
                         <span>Ir a mi Pasaporte Digital</span>
                       </button>
                       {process.env.NODE_ENV === 'production' && (
-                        <span className="text-[10px] font-mono text-secondary-orange font-semibold">
+                        <span className="text-sm font-mono text-secondary-orange font-semibold">
                           Se activa el 1 de septiembre 2026
                         </span>
                       )}

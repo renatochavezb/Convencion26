@@ -125,7 +125,7 @@ export default function Hero({ onCtaclick }: HeroProps) {
                 <Ticket className="w-4 h-4" /> Pasaporte Digital
               </button>
               {process.env.NODE_ENV === 'production' && (
-                <span className="text-[10px] font-mono text-purple-300 font-semibold mt-1">
+                <span className="text-sm font-mono text-purple-300 font-semibold mt-1">
                   Se activa el 1 de septiembre 2026
                 </span>
               )}
@@ -217,7 +217,7 @@ export default function Hero({ onCtaclick }: HeroProps) {
                   Pasaporte Digital
                 </button>
                 {process.env.NODE_ENV === 'production' ? (
-                  <span className="text-[10px] font-mono text-purple-300 font-semibold text-center animate-pulse">
+                  <span className="text-sm font-mono text-purple-300 font-semibold text-center animate-pulse">
                     Se activa el 1 de septiembre 2026
                   </span>
                 ) : (
