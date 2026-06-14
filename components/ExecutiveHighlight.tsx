@@ -49,7 +49,7 @@ export default function ExecutiveHighlight() {
                   REVELACIÓN DEL GALARDONADO
                 </h4>
                 <p className="font-sans text-sm md:text-base text-on-surface-variant leading-relaxed">
-                  El próximo <span className="text-secondary-orange font-bold text-lg">15 de Junio</span> se anunciará oficialmente al galardonado como Ejecutivo Distinguido Nacional 2026.
+                  El próximo <span className="text-secondary-orange font-bold text-lg">6 de Julio</span> se anunciará oficialmente al galardonado como Ejecutivo Distinguido Nacional 2026.
                 </p>
               </div>
 
@@ -73,7 +73,7 @@ export default function ExecutiveHighlight() {
 
               <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row justify-center gap-4 text-xs font-mono">
                 <span className="bg-secondary-orange/10 text-secondary-orange px-3 py-1 border border-secondary-orange/20">
-                  📅 ANUNCIO: 15 DE JUNIO, 2026
+                  📅 ANUNCIO: 6 DE JULIO, 2026
                 </span>
                 <span className="bg-white/5 text-white/60 px-3 py-1 border border-white/10">
                   🔒 CONTENIDO RESERVADO
