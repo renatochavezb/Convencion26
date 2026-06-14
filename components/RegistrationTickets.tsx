@@ -56,10 +56,11 @@ export default function RegistrationTickets({ onSelectModality }: RegistrationTi
 
             <button 
               onClick={() => onSelectModality('individual')}
+              disabled
               id="select-ticket-individual"
-              className="w-full border-2 border-white text-white py-4 font-mono text-xs font-bold uppercase tracking-widest hover:bg-white/15 transition-all cursor-pointer rounded-none btn-glow-white"
+              className="w-full border-2 border-white/40 text-white/40 py-4 font-mono text-xs font-bold uppercase tracking-widest transition-all cursor-not-allowed rounded-none"
             >
-              Seleccionar Individual
+              Individual
             </button>
           </div>
 
@@ -105,10 +106,11 @@ export default function RegistrationTickets({ onSelectModality }: RegistrationTi
 
             <button 
               onClick={() => onSelectModality('pareja')}
+              disabled
               id="select-ticket-couple"
-              className="w-full bg-secondary-orange text-deep-blue py-4 font-mono text-xs font-bold uppercase tracking-widest hover:bg-[#ffa726] transition-all cursor-pointer rounded-none shadow-lg mt-8 btn-glow-orange"
+              className="w-full bg-secondary-orange/40 text-deep-blue/60 py-4 font-mono text-xs font-bold uppercase tracking-widest transition-all cursor-not-allowed rounded-none mt-8"
             >
-              Seleccionar Pareja
+              Pareja
             </button>
           </div>
 
