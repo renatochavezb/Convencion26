@@ -138,6 +138,15 @@ progress::-webkit-progress-value {
     transform: translateY(0);
   }
 
+  .btn-pulse-purple {
+    animation: pulse-purple-glow 2.2s ease-in-out infinite;
+  }
+  .btn-pulse-purple:hover {
+    animation-play-state: paused;
+    transform: translateY(-1px);
+    box-shadow: 0 0 32px rgba(217, 70, 239, 0.55), 0 8px 20px rgba(124, 58, 237, 0.35);
+  }
+
   /* Spotlight glow */
   .glass-card-glow {
     position: relative;
@@ -155,6 +164,17 @@ progress::-webkit-progress-value {
   }
   .glass-card-glow:hover::before {
     opacity: 1;
+  }
+}
+
+@keyframes pulse-purple-glow {
+  0%, 100% {
+    box-shadow: 0 0 16px rgba(217, 70, 239, 0.25), 0 0 0 0 rgba(217, 70, 239, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(217, 70, 239, 0.55), 0 0 20px 4px rgba(147, 51, 234, 0.35);
+    transform: scale(1.02);
   }
 }
 

@@ -1,34 +1,36 @@
+"use client";
+
 import { useState, useEffect } from 'react';
-import { Play, Ticket, MapPin, Calendar, Clock } from 'lucide-react';
+import { Play, Ticket } from 'lucide-react';
 import logoGradiente from '../assets/logo-gradiente.png';
 import comevLogo from '../assets/comev-logo.png';
 
+/** Inicio del evento: 3 sep 2026, 19:00 hora de Chihuahua (UTC-6) */
+const EVENT_START_MS = new Date('2026-09-03T19:00:00-06:00').getTime();
+
+function getTimeLeft() {
+  const difference = EVENT_START_MS - Date.now();
+  if (difference <= 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  }
+  return {
+    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((difference / (1000 * 60)) % 60),
+    seconds: Math.floor((difference / 1000) % 60),
+  };
+}
 
 interface HeroProps {
   onCtaclick: () => void;
 }
 
 export default function Hero({ onCtaclick }: HeroProps) {
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState(getTimeLeft);
 
   useEffect(() => {
-    const calculateTimeLeft = () => {
-      // Event start date: September 3, 2026 at 07:00 PM (Rompe Hielo)
-      const difference = +new Date('2026-09-03T19:00:00') - +new Date();
-      if (difference > 0) {
-        setTimeLeft({
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
-        });
-      } else {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-      }
-    };
-
-    calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 1000);
+    setTimeLeft(getTimeLeft());
+    const timer = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -109,6 +111,25 @@ export default function Hero({ onCtaclick }: HeroProps) {
             >
               <Play className="w-4 h-4 fill-white" /> Ver Programa del Evento
             </a>
+
+            <div className="flex flex-col items-start gap-1 lg:hidden">
+              <button
+                type="button"
+                onClick={() => {
+                  if (process.env.NODE_ENV === 'production') return;
+                  window.location.hash = '#pasaporte';
+                }}
+                disabled={process.env.NODE_ENV === 'production'}
+                className="btn-pulse-purple inline-flex items-center gap-2 bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#d946ef] hover:from-[#8b5cf6] hover:via-[#a855f7] hover:to-[#e879f9] text-white font-headline text-xs font-bold uppercase tracking-wider px-6 py-3.5 border border-[#d946ef]/50 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+              >
+                <Ticket className="w-4 h-4" /> Pasaporte Digital
+              </button>
+              {process.env.NODE_ENV === 'production' && (
+                <span className="text-[10px] font-mono text-purple-300 font-semibold mt-1">
+                  Se activa el 1 de septiembre 2026
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -147,19 +168,19 @@ export default function Hero({ onCtaclick }: HeroProps) {
                 </p>
                 <div className="grid grid-cols-4 gap-2 text-center">
                   <div className="bg-white/[0.02] border border-white/5 p-3">
-                    <span className="block font-headline text-2xl font-black text-white leading-none">{timeLeft.days}</span>
+                    <span suppressHydrationWarning className="block font-headline text-2xl font-black text-white leading-none">{timeLeft.days}</span>
                     <span className="font-mono text-[8px] text-on-surface-variant block uppercase mt-1">Días</span>
                   </div>
                   <div className="bg-white/[0.02] border border-white/5 p-3">
-                    <span className="block font-headline text-2xl font-black text-white leading-none">{String(timeLeft.hours).padStart(2, '0')}</span>
+                    <span suppressHydrationWarning className="block font-headline text-2xl font-black text-white leading-none">{String(timeLeft.hours).padStart(2, '0')}</span>
                     <span className="font-mono text-[8px] text-on-surface-variant block uppercase mt-1">Horas</span>
                   </div>
                   <div className="bg-white/[0.02] border border-white/5 p-3">
-                    <span className="block font-headline text-2xl font-black text-white leading-none">{String(timeLeft.minutes).padStart(2, '0')}</span>
+                    <span suppressHydrationWarning className="block font-headline text-2xl font-black text-white leading-none">{String(timeLeft.minutes).padStart(2, '0')}</span>
                     <span className="font-mono text-[8px] text-on-surface-variant block uppercase mt-1">Min</span>
                   </div>
                   <div className="bg-white/[0.02] border border-white/5 p-3">
-                    <span className="block font-headline text-2xl font-black text-white leading-none">{String(timeLeft.seconds).padStart(2, '0')}</span>
+                    <span suppressHydrationWarning className="block font-headline text-2xl font-black text-white leading-none">{String(timeLeft.seconds).padStart(2, '0')}</span>
                     <span className="font-mono text-[8px] text-on-surface-variant block uppercase mt-1">Seg</span>
                   </div>
                 </div>
@@ -181,41 +202,29 @@ export default function Hero({ onCtaclick }: HeroProps) {
                 </div>
               </div>
 
-              {/* Barcode section */}
-              <div className="pt-4 border-t border-white/10 flex flex-col items-center gap-2.5">
-                <div className="w-full h-11 bg-white/90 flex items-center justify-center p-1.5 select-none rounded-[1px]">
-                  {/* Styled mock barcode lines */}
-                  <div className="flex gap-[3px] w-full h-full items-stretch justify-center opacity-85">
-                    <div className="bg-black w-[1px]"></div>
-                    <div className="bg-black w-[3px]"></div>
-                    <div className="bg-black w-[1px]"></div>
-                    <div className="bg-black w-[4px]"></div>
-                    <div className="bg-black w-[2px]"></div>
-                    <div className="bg-black w-[1px]"></div>
-                    <div className="bg-black w-[3px]"></div>
-                    <div className="bg-black w-[1px]"></div>
-                    <div className="bg-black w-[5px]"></div>
-                    <div className="bg-black w-[1px]"></div>
-                    <div className="bg-black w-[2px]"></div>
-                    <div className="bg-black w-[4px]"></div>
-                    <div className="bg-black w-[1px]"></div>
-                    <div className="bg-black w-[3px]"></div>
-                    <div className="bg-black w-[1px]"></div>
-                    <div className="bg-black w-[5px]"></div>
-                    <div className="bg-black w-[2px]"></div>
-                    <div className="bg-black w-[1px]"></div>
-                    <div className="bg-black w-[3px]"></div>
-                    <div className="bg-black w-[1px]"></div>
-                    <div className="bg-black w-[4px]"></div>
-                    <div className="bg-black w-[2px]"></div>
-                    <div className="bg-black w-[1px]"></div>
-                    <div className="bg-black w-[3px]"></div>
-                    <div className="bg-black w-[1px]"></div>
-                  </div>
-                </div>
-                <span className="font-mono text-[8px] text-on-surface-variant tracking-[0.3em] font-semibold uppercase">
-                  *COMEV2026*
-                </span>
+              {/* Pasaporte Digital */}
+              <div className="pt-4 border-t border-white/10 flex flex-col items-center gap-3 w-full">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (process.env.NODE_ENV === 'production') return;
+                    window.location.hash = '#pasaporte';
+                  }}
+                  disabled={process.env.NODE_ENV === 'production'}
+                  className="btn-pulse-purple w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#d946ef] hover:from-[#8b5cf6] hover:via-[#a855f7] hover:to-[#e879f9] text-white font-headline text-[11px] font-bold uppercase tracking-wider py-3.5 px-4 border border-[#d946ef]/50 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  <Ticket className="w-4 h-4 shrink-0" />
+                  Pasaporte Digital
+                </button>
+                {process.env.NODE_ENV === 'production' ? (
+                  <span className="text-[10px] font-mono text-purple-300 font-semibold text-center animate-pulse">
+                    Se activa el 1 de septiembre 2026
+                  </span>
+                ) : (
+                  <span className="font-mono text-[8px] text-on-surface-variant tracking-[0.3em] font-semibold uppercase">
+                    *COMEV2026*
+                  </span>
+                )}
               </div>
 
             </div>

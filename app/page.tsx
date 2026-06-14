@@ -24,14 +24,30 @@ export default function App() {
   // Set initial hash after mount (client-side only)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const isProd = process.env.NODE_ENV === 'production';
+    
     if (params.has('sello') && !window.location.hash) {
-      window.location.hash = '#pasaporte';
+      if (!isProd) {
+        window.location.hash = '#pasaporte';
+      }
     }
-    setCurrentHash(window.location.hash || (params.has('sello') ? '#pasaporte' : ''));
+    
+    const initialHash = window.location.hash;
+    if (initialHash === '#pasaporte' && isProd) {
+      window.location.hash = '';
+      setCurrentHash('');
+    } else {
+      setCurrentHash(initialHash || (params.has('sello') && !isProd ? '#pasaporte' : ''));
+    }
     
     const handleHashChange = () => {
-      setCurrentHash(window.location.hash);
-      window.scrollTo(0, 0);
+      if (window.location.hash === '#pasaporte' && isProd) {
+        window.location.hash = '';
+        setCurrentHash('');
+      } else {
+        setCurrentHash(window.location.hash);
+        window.scrollTo(0, 0);
+      }
     };
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
@@ -103,7 +119,9 @@ export default function App() {
 
     // Redirect directly to passport page
     setTimeout(() => {
-      window.location.hash = '#pasaporte';
+      if (process.env.NODE_ENV !== 'production') {
+        window.location.hash = '#pasaporte';
+      }
     }, 150);
   };
 
@@ -127,7 +145,7 @@ export default function App() {
     window.location.hash = '#pasaporte';
   };
 
-  if (currentHash === '#pasaporte') {
+  if (currentHash === '#pasaporte' && process.env.NODE_ENV !== 'production') {
     return <PassportPage />;
   }
 
@@ -239,13 +257,24 @@ export default function App() {
                   <div className="border-t border-outline/10 my-4" />
 
                   <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                    <button
-                      onClick={() => { window.location.hash = '#pasaporte'; }}
-                      className="w-full sm:w-auto bg-secondary-orange hover:bg-accent-orange text-deep-blue font-headline font-black text-xs uppercase tracking-widest py-3.5 px-6 rounded-xl transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer border-none active:scale-[0.98] shadow-md shadow-secondary-orange/10 shrink-0"
-                    >
-                      <Ticket className="w-4 h-4 text-deep-blue" />
-                      <span>Ir a mi Pasaporte Digital</span>
-                    </button>
+                    <div className="flex flex-col items-center gap-2 w-full sm:w-auto">
+                      <button
+                        onClick={() => {
+                          if (process.env.NODE_ENV === 'production') return;
+                          window.location.hash = '#pasaporte';
+                        }}
+                        disabled={process.env.NODE_ENV === 'production'}
+                        className="w-full bg-secondary-orange hover:bg-accent-orange text-deep-blue font-headline font-black text-xs uppercase tracking-widest py-3.5 px-6 rounded-xl transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer border-none active:scale-[0.98] shadow-md shadow-secondary-orange/10 shrink-0 disabled:opacity-60 disabled:cursor-not-allowed"
+                      >
+                        <Ticket className="w-4 h-4 text-deep-blue" />
+                        <span>Ir a mi Pasaporte Digital</span>
+                      </button>
+                      {process.env.NODE_ENV === 'production' && (
+                        <span className="text-[10px] font-mono text-secondary-orange font-semibold">
+                          Se activa el 1 de septiembre 2026
+                        </span>
+                      )}
+                    </div>
                     
                     <button
                       onClick={handleClearRegistration}
