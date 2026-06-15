@@ -29,11 +29,16 @@ export async function GET(req: NextRequest) {
 
     const contentType = match[1];
     const dataBuffer = Buffer.from(match[2], 'base64');
+    const ext = contentType.split('/')[1] || 'bin';
+    const isPdf = contentType.toLowerCase().includes('pdf');
+    const disposition = isPdf 
+      ? `attachment; filename="comprobante-${ticketId}.${ext}"` 
+      : 'inline';
 
     return new Response(dataBuffer, {
       headers: {
         'Content-Type': contentType,
-        'Content-Disposition': 'inline',
+        'Content-Disposition': disposition,
       },
     });
   } catch (err: any) {
