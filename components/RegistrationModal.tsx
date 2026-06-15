@@ -98,7 +98,7 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
     }
   };
 
-  const handleUploadAndFinish = async () => {
+  const handleUploadAndFinish = () => {
     setLoading(true);
     const generatedTicketId = ticketId || 'CMV-' + Math.floor(100000 + Math.random() * 900000).toString();
     const payload: RegistrationDetails = {
@@ -120,30 +120,24 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
       })
     };
 
-    // Save final status and file to MongoDB/Sheets
-    try {
-      await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-    } catch (err) {
+    // Save final status and file to MongoDB/Sheets in the background
+    fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).catch(err => {
       console.error('Failed to upload proof and finish:', err);
-    }
-
-    setLoading(false);
+    });
 
     // Attempt to copy image to clipboard so they can paste it directly in WhatsApp
     if (selectedFile && navigator.clipboard && navigator.clipboard.write && selectedFile.type.startsWith('image/')) {
-      try {
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            [selectedFile.type]: selectedFile
-          })
-        ]);
-      } catch (clipErr) {
+      navigator.clipboard.write([
+        new ClipboardItem({
+          [selectedFile.type]: selectedFile
+        })
+      ]).catch(clipErr => {
         console.warn('Could not copy image to clipboard:', clipErr);
-      }
+      });
     }
 
     const fileLink = `${window.location.origin}/api/comprobante?id=${generatedTicketId}`;
@@ -157,6 +151,7 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
     const whatsappUrl = `https://wa.me/526142278711?text=${encodeURIComponent(textMessage)}`;
     window.open(whatsappUrl, '_blank');
 
+    setLoading(false);
     onSuccess(payload);
   };
 
