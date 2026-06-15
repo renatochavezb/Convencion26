@@ -256,6 +256,7 @@ export default function FlightDiscountsSection() {
         </article>
 
         {/* Volaris — sin información en el documento oficial aún */}
+        {/* 
         <div className="mt-6 p-5 border border-dashed border-[#572A88]/40 bg-[#572A88]/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <p className="font-headline font-black text-xl text-[#9b6bb8] lowercase italic">volaris</p>
@@ -273,6 +274,7 @@ export default function FlightDiscountsSection() {
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>
+        */}
       </div>
     </section>
   );

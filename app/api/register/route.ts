@@ -24,6 +24,65 @@ export async function POST(req: NextRequest) {
       { $set: payload },
       { upsert: true }
     );
+
+    // If couple modality, register the companion as a separate document
+    if (payload.ticketType === 'pareja' && payload.partnerEmail && payload.partnerName) {
+      const partnerEmail = payload.partnerEmail.toLowerCase().trim();
+      const partnerPayload = {
+        ticketId: payload.ticketId ? `${payload.ticketId}-P` : '',
+        name: payload.partnerName,
+        email: partnerEmail,
+        company: payload.company || '',
+        position: payload.position || '',
+        badgeRole: 'Convencionista',
+        ticketType: 'pareja',
+        status: payload.status || 'pendiente',
+        partnerName: payload.name,
+        partnerEmail: email,
+        comprobante: payload.comprobante || undefined,
+        registeredAt: payload.registeredAt || new Date().toLocaleDateString('es-MX'),
+        updatedAt: new Date().toISOString()
+      };
+      
+      await db.collection('registrations').updateOne(
+        { email: partnerEmail },
+        { $set: partnerPayload },
+        { upsert: true }
+      );
+    }
+
+    // Send to Google Sheets Webhook asynchronously if configured
+    const sheetsWebhook = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+    if (sheetsWebhook) {
+      try {
+        fetch(sheetsWebhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ticketId: payload.ticketId || '',
+            name: payload.name || '',
+            email: payload.email || '',
+            company: payload.company || '',
+            position: payload.position || '',
+            badgeRole: payload.badgeRole || '',
+            ticketType: payload.ticketType || '',
+            status: payload.status || 'pendiente',
+            partnerName: payload.partnerName || '',
+            partnerEmail: payload.partnerEmail || '',
+            nombreAcompanante: payload.partnerName || '',
+            correoAcompanante: payload.partnerEmail || '',
+            nombreacompanante: payload.partnerName || '',
+            correoacompanante: payload.partnerEmail || '',
+            comprobante: payload.comprobante ? 'SÍ' : 'NO',
+            registeredAt: payload.registeredAt || new Date().toLocaleDateString('es-MX'),
+            updatedAt: payload.updatedAt
+          }),
+        }).catch(err => console.error('Google Sheets webhook post error:', err));
+      } catch (sheetsErr) {
+        console.error('Google Sheets sync error:', sheetsErr);
+      }
+    }
+
     return NextResponse.json({ success: true, matchedCount: result.matchedCount, upsertedCount: result.upsertedCount });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

@@ -248,37 +248,18 @@ export default function App() {
                   </div>
                   
                   <div>
-                    <h4 className="font-headline font-black text-white text-2xl uppercase tracking-tight">¡TU PASE ESTÁ LISTO!</h4>
+                    <h4 className="font-headline font-black text-white text-2xl uppercase tracking-tight">¡TU REGISTRO ESTÁ LISTO!</h4>
                     <p className="font-sans text-xs text-on-surface-variant mt-2 leading-relaxed max-w-sm mx-auto">
-                      Tu carnet digital y pasaporte de networking han sido generados. Accede a ellos desde tu teléfono para registrar asistencia y conectar con otros empresarios.
+                      Has registrado tus datos para la inscripcion para la Convención ¡VIVA CHIHUAHUA!, asegurate de mandar el comprobante de pago.
                     </p>
                   </div>
 
                   <div className="border-t border-outline/10 my-4" />
 
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                    <div className="flex flex-col items-center gap-2 w-full sm:w-auto">
-                      <button
-                        onClick={() => {
-                          if (process.env.NODE_ENV === 'production') return;
-                          window.location.hash = '#pasaporte';
-                        }}
-                        disabled={process.env.NODE_ENV === 'production'}
-                        className="w-full bg-secondary-orange hover:bg-accent-orange text-deep-blue font-headline font-black text-xs uppercase tracking-widest py-3.5 px-6 rounded-xl transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer border-none active:scale-[0.98] shadow-md shadow-secondary-orange/10 shrink-0 disabled:opacity-60 disabled:cursor-not-allowed"
-                      >
-                        <Ticket className="w-4 h-4 text-deep-blue" />
-                        <span>Ir a mi Pasaporte Digital</span>
-                      </button>
-                      {process.env.NODE_ENV === 'production' && (
-                        <span className="text-sm font-mono text-secondary-orange font-semibold">
-                          Se activa el 1 de septiembre 2026
-                        </span>
-                      )}
-                    </div>
-                    
+                  <div className="flex justify-center items-center pt-2">
                     <button
                       onClick={handleClearRegistration}
-                      className="w-full sm:w-auto border border-outline/40 text-on-surface-variant hover:text-white font-mono text-[10px] leading-none tracking-widest py-3.5 px-5 transition-all uppercase flex items-center justify-center gap-1.5 hover:bg-white/5 rounded-xl cursor-pointer shrink-0"
+                      className="w-full sm:w-auto border border-outline/40 text-on-surface-variant hover:text-white font-mono text-[10px] leading-none tracking-widest py-3.5 px-6 transition-all uppercase flex items-center justify-center gap-1.5 hover:bg-white/5 rounded-xl cursor-pointer shrink-0"
                     >
                       <RefreshCw className="w-3.5 h-3.5" />
                       <span>Registrar Otro</span>

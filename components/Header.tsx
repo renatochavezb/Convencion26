@@ -115,10 +115,10 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
 
           {hasTicket ? (
             <button
-              onClick={onViewTicket}
-              className="bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest flex items-center gap-1.5 hover:bg-emerald-500 hover:text-deep-blue transition-colors"
+              disabled
+              className="bg-emerald-500/10 text-emerald-400/60 border border-emerald-500/20 px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest flex items-center gap-1.5 cursor-not-allowed opacity-70"
             >
-              <Ticket className="w-4 h-4" /> Ver Mi Carnet
+              <Ticket className="w-4 h-4 opacity-60" /> ¡REGISTRADO!
             </button>
           ) : (
             <button
@@ -187,13 +187,10 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
 
           {hasTicket ? (
             <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onViewTicket();
-              }}
-              className="w-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 py-3 font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-1.5"
+              disabled
+              className="w-full bg-emerald-500/10 text-emerald-400/60 border border-emerald-500/20 py-3 font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-1.5 cursor-not-allowed opacity-70"
             >
-              <Ticket className="w-4.5 h-4.5" /> Ver Mi Carnet
+              <Ticket className="w-4.5 h-4.5 opacity-60" /> ¡REGISTRADO!
             </button>
           ) : (
             <button

@@ -13,11 +13,8 @@ interface TicketBadgeProps {
 export default function TicketBadge({ registration, onClear }: TicketBadgeProps) {
   const [downloaded, setDownloaded] = useState(false);
 
-  // Select badge logo based on attendee role
   const getBadgeLogo = () => {
     switch (registration.badgeRole) {
-      case 'VIP':
-        return logoGradiente.src;
       case 'Invitado Especial':
         return logoBlanco.src;
       default:
@@ -104,7 +101,6 @@ export default function TicketBadge({ registration, onClear }: TicketBadgeProps)
           {/* Badge classification category */}
           <div className="text-center relative z-10 mb-4">
             <div className={`inline-block py-1 px-4 text-xs font-mono font-black uppercase tracking-wider ${
-              registration.badgeRole === 'VIP' ? 'bg-[#ffc080] text-deep-blue' :
               registration.badgeRole === 'Invitado Especial' ? 'bg-white text-deep-blue' :
               registration.badgeRole === 'Prensa' ? 'bg-[#001f3f] text-accent-orange border border-accent-orange/40' :
               'bg-secondary-orange text-deep-blue'

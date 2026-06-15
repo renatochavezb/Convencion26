@@ -28,9 +28,11 @@ export interface RegistrationDetails {
   email: string;
   company: string;
   position: string; // cargo/puesto
-  badgeRole: 'Asistente' | 'Invitado Especial' | 'VIP' | 'Prensa';
+  badgeRole: 'Convencionista' | 'Invitado Especial' | 'Prensa';
   ticketType: 'individual' | 'pareja';
   partnerName?: string;
   partnerEmail?: string;
   registeredAt: string;
+  status?: 'pendiente' | 'confirmado';
+  comprobante?: string;
 }
