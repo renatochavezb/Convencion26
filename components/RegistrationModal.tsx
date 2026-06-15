@@ -37,7 +37,7 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
   const [fileBase64, setFileBase64] = useState<string | null>(null);
 
   const handleCopyAllBankDetails = () => {
-    const textToCopy = "Banco: Bancomer / BBVA\nCLABE: 012180006144540152\nReferencia: COMEV-2026";
+    const textToCopy = "Banco: Bancomer / BBVA\nCLABE: ******************\nReferencia: COMEV-2026";
     navigator.clipboard.writeText(textToCopy);
     setCopiedAllBankDetails(true);
     setTimeout(() => setCopiedAllBankDetails(false), 2000);
@@ -523,7 +523,7 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
                   <p>Realiza tu transferencia SPEI y envía tu comprobante al WhatsApp 6142278711 o en la sección de Inscripciones:</p>
                   <div className="space-y-1.5 p-2.5 bg-black/60 border border-surface-variant font-mono text-[11px] text-emerald-400">
                     <div>Banco: <span className="text-white">Bancomer / BBVA</span></div>
-                    <div>CLABE: <span className="text-white">0121 8000 6144 5401 52</span></div>
+                    <div>CLABE: <span className="text-white">******************</span></div>
                     <div>Referencia: <span className="text-yellow-400 font-bold">COMEV-2026</span></div>
                   </div>
                   <p className="text-[10px] italic">Al dar clic en Comprobante de Inscripción, podrás cargar tu comprobante de pago o tomar una foto.</p>
