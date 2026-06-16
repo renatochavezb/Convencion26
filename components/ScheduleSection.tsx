@@ -11,6 +11,7 @@ import juntaBgRaw from '../assets/junta_bg.png';
 import damasBgRaw from '../assets/damas_bg.png';
 import galaBgRaw from '../assets/gala_bg.png';
 import paseoBgRaw from '../assets/paseo_bg.png';
+import cumbreVentasLogoRaw from '../assets/cumbre-ventas-logo.jpg';
 
 const retro70sBg = (retro70sBgRaw as any).src;
 const inauguracionBg = (inauguracionBgRaw as any).src;
@@ -21,6 +22,7 @@ const juntaBg = (juntaBgRaw as any).src;
 const damasBg = (damasBgRaw as any).src;
 const galaBg = (galaBgRaw as any).src;
 const paseoBg = (paseoBgRaw as any).src;
+const cumbreVentasLogo = (cumbreVentasLogoRaw as any).src;
 
 
 function parseEventTime(timeStr: string, day: number) {
@@ -79,6 +81,19 @@ function getGoogleCalendarUrl(event: ScheduleEvent) {
 function getEventWatermark(eventId: string, title: string) {
   const titleLower = title.toLowerCase();
   
+  // 0. Cumbre de Ventas (Conferencias especiales)
+  if (eventId === 'd4-new-speaker' || eventId === 'd4-2') {
+    return (
+      <div className="absolute right-[15%] top-1/2 -translate-y-1/2 pointer-events-none select-none z-0 hidden lg:block opacity-10 hover:opacity-20 transition-opacity duration-300">
+        <img 
+          src={cumbreVentasLogo} 
+          alt="Cumbre de Ventas Watermark" 
+          className="w-32 h-auto object-contain" 
+        />
+      </div>
+    );
+  }
+
   // 1. Ceremonia de Inauguración
   if (titleLower.includes('inauguraci')) {
     return (
@@ -417,6 +432,30 @@ function getEventCardStyle(eventId: string, title: string): EventCardStyle {
     };
   }
 
+  // 2.5 Cumbre de Ventas (Conferencias especiales d4-new-speaker y d4-2)
+  if (eventId === 'd4-new-speaker' || eventId === 'd4-2') {
+    return {
+      isRetro: false,
+      containerClass: 'bg-gradient-to-r from-cyan-950/15 via-[#041221] to-blue-950/15 border border-cyan-400/40 hover:border-cyan-300 shadow-[inset_0_0_15px_rgba(6,182,212,0.1)] hover:shadow-[inset_0_0_25px_rgba(6,182,212,0.25),0_0_25px_rgba(6,182,212,0.3)]',
+      patternOverlay: (
+        <div className="absolute inset-0 z-0 opacity-[0.18] pointer-events-none select-none mix-blend-overlay">
+          <img 
+            src={conferenciaBg} 
+            alt="Cumbre de Ventas background" 
+            className="w-full h-full object-cover object-center" 
+          />
+        </div>
+      ),
+      clockIconColor: 'text-cyan-400',
+      pinIconColor: 'text-blue-400',
+      timeTextClass: 'text-cyan-400 font-bold',
+      descTextClass: 'text-on-surface-variant',
+      locationClass: 'hover:text-cyan-400 hover:underline',
+      titleClass: 'text-white font-extrabold hover:text-cyan-300 transition-colors duration-200',
+      calendarButtonClass: 'bg-transparent border border-cyan-400/30 text-cyan-400 hover:border-cyan-300 hover:bg-cyan-500 hover:text-deep-blue shadow-[0_0_10px_rgba(6,182,212,0.05)] hover:shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+    };
+  }
+
   // 3. Conferencia Magistral / Cumbre IA
   if (titleLower.includes('nestor') || titleLower.includes('cumbre') || titleLower.includes('conferencia') || titleLower.includes('ponente')) {
     return {
@@ -649,6 +688,157 @@ export default function ScheduleSection() {
         <div className="space-y-6">
           {filteredEvents.length > 0 ? (
             filteredEvents.map((event) => {
+                if (event.id === 'd4-2') {
+                  return null;
+                }
+
+                if (event.id === 'd4-new-speaker') {
+                  const event2 = filteredEvents.find((e) => e.id === 'd4-2');
+                  const linkedSpeaker1 = SPEAKERS.find((s) => s.id === 'invitado-keynote');
+                  const linkedSpeaker2 = SPEAKERS.find((s) => s.id === 'nestor');
+                  
+                  return (
+                    <div 
+                      key="cumbre-ventas-group"
+                      className="relative border border-[#0ea5e9]/40 bg-[#020e1a] rounded-3xl overflow-hidden shadow-[0_0_35px_rgba(14,165,233,0.15)] transition-all duration-300 hover:border-[#0ea5e9]/70"
+                    >
+                      {/* Background Pattern */}
+                      <div className="absolute inset-0 z-0 opacity-[0.12] pointer-events-none select-none mix-blend-overlay">
+                        <img 
+                          src={conferenciaBg} 
+                          alt="Cumbre de Ventas background" 
+                          className="w-full h-full object-cover object-center" 
+                        />
+                      </div>
+
+                      {/* Header Section */}
+                      <div className="relative p-6 md:p-10 text-center border-b border-white/10 z-10">
+                        {/* Top Badge */}
+                        <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-[10px] md:text-xs font-mono font-bold tracking-widest uppercase select-none mx-auto mb-4">
+                          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                          Evento Especial Dentro de COMEV 2026
+                        </div>
+
+                        {/* Main Logo */}
+                        <div className="py-2">
+                          <img 
+                            src={cumbreVentasLogo} 
+                            alt="Cumbre de Ventas 2026" 
+                            className="h-20 md:h-28 mx-auto object-contain drop-shadow-[0_0_20px_rgba(6,182,212,0.35)] hover:scale-105 transition-transform duration-300" 
+                          />
+                        </div>
+                      </div>
+
+                      {/* Sub-events List */}
+                      <div className="divide-y divide-white/10 z-10 relative bg-[#020e1a]/40">
+                        
+                        {/* Event 1 */}
+                        <div className="p-6 md:p-8 grid md:grid-cols-12 gap-6 items-center hover:bg-white/[0.015] transition-colors duration-200">
+                          {/* Large Number Column */}
+                          <div className="md:col-span-1 flex items-center justify-start md:justify-center">
+                            <span className="text-4xl md:text-5xl font-black text-[#0ea5e9]/20 font-mono tracking-tighter">01</span>
+                          </div>
+
+                          {/* Content Column */}
+                          <div className="md:col-span-8 space-y-3">
+                            <div className="inline-block px-2.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-400/20 text-cyan-300 text-[10px] font-mono font-bold tracking-wider uppercase">
+                              Conferencia Magistral
+                            </div>
+
+                            <h4 className="font-headline text-lg md:text-xl font-bold text-white leading-snug">
+                              Una visión estratégica para impulsar el crecimiento empresarial
+                            </h4>
+
+                            <div className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-secondary-orange uppercase">
+                              <span>Ponente:</span>
+                              <span className="px-2 py-0.5 rounded bg-secondary-orange/10 border border-secondary-orange/20 text-white ml-1 font-semibold">
+                                {linkedSpeaker1 ? linkedSpeaker1.name : "Conferencista Invitado"}
+                              </span>
+                            </div>
+
+                            <p className="font-sans text-xs md:text-sm leading-relaxed text-on-surface-variant">
+                              {linkedSpeaker1 ? linkedSpeaker1.bio : event.description}
+                            </p>
+                          </div>
+
+                          {/* Location Column */}
+                          <div className="md:col-span-3 flex items-start gap-1.5 font-sans text-on-surface-variant leading-relaxed md:justify-end">
+                            <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                            {event.locationUrl ? (
+                              <a 
+                                href={event.locationUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="transition-all duration-150 text-sm md:text-base font-bold text-cyan-200 hover:text-cyan-400 hover:underline"
+                              >
+                                {event.location}
+                              </a>
+                            ) : (
+                              <span className="text-sm md:text-base font-bold text-cyan-200">{event.location}</span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Event 2 */}
+                        {event2 && (
+                          <div className="p-6 md:p-8 grid md:grid-cols-12 gap-6 items-center hover:bg-white/[0.015] transition-colors duration-200">
+                            {/* Large Number Column */}
+                            <div className="md:col-span-1 flex items-center justify-start md:justify-center">
+                              <span className="text-4xl md:text-5xl font-black text-[#0ea5e9]/20 font-mono tracking-tighter">02</span>
+                            </div>
+
+                            {/* Content Column */}
+                            <div className="md:col-span-8 space-y-3">
+                              <div className="inline-block px-2.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-400/20 text-cyan-300 text-[10px] font-mono font-bold tracking-wider uppercase">
+                                Conferencia Magistral
+                              </div>
+
+                              <h4 className="font-headline text-lg md:text-xl font-bold text-white leading-snug flex items-center flex-wrap gap-2">
+                                <span>Cumbre: Néstor Guerra</span>
+                                <span className="text-xs md:text-sm font-sans font-normal text-on-surface-variant">. CONFERENCISTA INTERNACIONAL IA & NEGOCIOS</span>
+                              </h4>
+
+                              <div className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-secondary-orange uppercase">
+                                <span>Ponente:</span>
+                                <span className="px-2 py-0.5 rounded bg-secondary-orange/10 border border-secondary-orange/20 text-white ml-1 font-semibold inline-flex items-center gap-1.5 font-sans">
+                                  {linkedSpeaker2 ? linkedSpeaker2.name : event2.speakerName}
+                                  <svg className="w-5 h-3.5 shadow-sm border border-white/10 rounded-sm inline-block shrink-0" viewBox="0 0 3 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <title>España</title>
+                                    <rect width="3" height="2" fill="#AD1519" />
+                                    <rect y="0.5" width="3" height="1" fill="#FABD00" />
+                                  </svg>
+                                </span>
+                              </div>
+
+                              <p className="font-sans text-xs md:text-sm leading-relaxed text-on-surface-variant">
+                                {event2.description}
+                              </p>
+                            </div>
+
+                            {/* Location Column */}
+                            <div className="md:col-span-3 flex items-start gap-1.5 font-sans text-on-surface-variant leading-relaxed md:justify-end">
+                              <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                              {event2.locationUrl ? (
+                                <a 
+                                  href={event2.locationUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="transition-all duration-150 text-sm md:text-base font-bold text-cyan-200 hover:text-cyan-400 hover:underline"
+                                >
+                                  {event2.location}
+                                </a>
+                              ) : (
+                                <span className="text-sm md:text-base font-bold text-cyan-200">{event2.location}</span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                      </div>
+                    </div>
+                  );
+                }
+
                 const cardStyle = getEventCardStyle(event.id, event.title);
                 const linkedSpeaker = event.speakerId ? SPEAKERS.find((s) => s.id === event.speakerId) : null;
                 return (
@@ -718,6 +908,12 @@ export default function ScheduleSection() {
                     {/* Center Column: Description and Speaker (Extended to 9 columns since calendar button is hidden) */}
                     <div className="md:col-span-9 space-y-3 relative z-10">
                       <div>
+                        {(event.id === 'd4-new-speaker' || event.id === 'd4-2') && (
+                          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-[10px] md:text-xs font-mono font-bold tracking-wider mb-3 uppercase select-none w-fit">
+                            <img src={cumbreVentasLogo} className="h-4 w-auto object-contain" alt="Cumbre de Ventas" />
+                            <span>Conferencia Cumbre de Ventas 2026</span>
+                          </div>
+                        )}
                         {event.title === 'Ejecutivo Distinguido Nacional' ? (
                           <button
                             onClick={() => {

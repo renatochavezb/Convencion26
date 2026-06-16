@@ -2,6 +2,7 @@ import { Star, Shield, Landmark } from 'lucide-react';
 import logoNaranja from '../assets/logo-naranja.png';
 import comevLogo from '../assets/comev-logo-trans.png';
 import evmLogo from '../assets/evm-logo.png';
+import comevOficialLogo from '../assets/comev-oficial.png';
 
 
 export default function Footer() {
@@ -35,7 +36,9 @@ export default function Footer() {
               <div className="w-px h-12 bg-white/15 mx-1" />
               <img src={comevLogo.src} alt="Logo COMEV" className="h-14 w-auto object-contain opacity-90" />
               <div className="w-px h-12 bg-white/15 mx-1" />
-              <img src={evmLogo.src} alt="Logo EVM Chihuahua" className="h-14 w-auto object-contain opacity-90" />
+              <img src={evmLogo.src} alt="Logo EVM Chihuahua" className="h-24 w-auto object-contain opacity-90" />
+              <div className="w-px h-12 bg-white/15 mx-1" />
+              <img src={comevOficialLogo.src} alt="Logo COMEV Oficial" className="h-24 w-auto object-contain opacity-90" />
             </div>
 
 
@@ -91,7 +94,16 @@ export default function Footer() {
               COMEV
             </a>
             <a href="#" className="hover:text-secondary-orange transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-secondary-orange transition-colors">Contact Us</a>
+            <a 
+              href="https://wa.me/526142278711" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              data-tooltip-id="tooltip"
+              data-tooltip-content="¡Escríbenos! Respuesta rápida"
+              className="hover:text-secondary-orange transition-colors"
+            >
+              Contáctanos
+            </a>
           </div>
 
           {/* Copyrights */}

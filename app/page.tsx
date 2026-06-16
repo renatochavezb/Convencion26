@@ -13,6 +13,7 @@ import LocationSection from '@/components/LocationSection';
 import FlightDiscountsSection from '@/components/FlightDiscountsSection';
 import Footer from '@/components/Footer';
 import PassportPage from '@/components/PassportPage';
+import WhatsAppFAB from '@/components/WhatsAppFAB';
 import { RegistrationDetails } from '@/types';
 import { Star, ShieldAlert, Award, RefreshCw, Ticket } from 'lucide-react';
 
@@ -286,6 +287,9 @@ export default function App() {
 
       {/* Footer & Sponsors block */}
       <Footer />
+
+      {/* Floating WhatsApp Action Button */}
+      <WhatsAppFAB />
 
       {/* Checkout modal if selected */}
       {selectedModality && (

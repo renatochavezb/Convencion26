@@ -55,9 +55,9 @@ export default function Hero({ onCtaclick }: HeroProps) {
         <div className="lg:col-span-7 space-y-6">
 
           {/* Display Hero Title with staggered italic highlights */}
-          <h2 className="font-headline text-5xl md:text-7xl font-black text-white leading-[0.95] tracking-tighter uppercase italic select-none">
-            ¡VIVA <br />
-            <span className="text-secondary-orange italic">CHIHUAHUA!</span>
+          <h2 className="font-headline text-5xl md:text-7xl font-black leading-[0.95] tracking-tighter uppercase italic select-none">
+            <span className="text-shimmer-white block">¡VIVA</span>
+            <span className="text-shimmer-orange italic block" style={{ animationDelay: '150ms' }}>CHIHUAHUA!</span>
           </h2>
 
           {/* Primary Subhead */}
@@ -113,7 +113,7 @@ export default function Hero({ onCtaclick }: HeroProps) {
                   window.location.hash = '#pasaporte';
                 }}
                 disabled={process.env.NODE_ENV === 'production'}
-                className="btn-pulse-purple inline-flex items-center gap-2 bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#d946ef] hover:from-[#8b5cf6] hover:via-[#a855f7] hover:to-[#e879f9] text-white font-headline text-xs font-bold uppercase tracking-wider px-6 py-3.5 border border-[#d946ef]/50 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#d946ef] hover:from-[#8b5cf6] hover:via-[#a855f7] hover:to-[#e879f9] text-white font-headline text-xs font-bold uppercase tracking-wider px-6 py-3.5 border border-[#d946ef]/50 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
               >
                 <Ticket className="w-4 h-4" /> Pasaporte Digital
               </button>
@@ -204,7 +204,7 @@ export default function Hero({ onCtaclick }: HeroProps) {
                     window.location.hash = '#pasaporte';
                   }}
                   disabled={process.env.NODE_ENV === 'production'}
-                  className="btn-pulse-purple w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#d946ef] hover:from-[#8b5cf6] hover:via-[#a855f7] hover:to-[#e879f9] text-white font-headline text-[11px] font-bold uppercase tracking-wider py-3.5 px-4 border border-[#d946ef]/50 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#d946ef] hover:from-[#8b5cf6] hover:via-[#a855f7] hover:to-[#e879f9] text-white font-headline text-[11px] font-bold uppercase tracking-wider py-3.5 px-4 border border-[#d946ef]/50 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
                 >
                   <Ticket className="w-4 h-4 shrink-0" />
                   Pasaporte Digital

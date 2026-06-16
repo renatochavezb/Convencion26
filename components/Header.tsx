@@ -13,6 +13,7 @@ interface HeaderProps {
 export default function Header({ onRegisterClick, hasTicket, onViewTicket }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   // Smooth scroll helper
   const handleScrollTo = (id: string) => {
@@ -29,6 +30,15 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
         setScrolled(true);
       } else {
         setScrolled(false);
+      }
+
+      // Calculate scroll progress percentage
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const progress = (window.scrollY / totalHeight) * 100;
+        setScrollProgress(progress);
+      } else {
+        setScrollProgress(0);
       }
     };
     window.addEventListener('scroll', handleScroll);
@@ -205,6 +215,11 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
           )}
         </div>
       )}
+      {/* Scroll Progress Bar */}
+      <div 
+        className="absolute bottom-0 left-0 h-[3px] bg-secondary-orange transition-all duration-75"
+        style={{ width: `${scrollProgress}%` }}
+      />
     </nav>
   );
 }

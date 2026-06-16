@@ -55,6 +55,18 @@
     50% { transform: scale(1.1); opacity: 1; }
     100% { transform: scale(1); opacity: 1; }
   }
+
+  @keyframes button-shimmer {
+    0% { left: -60%; }
+    30% { left: 140%; }
+    100% { left: 140%; }
+  }
+
+  @keyframes text-shimmer-sweep {
+    0% { background-position: 200% 0; }
+    30% { background-position: -200% 0; }
+    100% { background-position: -200% 0; }
+  }
 }
 
 html,
@@ -145,6 +157,58 @@ progress::-webkit-progress-value {
     animation-play-state: paused;
     transform: translateY(-1px);
     box-shadow: 0 0 32px rgba(217, 70, 239, 0.55), 0 8px 20px rgba(124, 58, 237, 0.35);
+  }
+
+  .btn-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-shimmer::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 30%;
+    height: 200%;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.45) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(25deg);
+    animation: button-shimmer 4s ease-in-out infinite;
+  }
+
+  .text-shimmer-white {
+    background: linear-gradient(
+      120deg,
+      #ffffff 30%,
+      #e2e8f0 40%,
+      #ffffff 50%,
+      #ffffff 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: text-shimmer-sweep 5s linear infinite;
+  }
+
+  .text-shimmer-orange {
+    background: linear-gradient(
+      120deg,
+      #fe9800 30%,
+      #ffa726 40%,
+      #ffffff 50%,
+      #ffa726 60%,
+      #fe9800 70%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: text-shimmer-sweep 5s linear infinite;
   }
 
   /* Spotlight glow */
