@@ -1,6 +1,7 @@
 import { Star, Shield, Landmark } from 'lucide-react';
 import logoNaranja from '../assets/logo-naranja.png';
 import comevLogo from '../assets/comev-logo-trans.png';
+import evmLogo from '../assets/evm-logo.png';
 
 
 export default function Footer() {
@@ -33,6 +34,8 @@ export default function Footer() {
               </div>
               <div className="w-px h-12 bg-white/15 mx-1" />
               <img src={comevLogo.src} alt="Logo COMEV" className="h-14 w-auto object-contain opacity-90" />
+              <div className="w-px h-12 bg-white/15 mx-1" />
+              <img src={evmLogo.src} alt="Logo EVM Chihuahua" className="h-14 w-auto object-contain opacity-90" />
             </div>
 
 
