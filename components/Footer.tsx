@@ -35,11 +35,7 @@ export default function Footer() {
               <img src={comevLogo.src} alt="Logo COMEV" className="h-14 w-auto object-contain opacity-90" />
             </div>
 
-            {/* Verification code to emphasize realistic detail */}
-            <div className="bg-white/5 border border-surface-card px-3 py-1 font-mono text-[10px] text-on-surface-variant flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-secondary-orange inline-block animate-ping" />
-              CÓDIGO DE TRASPASO: CO-CHIH26
-            </div>
+
 
           </div>
         </div>
