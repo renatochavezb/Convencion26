@@ -34,6 +34,19 @@ const nextConfig = {
     
     return config;
   },
+  async headers() {
+    return [
+      {
+        source: '/docs/:path*',
+        headers: [
+          {
+            key: 'Content-Disposition',
+            value: 'attachment',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Play, Ticket } from 'lucide-react';
+import { Ticket } from 'lucide-react';
 import logoGradiente from '../assets/logo-gradiente.png';
 import comevLogo from '../assets/comev-logo.png';
 
@@ -102,15 +102,8 @@ export default function Hero({ onCtaclick }: HeroProps) {
               id="hero-cta-btn"
               className="bg-[#fe9800] hover:bg-[#ffa726] text-deep-blue font-semibold tracking-wider font-headline text-sm rounded-none uppercase px-8 py-4 cursor-pointer btn-glow-orange"
             >
-              ADQUIRIR ACCESO DIRECTO
+              ¡REGÍSTRATE AQUÍ!
             </button>
-            
-            <a
-              href="#schedule"
-              className="inline-flex items-center gap-2 text-white hover:text-secondary-orange font-mono text-[11px] font-bold uppercase tracking-wider underline underline-offset-4 decoration-2"
-            >
-              <Play className="w-4 h-4 fill-white" /> Ver Programa del Evento
-            </a>
 
             <div className="flex flex-col items-start gap-1 lg:hidden">
               <button

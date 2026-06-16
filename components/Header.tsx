@@ -125,7 +125,7 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
               onClick={onRegisterClick}
               className="bg-secondary-orange text-deep-blue px-6 py-2 font-headline text-[13px] font-bold uppercase tracking-wider active:scale-95 duration-100 transition-all hover:bg-white hover:text-deep-blue rounded-none shadow-md cursor-pointer"
             >
-              Register Now
+              REGISTRARSE
             </button>
           )}
         </div>
@@ -200,7 +200,7 @@ export default function Header({ onRegisterClick, hasTicket, onViewTicket }: Hea
               }}
               className="w-full bg-secondary-orange text-deep-blue py-3 font-mono text-xs font-bold uppercase tracking-widest text-center"
             >
-              Register Now
+              REGISTRARSE
             </button>
           )}
         </div>
