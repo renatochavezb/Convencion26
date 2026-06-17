@@ -109,12 +109,19 @@ export default function Hero({ onCtaclick }: HeroProps) {
               <button
                 type="button"
                 onClick={() => {
+                  if (process.env.NODE_ENV === 'production') return;
                   window.location.hash = '#pasaporte';
                 }}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#d946ef] hover:from-[#8b5cf6] hover:via-[#a855f7] hover:to-[#e879f9] text-white font-headline text-xs font-bold uppercase tracking-wider px-6 py-3.5 border border-[#d946ef]/50 cursor-pointer"
+                disabled={process.env.NODE_ENV === 'production'}
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#d946ef] hover:from-[#8b5cf6] hover:via-[#a855f7] hover:to-[#e879f9] text-white font-headline text-xs font-bold uppercase tracking-wider px-6 py-3.5 border border-[#d946ef]/50 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
               >
                 <Ticket className="w-4 h-4" /> Pasaporte Digital
               </button>
+              {process.env.NODE_ENV === 'production' && (
+                <span className="text-sm font-mono text-purple-300 font-semibold mt-1">
+                  Se activa el 1 de septiembre 2026
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -193,16 +200,24 @@ export default function Hero({ onCtaclick }: HeroProps) {
                 <button
                   type="button"
                   onClick={() => {
+                    if (process.env.NODE_ENV === 'production') return;
                     window.location.hash = '#pasaporte';
                   }}
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#d946ef] hover:from-[#8b5cf6] hover:via-[#a855f7] hover:to-[#e879f9] text-white font-headline text-[11px] font-bold uppercase tracking-wider py-3.5 px-4 border border-[#d946ef]/50 cursor-pointer"
+                  disabled={process.env.NODE_ENV === 'production'}
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#d946ef] hover:from-[#8b5cf6] hover:via-[#a855f7] hover:to-[#e879f9] text-white font-headline text-[11px] font-bold uppercase tracking-wider py-3.5 px-4 border border-[#d946ef]/50 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
                 >
                   <Ticket className="w-4 h-4 shrink-0" />
                   Pasaporte Digital
                 </button>
-                <span className="font-mono text-[8px] text-on-surface-variant tracking-[0.3em] font-semibold uppercase">
-                  *COMEV2026*
-                </span>
+                {process.env.NODE_ENV === 'production' ? (
+                  <span className="text-sm font-mono text-purple-300 font-semibold text-center animate-pulse">
+                    Se activa el 1 de septiembre 2026
+                  </span>
+                ) : (
+                  <span className="font-mono text-[8px] text-on-surface-variant tracking-[0.3em] font-semibold uppercase">
+                    *COMEV2026*
+                  </span>
+                )}
               </div>
 
             </div>

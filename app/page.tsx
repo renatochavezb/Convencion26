@@ -25,8 +25,7 @@ export default function App() {
   // Set initial hash after mount (client-side only)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    // Bypassed production restriction temporarily for testing
-    const isProd = false;
+    const isProd = process.env.NODE_ENV === 'production';
     
     if (params.has('sello') && !window.location.hash) {
       if (!isProd) {
@@ -121,8 +120,7 @@ export default function App() {
 
     // Redirect directly to passport page
     setTimeout(() => {
-      // Bypassed production restriction temporarily for testing
-      if (true) {
+      if (process.env.NODE_ENV !== 'production') {
         window.location.hash = '#pasaporte';
       }
     }, 150);
@@ -148,7 +146,7 @@ export default function App() {
     window.location.hash = '#pasaporte';
   };
 
-  if (currentHash === '#pasaporte') { // Bypassed production restriction temporarily for testing
+  if (currentHash === '#pasaporte' && process.env.NODE_ENV !== 'production') {
     return <PassportPage />;
   }
 
