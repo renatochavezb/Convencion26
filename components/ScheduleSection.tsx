@@ -745,8 +745,8 @@ export default function ScheduleSection() {
                               Conferencia Magistral
                             </div>
 
-                            <h4 className="font-headline text-lg md:text-xl font-bold text-white leading-snug">
-                              Una visión estratégica para impulsar el crecimiento empresarial
+                            <h4 className="font-headline text-lg md:text-xl font-bold text-white leading-snug uppercase">
+                              {linkedSpeaker1 ? linkedSpeaker1.role : event.title}
                             </h4>
 
                             <div className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-secondary-orange uppercase">

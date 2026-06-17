@@ -2,16 +2,70 @@ import { useState } from 'react';
 import { Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SPEAKERS } from '../data';
 import { Speaker } from '../types';
+import cumbreVentasLogo from '../assets/cumbre-ventas-logo.jpg';
 
 export default function SpeakerHighlight() {
   const [selectedSpeakerId, setSelectedSpeakerId] = useState<string | null>(null);
   const [activeFeaturedIdx, setActiveFeaturedIdx] = useState(0);
 
-  const featuredSpeakers = SPEAKERS.filter((s) => s.featured);
+  const rawFeatured = SPEAKERS.filter((s) => s.featured);
+  
+  // Arrange chronologically: Claudia & Humberto first, Néstor second
+  const orderedFeatured = [
+    rawFeatured.find(s => s.id === 'invitado-keynote'),
+    rawFeatured.find(s => s.id === 'nestor')
+  ].filter(Boolean) as Speaker[];
+
+  const featuredSpeakers = [
+    {
+      id: 'cumbre-intro',
+      name: 'CUMBRE DE VENTAS 2026',
+      role: 'EVENTO ESPECIAL ACADÉMICO',
+      quote: '',
+      bullets: [],
+      imageUrl: '',
+      featured: true,
+      bio: ''
+    },
+    ...orderedFeatured
+  ];
 
   const currentSpeaker = featuredSpeakers[activeFeaturedIdx] || featuredSpeakers[0];
 
   function formatSpeakerName(name: string) {
+    if (name.includes('&')) {
+      const [s1, s2] = name.split('&').map(s => s.trim());
+      
+      const parts1 = s1.split(' ');
+      const lastWord1 = parts1.pop();
+      
+      const parts2 = s2.split(' ');
+      const lastWord2 = parts2.pop();
+      
+      return (
+        <span className="flex items-center gap-4 md:gap-5 mt-1 text-left w-full">
+          {/* Big & ornament on the left */}
+          <span 
+            className="font-sans font-black select-none pointer-events-none leading-none shrink-0"
+            style={{ 
+              fontSize: '4.5rem', 
+              color: 'rgba(232, 196, 74, 0.35)'
+            }}
+          >
+            &amp;
+          </span>
+          {/* Names stacked on the right */}
+          <span className="flex flex-col gap-1.5 md:gap-2.5 items-start">
+            <span className="block text-3xl md:text-[44px] font-black tracking-tight uppercase leading-none whitespace-nowrap">
+              <span className="text-[#ff8c00]">{parts1.join(' ')}</span> <span className="text-white">{lastWord1}</span>
+            </span>
+            <span className="block text-3xl md:text-[44px] font-black tracking-tight uppercase leading-none whitespace-nowrap">
+              <span className="text-[#e8c44a]">{parts2.join(' ')}</span> <span className="text-white">{lastWord2}</span>
+            </span>
+          </span>
+        </span>
+      );
+    }
     const parts = name.split(' ');
     if (parts.length <= 1) return name;
     const lastWord = parts.pop();
@@ -37,6 +91,7 @@ export default function SpeakerHighlight() {
           </p>
         </div>
 
+
         {/* Core speaker layout - Carousel */}
         <div className="relative">
           <div 
@@ -50,14 +105,64 @@ export default function SpeakerHighlight() {
                 {/* Outer sharp guide borders */}
                 <div className="absolute -inset-4 border border-secondary-orange/30 scale-102 group-hover:scale-100 transition-transform duration-500 pointer-events-none" />
 
-                <img 
-                  alt={`${currentSpeaker.name} Professional Portrait`} 
-                  className="relative z-10 w-full grayscale contrast-125 hover:grayscale-0 transition-all duration-700 aspect-[4/5] object-cover border border-surface-variant select-none"
-                  src={currentSpeaker.imageUrl}
-                />
+                {currentSpeaker.id === 'cumbre-intro' ? (
+                  <div className="relative w-full aspect-[4/5] select-none group/collage overflow-hidden">
+                    {/* Card 1: Claudia */}
+                    <div className="absolute left-[5%] bottom-[3%] w-[42%] h-[82%] overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 ease-out z-10 rotate-[-6deg] origin-bottom group-hover/collage:-translate-x-4 group-hover/collage:rotate-[-10deg] group-hover/collage:scale-[1.03] group-hover/collage:opacity-100 opacity-85">
+                      <img 
+                        src={SPEAKERS.find(s => s.id === 'invitado-keynote')?.imageUrl} 
+                        alt="Claudia Alcalá Portrait" 
+                        className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-700" 
+                      />
+                    </div>
+                    
+                    {/* Card 2: Néstor */}
+                    <div className="absolute right-[5%] bottom-[3%] w-[42%] h-[82%] overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 ease-out z-12 rotate-[6deg] origin-bottom group-hover/collage:translate-x-4 group-hover/collage:rotate-[10deg] group-hover/collage:scale-[1.03] group-hover/collage:opacity-100 opacity-85">
+                      <img 
+                        src={SPEAKERS.find(s => s.id === 'nestor')?.imageUrl} 
+                        alt="Néstor Guerra Portrait" 
+                        className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-700" 
+                      />
+                    </div>
+
+                    {/* Card 3: Humberto (Center-Front) */}
+                    <div className="absolute left-[29%] bottom-0 w-[42%] h-[88%] overflow-hidden border-2 border-secondary-orange/30 shadow-[0_25px_50px_rgba(0,0,0,0.7)] transition-all duration-500 ease-out z-20 group-hover/collage:scale-[1.05] group-hover/collage:border-secondary-orange">
+                      <img 
+                        src={SPEAKERS.find(s => s.id === 'invitado-keynote')?.imageUrl2} 
+                        alt="Humberto Nevárez Portrait" 
+                        className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-700" 
+                      />
+                    </div>
+                  </div>
+                ) : currentSpeaker.imageUrl2 ? (
+                  <div className="relative w-full aspect-[4/5] select-none group/duo">
+                    {/* Photo 1 (Claudia - bottom-left background) */}
+                    <div className="absolute left-0 bottom-0 w-[52%] h-[84%] overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 ease-out z-10 group-hover/duo:-translate-x-2.5 group-hover/duo:translate-y-2.5 group-hover/duo:scale-[1.02]">
+                      <img 
+                        src={currentSpeaker.imageUrl} 
+                        alt="Claudia Alcalá Portrait"
+                        className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-700"
+                      />
+                    </div>
+                    {/* Photo 2 (Humberto - top-right foreground) */}
+                    <div className="absolute right-0 top-0 w-[56%] h-[90%] overflow-hidden border-2 border-secondary-orange/40 shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-all duration-500 ease-out z-20 group-hover/duo:translate-x-2.5 group-hover/duo:-translate-y-2.5 group-hover/duo:scale-[1.02] group-hover/duo:border-secondary-orange">
+                      <img 
+                        src={currentSpeaker.imageUrl2} 
+                        alt="Humberto Nevárez Portrait"
+                        className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-700"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <img 
+                    alt={`${currentSpeaker.name} Professional Portrait`} 
+                    className="relative z-10 w-full grayscale contrast-125 hover:grayscale-0 transition-all duration-700 aspect-[4/5] object-cover border border-surface-variant select-none"
+                    src={currentSpeaker.imageUrl}
+                  />
+                )}
 
                 {/* Neutral Overlay Badge for Guest Speaker */}
-                {currentSpeaker.id === 'invitado-keynote' && (
+                {currentSpeaker.id === 'invitado-keynote' && currentSpeaker.name === 'CONFERENCISTA INVITADO' && (
                   <div className="absolute inset-0 z-20 flex flex-col justify-between p-6 bg-deep-blue/85 border border-white/10 select-none animate-fadeIn">
                     {/* Top */}
                     <span className="font-mono text-[10px] font-bold text-secondary-orange tracking-widest uppercase">
@@ -86,12 +191,16 @@ export default function SpeakerHighlight() {
                 )}
 
                 {/* Bolt orange indicator sticker */}
-                <div className="absolute -bottom-6 -right-6 z-20 bg-secondary-orange p-5 w-44 hover:bg-white transition-colors duration-200 hidden lg:block select-none shadow-lg">
+                <div className="absolute -bottom-6 -right-6 z-30 bg-secondary-orange p-5 w-44 hover:bg-white transition-colors duration-200 hidden lg:block select-none shadow-lg">
                   <span className="font-headline font-black text-xs text-deep-blue block mb-0.5 tracking-wider">
-                    {currentSpeaker.id === 'invitado-keynote' ? '★ INVITADO ESPECIAL' : '★ CONFERENCISTA'}
+                    {currentSpeaker.id === 'cumbre-intro' 
+                      ? '★ CUMBRE DE VENTAS' 
+                      : (currentSpeaker.name.includes('&') ? '★ DUPLA KEYNOTE' : '★ CONFERENCISTA')}
                   </span>
                   <p className="font-mono text-[9px] text-deep-blue font-semibold uppercase">
-                    {currentSpeaker.id === 'invitado-keynote' ? 'Programa Académico' : 'Featured Keynote'}
+                    {currentSpeaker.id === 'cumbre-intro' 
+                      ? 'Programa Académico' 
+                      : (currentSpeaker.name.includes('&') ? 'Participación Especial' : 'Featured Keynote')}
                   </p>
                 </div>
 
@@ -100,77 +209,146 @@ export default function SpeakerHighlight() {
 
             {/* Bio information block */}
             <div className="md:col-span-7 order-1 md:order-2 space-y-8">
-              <div>
-                <span className="font-mono text-xs font-bold text-secondary-orange tracking-widest uppercase mb-3 block">
-                  {currentSpeaker.id === 'invitado-keynote' 
-                    ? 'CONFERENCISTA INVITADO • PARTICIPACIÓN ESPECIAL' 
-                    : 'CONFERENCISTA PRINCIPAL • EXCEPCIONAL'}
-                </span>
-                <h3 className="font-headline text-4xl md:text-5xl font-black text-white leading-none tracking-tight flex items-center gap-4">
-                  <span>{formatSpeakerName(currentSpeaker.name)}</span>
-                  {currentSpeaker.id === 'nestor' && (
-                    <svg className="w-14 h-9.5 shadow-md border border-white/10 rounded-sm inline-block shrink-0" viewBox="0 0 3 2" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <title>España</title>
-                      <rect width="3" height="2" fill="#AD1519" />
-                      <rect y="0.5" width="3" height="1" fill="#FABD00" />
-                    </svg>
-                  )}
-                </h3>
-                <p className="font-headline text-xl md:text-2xl text-[#ffc080] font-bold mt-1.5 uppercase italic">
-                  {currentSpeaker.role}
-                </p>
-              </div>
+              {currentSpeaker.id === 'cumbre-intro' ? (
+                <div className="space-y-6 animate-fadeIn">
+                  <div>
+                    <img 
+                      src={cumbreVentasLogo.src} 
+                      className="h-14 md:h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(6,182,212,0.25)] mb-3 select-none" 
+                      alt="Cumbre de Ventas 2026" 
+                    />
+                    <span className="font-mono text-xs font-bold text-secondary-orange tracking-widest uppercase mb-1 block">
+                      PROGRAMA ACADÉMICO ESPECIAL
+                    </span>
+                    <h3 className="font-headline text-3xl md:text-5xl font-black text-white leading-none tracking-tight">
+                      CUMBRE DE VENTAS <span className="text-[#fe9800]">2026</span>
+                    </h3>
+                    <p className="font-sans text-xs md:text-sm text-on-surface-variant leading-relaxed mt-3 max-w-xl">
+                      El núcleo estratégico de la Convención. Una jornada intensiva dedicada a la transformación y productividad comercial a través de la Inteligencia Artificial, el liderazgo competitivo y la innovación práctica.
+                    </p>
+                  </div>
 
-              {/* Quote design layout */}
-              {currentSpeaker.quote && (
-                <div className="bg-surface-card border border-surface-card-high p-6 md:p-8 relative">
-                  <Quote className="w-16 h-16 text-secondary-orange/10 absolute top-4 left-4" />
-                  <p className="font-headline text-lg md:text-xl text-white italic relative z-10 pl-6 leading-relaxed">
-                    {currentSpeaker.quote}
-                  </p>
+                  {/* Timetable / Horario */}
+                  <div className="space-y-3 border-t border-surface-card-high/50 pt-5">
+                    <h4 className="font-mono text-[9px] font-bold text-secondary-orange tracking-widest uppercase">
+                      CONFERENCIAS DE LA CUMBRE:
+                    </h4>
+                    
+                    <div className="grid gap-3.5 max-w-xl">
+                      {/* Slot 1: Claudia & Humberto */}
+                      <button
+                        onClick={() => setActiveFeaturedIdx(1)}
+                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-surface-card hover:bg-surface-card-high border border-surface-card-high hover:border-[#fe9800]/50 transition-all duration-300 text-left gap-3 group cursor-pointer"
+                      >
+                        <div className="space-y-1">
+                          <h5 className="font-headline font-bold text-white text-sm md:text-base leading-snug group-hover:text-secondary-orange transition-colors">
+                            EL PODER DE LA IA EN VENTAS Y NEGOCIOS
+                          </h5>
+                          <p className="font-sans text-xs text-on-surface-variant">
+                            Claudia Alcalá & Humberto Nevárez
+                          </p>
+                        </div>
+                        <span className="font-mono text-xs text-secondary-orange/60 group-hover:text-[#fe9800] font-bold shrink-0 self-end sm:self-center transition-colors">
+                          Ver detalles ➔
+                        </span>
+                      </button>
+
+                      {/* Slot 2: Néstor */}
+                      <button
+                        onClick={() => setActiveFeaturedIdx(2)}
+                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-surface-card hover:bg-surface-card-high border border-surface-card-high hover:border-cyan-500/30 transition-all duration-300 text-left gap-3 group cursor-pointer"
+                      >
+                        <div className="space-y-1">
+                          <h5 className="font-headline font-bold text-white text-sm md:text-base leading-snug group-hover:text-cyan-400 transition-colors">
+                            IA & NEGOCIOS: DECISIÓN DEL PRESENTE
+                          </h5>
+                          <p className="font-sans text-xs text-on-surface-variant">
+                            Néstor Guerra
+                          </p>
+                        </div>
+                        <span className="font-mono text-xs text-cyan-400/60 group-hover:text-cyan-400 font-bold shrink-0 self-end sm:self-center transition-colors">
+                          Ver detalles ➔
+                        </span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              )}
+              ) : (
+                <>
+                  <div>
+                    <span className="font-mono text-xs font-bold text-secondary-orange tracking-widest uppercase mb-3 block">
+                      {currentSpeaker.name.includes('&')
+                        ? 'CONFERENCISTAS INVITADOS • PARTICIPACIÓN ESPECIAL'
+                        : (currentSpeaker.id === 'invitado-keynote' 
+                          ? 'CONFERENCISTA INVITADO • PARTICIPACIÓN ESPECIAL' 
+                          : 'CONFERENCISTA PRINCIPAL • EXCEPCIONAL')}
+                    </span>
+                    <h3 className="font-headline text-4xl md:text-5xl font-black text-white leading-none tracking-tight flex items-center gap-4">
+                      <span>{formatSpeakerName(currentSpeaker.name)}</span>
+                      {currentSpeaker.id === 'nestor' && (
+                        <svg className="w-14 h-9.5 shadow-md border border-white/10 rounded-sm inline-block shrink-0" viewBox="0 0 3 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <title>España</title>
+                          <rect width="3" height="2" fill="#AD1519" />
+                          <rect y="0.5" width="3" height="1" fill="#FABD00" />
+                        </svg>
+                      )}
+                    </h3>
+                    <p className="font-headline text-xl md:text-2xl text-[#ffc080] font-bold mt-1.5 uppercase italic">
+                      {currentSpeaker.role}
+                    </p>
+                  </div>
 
-              {/* Interactive bio collapse */}
-              <div className="font-sans text-xs md:text-sm text-on-surface-variant leading-relaxed max-w-xl">
-                <p>{currentSpeaker.bio}</p>
-                
-                {currentSpeaker.id === 'nestor' && (
-                  <>
-                    <button 
-                      onClick={() => setSelectedSpeakerId(selectedSpeakerId === 'nestor' ? null : 'nestor')}
-                      id="btn-learn-more-nestor"
-                      className="mt-3 inline-flex items-center gap-1.5 font-mono text-xs text-secondary-orange font-bold uppercase border-b border-dashed border-secondary-orange hover:text-white hover:border-white pb-0.5"
-                    >
-                      {selectedSpeakerId === 'nestor' ? 'Ocultar Trayectoria' : 'Ver más de su trayectoria ➔'}
-                    </button>
+                  {/* Quote design layout */}
+                  {currentSpeaker.quote && (
+                    <div className="bg-surface-card border border-surface-card-high p-6 md:p-8 relative">
+                      <Quote className="w-16 h-16 text-secondary-orange/10 absolute top-4 left-4" />
+                      <p className="font-headline text-lg md:text-xl text-white italic relative z-10 pl-6 leading-relaxed">
+                        {currentSpeaker.quote}
+                      </p>
+                    </div>
+                  )}
 
-                    {selectedSpeakerId === 'nestor' && (
-                      <div className="mt-4 p-4 bg-surface-card border border-surface-card-high space-y-2 animate-fadeIn font-sans text-xs text-on-surface-variant/90 leading-relaxed border-l-2 border-secondary-orange">
-                        <p>
-                          Néstor Guerra se desempeña como consultor en metodologías Lean Startup y Agile. Es profesor asistente en escuelas de negocio de élite y dirige conferencias magistrales enfocadas en integrar tecnologías emergentes de IA generativa dentro de la planificación estratégica.
-                        </p>
-                        <p>
-                          Ha colaborado con clústeres gubernamentales en México, España y Colombia definiendo regulaciones para la adopción de algoritmos responsables en corporativos multinacionales.
-                        </p>
-                      </div>
+                  {/* Interactive bio collapse */}
+                  <div className="font-sans text-xs md:text-sm text-on-surface-variant leading-relaxed max-w-xl">
+                    <p>{currentSpeaker.bio}</p>
+                    
+                    {currentSpeaker.id === 'nestor' && (
+                      <>
+                        <button 
+                          onClick={() => setSelectedSpeakerId(selectedSpeakerId === 'nestor' ? null : 'nestor')}
+                          id="btn-learn-more-nestor"
+                          className="mt-3 inline-flex items-center gap-1.5 font-mono text-xs text-secondary-orange font-bold uppercase border-b border-dashed border-secondary-orange hover:text-white hover:border-white pb-0.5"
+                        >
+                          {selectedSpeakerId === 'nestor' ? 'Ocultar Trayectoria' : 'Ver más de su trayectoria ➔'}
+                        </button>
+
+                        {selectedSpeakerId === 'nestor' && (
+                          <div className="mt-4 p-4 bg-surface-card border border-surface-card-high space-y-2 animate-fadeIn font-sans text-xs text-on-surface-variant/90 leading-relaxed border-l-2 border-secondary-orange">
+                            <p>
+                              Néstor Guerra se desempeña como consultor en metodologías Lean Startup y Agile. Es profesor asistente en escuelas de negocio de élite y dirige conferencias magistrales enfocadas en integrar tecnologías emergentes de IA generativa dentro de la planificación estratégica.
+                            </p>
+                            <p>
+                              Ha colaborado con clústeres gubernamentales en México, España y Colombia definiendo regulaciones para la adopción de algoritmos responsables en corporativos multinacionales.
+                            </p>
+                          </div>
+                        )}
+                      </>
                     )}
-                  </>
-                )}
-              </div>
+                  </div>
 
-              {/* List of achievements bulletpoints */}
-              <div className="border-t border-surface-card-high/60 pt-6">
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-3.5 gap-x-8 font-sans text-sm text-on-surface-variant">
-                  {currentSpeaker.bullets.map((bullet, idx) => (
-                    <li key={idx} className="flex items-center gap-2.5">
-                      <span className="w-1.5 h-1.5 bg-[#fe9800] shrink-0" />
-                      <span>{bullet}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
+                  {/* List of achievements bulletpoints */}
+                  <div className="border-t border-surface-card-high/60 pt-6">
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-3.5 gap-x-8 font-sans text-sm text-on-surface-variant">
+                      {currentSpeaker.bullets.map((bullet, idx) => (
+                        <li key={idx} className="flex items-center gap-2.5">
+                          <span className="w-1.5 h-1.5 bg-[#fe9800] shrink-0" />
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
             </div>
 
           </div>

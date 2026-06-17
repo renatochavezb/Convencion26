@@ -5,6 +5,7 @@ export interface Speaker {
   quote?: string;
   bullets: string[];
   imageUrl: string;
+  imageUrl2?: string;
   featured: boolean;
   bio?: string;
 }

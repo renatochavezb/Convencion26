@@ -1,6 +1,8 @@
 import { Speaker, ScheduleEvent } from './types';
 import nestorPhoto from './nestor_guerra.png';
 import keynoteGuestPhoto from './keynote_guest_placeholder.png';
+import claudiaPhoto from './claudia_alcala.jpg';
+import humbertoPhoto from './humberto_nevarez.jpg';
 
 export const SPEAKERS: Speaker[] = [
   {
@@ -21,18 +23,19 @@ export const SPEAKERS: Speaker[] = [
   },
   {
     id: 'invitado-keynote',
-    name: 'CONFERENCISTA INVITADO',
-    role: 'UNA VISIÓN ESTRATÉGICA PARA IMPULSAR EL CRECIMIENTO EMPRESARIAL',
-    quote: '"El crecimiento empresarial exige nuevas formas de pensar, conectar y actuar."',
+    name: 'Claudia Alcalá & Humberto Nevárez',
+    role: 'EL PODER DE LA IA EN VENTAS Y NEGOCIOS',
+    quote: '"La sinergia y la Inteligencia Artificial abren nuevos horizontes para el crecimiento comercial y empresarial."',
     bullets: [
       'Perspectiva empresarial aplicada al entorno actual',
       'Ideas prácticas para fortalecer liderazgo, ventas e innovación',
       'Participación especial dentro del programa académico',
       'Contenido enfocado en retos reales de las empresas'
     ],
-    imageUrl: keynoteGuestPhoto.src,
+    imageUrl: claudiaPhoto.src,
+    imageUrl2: humbertoPhoto.src,
     featured: true,
-    bio: 'Próximamente anunciaremos al conferencista invitado que se sumará al programa académico con una participación especial diseñada para aportar valor, ampliar la visión estratégica de los asistentes y conectar nuevas ideas con los retos reales de las empresas.'
+    bio: 'Claudia Alcalá y Humberto Nevárez aportarán una visión conjunta y de gran valor práctico, compartiendo metodologías clave para integrar la Inteligencia Artificial de forma efectiva en estrategias de venta y planeación de negocios modernos.'
   },
   {
     id: 'marisol',
@@ -101,9 +104,9 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   },
   {
     id: 'd4-new-speaker',
-    title: 'Conferencia Magistral: Liderazgo y Competitividad Industrial',
+    title: 'Conferencia Magistral: El poder de la IA en ventas y negocios',
     speakerId: 'invitado-keynote',
-    speakerName: 'Conferencista Invitado',
+    speakerName: 'Claudia Alcalá & Humberto Nevárez',
     time: '10:00 AM - 11:00 AM',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',

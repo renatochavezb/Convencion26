@@ -3,6 +3,7 @@ import logoNaranja from '../assets/logo-naranja.png';
 import comevLogo from '../assets/comev-logo-trans.png';
 import evmLogo from '../assets/evm-logo.png';
 import comevOficialLogo from '../assets/comev-oficial.png';
+import cumbreVentasLogo from '../assets/cumbre-ventas-logo.jpg';
 
 
 export default function Footer() {
@@ -22,9 +23,9 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-center items-center gap-12 select-none">
             
             {/* Embedded Logo replica */}
-            <div className="flex items-center gap-6">
+            <div className="flex flex-wrap items-center justify-center gap-6">
               <img src={logoNaranja.src} alt="Logo Convención" className="h-20 w-auto object-contain" />
-              <div className="w-[1.5px] h-14 bg-surface-variant" />
+              <div className="w-[1.5px] h-14 bg-surface-variant hidden sm:block" />
               <div className="flex flex-col leading-none text-left">
                 <span className="font-headline font-black text-xl tracking-tighter text-white uppercase">
                   COMEV
@@ -33,12 +34,14 @@ export default function Footer() {
                   CONVENCIÓN 2026
                 </span>
               </div>
-              <div className="w-px h-12 bg-white/15 mx-1" />
+              <div className="w-px h-12 bg-white/15 mx-1 hidden sm:block" />
               <img src={comevLogo.src} alt="Logo COMEV" className="h-14 w-auto object-contain opacity-90" />
-              <div className="w-px h-12 bg-white/15 mx-1" />
+              <div className="w-px h-12 bg-white/15 mx-1 hidden sm:block" />
               <img src={evmLogo.src} alt="Logo EVM Chihuahua" className="h-24 w-auto object-contain opacity-90" />
-              <div className="w-px h-12 bg-white/15 mx-1" />
+              <div className="w-px h-12 bg-white/15 mx-1 hidden sm:block" />
               <img src={comevOficialLogo.src} alt="Logo COMEV Oficial" className="h-24 w-auto object-contain opacity-90" />
+              <div className="w-px h-12 bg-white/15 mx-1 hidden sm:block" />
+              <img src={cumbreVentasLogo.src} alt="Logo Cumbre de Ventas 2026" className="h-16 w-auto object-contain opacity-90 rounded-sm" />
             </div>
 
 
