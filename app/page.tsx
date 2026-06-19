@@ -18,8 +18,12 @@ import { RegistrationDetails } from '@/types';
 import { Star, ShieldAlert, Award, RefreshCw, Ticket } from 'lucide-react';
 
 export default function App() {
-  const [selectedModality, setSelectedModality] = useState<'individual' | 'pareja' | null>(null);
   const [registration, setRegistration] = useState<RegistrationDetails | null>(null);
+  const [modalConfig, setModalConfig] = useState<{
+    modality: 'individual' | 'pareja';
+    initialStep?: 1 | 2 | 3;
+    prefill?: RegistrationDetails;
+  } | null>(null);
   const [currentHash, setCurrentHash] = useState('');
 
   // Set initial hash after mount (client-side only)
@@ -105,7 +109,7 @@ export default function App() {
 
   const handleRegistrationSuccess = async (data: RegistrationDetails) => {
     setRegistration(data);
-    setSelectedModality(null);
+    setModalConfig(null);
     try {
       localStorage.setItem('comev_badge_2026', JSON.stringify(data));
       // Save to MongoDB database
@@ -144,6 +148,46 @@ export default function App() {
 
   const handleViewTicketScroll = () => {
     window.location.hash = '#pasaporte';
+  };
+
+  const openRegistrationModal = (modality: 'individual' | 'pareja') => {
+    setModalConfig({ modality, initialStep: 1 });
+  };
+
+  const handleBankDetailsClick = () => {
+    if (registration) {
+      setModalConfig({
+        modality: registration.ticketType,
+        initialStep: 2,
+        prefill: registration,
+      });
+      return;
+    }
+
+    const shouldRegister = confirm(
+      'Para ver tus datos bancarios con tu referencia de pago, primero debes registrarte.\n\n¿Deseas registrarte ahora?'
+    );
+    if (shouldRegister) {
+      openRegistrationModal('individual');
+    }
+  };
+
+  const handleProofClick = () => {
+    if (registration) {
+      setModalConfig({
+        modality: registration.ticketType,
+        initialStep: 3,
+        prefill: registration,
+      });
+      return;
+    }
+
+    const shouldRegister = confirm(
+      'Para subir tu comprobante de pago, primero debes registrarte.\n\n¿Deseas registrarte ahora?'
+    );
+    if (shouldRegister) {
+      openRegistrationModal('individual');
+    }
   };
 
   if (currentHash === '#pasaporte' && process.env.NODE_ENV !== 'production') {
@@ -257,7 +301,21 @@ export default function App() {
 
                   <div className="border-t border-outline/10 my-4" />
 
-                  <div className="flex justify-center items-center pt-2">
+                  <div className="flex flex-col sm:flex-row flex-wrap justify-center items-stretch sm:items-center gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={handleBankDetailsClick}
+                      className="w-full sm:w-auto border-2 border-emerald-400/60 text-emerald-300 hover:bg-emerald-400/10 hover:text-white hover:border-emerald-300 font-headline text-xs font-bold uppercase tracking-wider py-3.5 px-6 transition-all cursor-pointer shrink-0"
+                    >
+                      Datos bancarios
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleProofClick}
+                      className="w-full sm:w-auto border-2 border-[#fe9800]/70 text-[#ffc080] hover:bg-[#fe9800]/10 hover:text-white hover:border-[#fe9800] font-headline text-xs font-bold uppercase tracking-wider py-3.5 px-6 transition-all cursor-pointer shrink-0"
+                    >
+                      Comprobante
+                    </button>
                     <button
                       onClick={handleClearRegistration}
                       className="w-full sm:w-auto border border-outline/40 text-on-surface-variant hover:text-white font-mono text-[10px] leading-none tracking-widest py-3.5 px-6 transition-all uppercase flex items-center justify-center gap-1.5 hover:bg-white/5 rounded-xl cursor-pointer shrink-0"
@@ -271,7 +329,11 @@ export default function App() {
             </div>
           </div>
         ) : (
-          <RegistrationTickets onSelectModality={(m) => setSelectedModality(m)} />
+          <RegistrationTickets
+            onSelectModality={openRegistrationModal}
+            onBankDetailsClick={handleBankDetailsClick}
+            onProofClick={handleProofClick}
+          />
         )}
       </div>
 
@@ -292,10 +354,13 @@ export default function App() {
       <WhatsAppFAB />
 
       {/* Checkout modal if selected */}
-      {selectedModality && (
-        <RegistrationModal 
-          modality={selectedModality}
-          onClose={() => setSelectedModality(null)}
+      {modalConfig && (
+        <RegistrationModal
+          key={`${modalConfig.modality}-${modalConfig.initialStep}-${modalConfig.prefill?.email ?? 'new'}`}
+          modality={modalConfig.modality}
+          initialStep={modalConfig.initialStep}
+          prefill={modalConfig.prefill}
+          onClose={() => setModalConfig(null)}
           onSuccess={handleRegistrationSuccess}
         />
       )}

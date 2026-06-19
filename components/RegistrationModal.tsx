@@ -1,27 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RegistrationDetails } from '../types';
+import { buildPaymentReference } from '@/lib/paymentReference';
 import { X, CreditCard, Landmark, CheckCircle2, Loader2, ArrowRight, Star, Tag, Smartphone, Copy, Check } from 'lucide-react';
+
+const BANK_DETAILS = {
+  banco: 'BanBajío',
+  beneficiario: 'Ejecutivos de Ventas y Mercadotecnia de Chihuahua A.C.',
+  cuenta: '66323270201',
+  clabe: '030150663232702019',
+} as const;
+
+function buildBankCopyText(referencia: string): string {
+  return [
+    `Banco: ${BANK_DETAILS.banco}`,
+    `Beneficiario: ${BANK_DETAILS.beneficiario}`,
+    `Cuenta: ${BANK_DETAILS.cuenta}`,
+    `CLABE: ${BANK_DETAILS.clabe}`,
+    `Referencia: ${referencia}`,
+  ].join('\n');
+}
 
 interface RegistrationModalProps {
   modality: 'individual' | 'pareja';
+  initialStep?: 1 | 2 | 3;
+  prefill?: RegistrationDetails;
   onClose: () => void;
   onSuccess: (data: RegistrationDetails) => void;
 }
 
-export default function RegistrationModal({ modality, onClose, onSuccess }: RegistrationModalProps) {
-  const [step, setStep] = useState<1 | 2 | 3>(1); // Step 1: Info, Step 2: Billing & Submit, Step 3: Proof upload
+export default function RegistrationModal({
+  modality: initialModality,
+  initialStep = 1,
+  prefill,
+  onClose,
+  onSuccess,
+}: RegistrationModalProps) {
+  const [modality, setModality] = useState(prefill?.ticketType ?? initialModality);
+  const [step, setStep] = useState<1 | 2 | 3>(initialStep);
   const [loading, setLoading] = useState(false);
 
   // Form Fields
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [company, setCompany] = useState('');
-  const [position, setPosition] = useState('');
-  const [badgeRole, setBadgeRole] = useState<'Convencionista' | 'Invitado Especial' | 'Prensa'>('Convencionista');
+  const [name, setName] = useState(prefill?.name ?? '');
+  const [email, setEmail] = useState(prefill?.email ?? '');
+  const [company, setCompany] = useState(prefill?.company ?? '');
+  const [city, setCity] = useState(prefill?.city ?? '');
+  const [position, setPosition] = useState(prefill?.position ?? '');
+  const [badgeRole, setBadgeRole] = useState<'Convencionista' | 'Invitado Especial' | 'Prensa'>(prefill?.badgeRole ?? 'Convencionista');
   
   // Partner Fields if "pareja"
-  const [partnerName, setPartnerName] = useState('');
-  const [partnerEmail, setPartnerEmail] = useState('');
+  const [partnerName, setPartnerName] = useState(prefill?.partnerName ?? '');
+  const [partnerEmail, setPartnerEmail] = useState(prefill?.partnerEmail ?? '');
 
   // Payment simulated values
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'wire'>('wire');
@@ -30,15 +58,19 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
   const [cvv, setCvv] = useState('');
 
   const [validationError, setValidationError] = useState<string | null>(null);
-  const [ticketId, setTicketId] = useState('');
   const [copiedAllBankDetails, setCopiedAllBankDetails] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fileBase64, setFileBase64] = useState<string | null>(null);
 
+  useEffect(() => {
+    setModality(initialModality);
+  }, [initialModality]);
+
+  const paymentReference = buildPaymentReference(name, city) || prefill?.ticketId || '';
+
   const handleCopyAllBankDetails = () => {
-    const textToCopy = "Banco: Bancomer / BBVA\nCLABE: ******************\nReferencia: COMEV-2026";
-    navigator.clipboard.writeText(textToCopy);
+    navigator.clipboard.writeText(buildBankCopyText(paymentReference));
     setCopiedAllBankDetails(true);
     setTimeout(() => setCopiedAllBankDetails(false), 2000);
   };
@@ -100,12 +132,12 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
 
   const handleUploadAndFinish = () => {
     setLoading(true);
-    const generatedTicketId = ticketId || 'CMV-' + Math.floor(100000 + Math.random() * 900000).toString();
     const payload: RegistrationDetails = {
-      ticketId: generatedTicketId,
+      ticketId: paymentReference,
       name,
       email,
       company,
+      city,
       position,
       badgeRole,
       ticketType: modality,
@@ -140,12 +172,13 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
       });
     }
 
-    const fileLink = `${window.location.origin}/api/comprobante?id=${generatedTicketId}`;
+    const fileLink = `${window.location.origin}/api/comprobante?id=${paymentReference}`;
     const textMessage = `¡Hola! Adjunto mi comprobante de pago para la Convención COMEV 2026.\n\n` +
       `• Nombre: ${name}\n` +
       `• Correo: ${email}\n` +
       `• Asociación: ${company}\n` +
-      `• ID Ticket: ${generatedTicketId}\n` +
+      `• ID Ticket: ${paymentReference}\n` +
+      `• Referencia de pago: ${paymentReference}\n` +
       `• Ver Comprobante: ${fileLink}`;
     
     const whatsappUrl = `https://wa.me/526142278711?text=${encodeURIComponent(textMessage)}`;
@@ -162,7 +195,7 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
     setValidationError(null);
 
     // Initial validations
-    if (!name.trim() || !email.trim() || !company.trim() || !position.trim()) {
+    if (!name.trim() || !email.trim() || !company.trim() || !city.trim() || !position.trim()) {
       setValidationError('Todos los campos primarios son obligatorios para generar tu credencial.');
       return;
     }
@@ -185,16 +218,12 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
 
     // Pre-register in MongoDB as pending in the background
     try {
-      const generatedId = ticketId || 'CMV-' + Math.floor(100000 + Math.random() * 900000).toString();
-      if (!ticketId) {
-        setTicketId(generatedId);
-      }
-
       const payload = {
-        ticketId: generatedId,
+        ticketId: paymentReference,
         name,
         email,
         company,
+        city,
         position,
         badgeRole,
         ticketType: modality,
@@ -222,16 +251,12 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
 
     // Save as confirmed in MongoDB and Sheets in the background immediately
     try {
-      const generatedTicketId = ticketId || 'CMV-' + Math.floor(100000 + Math.random() * 900000).toString();
-      if (!ticketId) {
-        setTicketId(generatedTicketId);
-      }
-
       const payload = {
-        ticketId: generatedTicketId,
+        ticketId: paymentReference,
         name,
         email,
         company,
+        city,
         position,
         badgeRole,
         ticketType: modality,
@@ -261,7 +286,7 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
 
   return (
     <div className="fixed inset-0 z-50 bg-deep-blue/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-surface-card border-2 border-secondary-orange w-full max-w-lg overflow-hidden shrink-0 relative shadow-2xl">
+      <div className="bg-surface-card border-2 border-secondary-orange w-full max-w-[640px] overflow-hidden shrink-0 relative shadow-2xl">
         
         {/* Banner header decoration */}
         <div className="bg-gradient-to-r from-secondary-orange to-accent-orange h-2 w-full" />
@@ -292,6 +317,33 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
                 CON ACCESO TOTAL
               </span>
             </div>
+
+            {step === 1 && (
+              <div className="mt-4 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setModality('individual'); setValidationError(null); }}
+                  className={`flex-1 py-2.5 px-3 font-mono text-[10px] font-bold uppercase tracking-wider border transition-all ${
+                    modality === 'individual'
+                      ? 'border-secondary-orange bg-secondary-orange/15 text-white'
+                      : 'border-surface-variant text-on-surface-variant hover:border-white/30 hover:text-white'
+                  }`}
+                >
+                  Individual · $4,000
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setModality('pareja'); setValidationError(null); }}
+                  className={`flex-1 py-2.5 px-3 font-mono text-[10px] font-bold uppercase tracking-wider border transition-all ${
+                    modality === 'pareja'
+                      ? 'border-secondary-orange bg-secondary-orange/15 text-white'
+                      : 'border-surface-variant text-on-surface-variant hover:border-white/30 hover:text-white'
+                  }`}
+                >
+                  Pareja · $7,500
+                </button>
+              </div>
+            )}
           </div>
 
           {validationError && (
@@ -360,16 +412,45 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
                 </div>
 
                 <div>
-                  <label className="font-mono text-[10px] text-on-surface-variant uppercase block mb-1">Cargo / Puesto *</label>
+                  <label className="font-mono text-[10px] text-on-surface-variant uppercase block mb-1">Ciudad / Delegación *</label>
                   <input 
                     type="text"
                     required
-                    placeholder="Ej. Líder de Operaciones"
-                    value={position}
-                    onChange={(e) => { setPosition(e.target.value); setValidationError(null); }}
+                    list="evm-cities"
+                    placeholder="Ej. Chihuahua"
+                    value={city}
+                    onChange={(e) => { setCity(e.target.value); setValidationError(null); }}
                     className="w-full bg-surface-container-lowest border border-surface-variant px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary-orange rounded-none font-sans"
                   />
+                  <datalist id="evm-cities">
+                    <option value="Chihuahua" />
+                    <option value="Ciudad Juárez" />
+                    <option value="Monterrey" />
+                    <option value="Guadalajara" />
+                    <option value="Ciudad de México" />
+                    <option value="Tijuana" />
+                    <option value="Hermosillo" />
+                    <option value="Saltillo" />
+                    <option value="Torreón" />
+                    <option value="León" />
+                    <option value="Querétaro" />
+                    <option value="Puebla" />
+                    <option value="Mérida" />
+                    <option value="Cancún" />
+                  </datalist>
                 </div>
+              </div>
+
+              <div>
+                <label className="font-mono text-[10px] text-on-surface-variant uppercase block mb-1">Cargo / Puesto *</label>
+                <input 
+                  type="text"
+                  required
+                  placeholder="Ej. Líder de Operaciones"
+                  value={position}
+                  onChange={(e) => { setPosition(e.target.value); setValidationError(null); }}
+                  className="w-full bg-surface-container-lowest border border-surface-variant px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary-orange rounded-none font-sans"
+                />
               </div>
 
               {/* Partner entries if shared coupon selected */}
@@ -497,7 +578,7 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
                 {/* Bank Wire instructions */}
                 <div className="bg-[#030e1a] border border-surface-variant p-4 space-y-3 font-sans text-xs text-on-surface-variant">
                   <div className="flex items-center justify-between border-b border-surface-variant/40 pb-2">
-                    <p className="font-mono text-[10px] text-white font-bold uppercase">🏦 CLABE DE EXPENDICCIONES OFICIALES</p>
+                    <p className="font-mono text-[10px] text-white font-bold uppercase">🏦 Datos bancarios oficiales</p>
                     <button
                       type="button"
                       onClick={handleCopyAllBankDetails}
@@ -516,10 +597,15 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
                     </button>
                   </div>
                   <p>Realiza tu transferencia SPEI y envía tu comprobante al WhatsApp 6142278711 o en la sección de Inscripciones:</p>
+                  <p className="text-[10px] text-secondary-orange/90 font-mono">
+                    Tu referencia usa tu apellido y ciudad (ej. CMV-GUER-CHIH) — siempre será la misma si vuelves a registrarte con los mismos datos.
+                  </p>
                   <div className="space-y-1.5 p-2.5 bg-black/60 border border-surface-variant font-mono text-[11px] text-emerald-400">
-                    <div>Banco: <span className="text-white">Bancomer / BBVA</span></div>
-                    <div>CLABE: <span className="text-white">******************</span></div>
-                    <div>Referencia: <span className="text-yellow-400 font-bold">COMEV-2026</span></div>
+                    <div>Banco: <span className="text-white">{BANK_DETAILS.banco}</span></div>
+                    <div className="md:whitespace-nowrap">Beneficiario: <span className="text-white">{BANK_DETAILS.beneficiario}</span></div>
+                    <div>Cuenta: <span className="text-white">{BANK_DETAILS.cuenta}</span></div>
+                    <div>CLABE: <span className="text-white">{BANK_DETAILS.clabe}</span></div>
+                    <div>Referencia: <span className="text-yellow-400 font-bold">{paymentReference}</span></div>
                   </div>
                   <p className="text-[10px] italic">Al dar clic en Comprobante de Inscripción, podrás cargar tu comprobante de pago o tomar una foto.</p>
                 </div>
@@ -529,6 +615,10 @@ export default function RegistrationModal({ modality, onClose, onSuccess }: Regi
 
               {/* Order recap */}
               <div className="bg-[#030e1a] border border-surface-variant p-4 font-mono text-[11px] text-on-surface-variant space-y-1 mt-6">
+                <div className="flex justify-between">
+                  <span>FOLIO / REFERENCIA:</span>
+                  <span className="text-yellow-400 font-bold">{paymentReference}</span>
+                </div>
                 <div className="flex justify-between">
                   <span>MODALIDAD:</span>
                   <span className="text-white uppercase">{modality}</span>

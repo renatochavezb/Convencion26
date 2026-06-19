@@ -28,6 +28,7 @@ export interface RegistrationDetails {
   name: string;
   email: string;
   company: string;
+  city?: string;
   position: string; // cargo/puesto
   badgeRole: 'Convencionista' | 'Invitado Especial' | 'Prensa';
   ticketType: 'individual' | 'pareja';

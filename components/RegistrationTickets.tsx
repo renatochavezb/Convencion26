@@ -3,9 +3,11 @@ import { WHATSAPP_INFORMES_URL } from '../constants/whatsapp';
 
 interface RegistrationTicketsProps {
   onSelectModality: (modality: 'individual' | 'pareja') => void;
+  onBankDetailsClick: () => void;
+  onProofClick: () => void;
 }
 
-export default function RegistrationTickets({ onSelectModality }: RegistrationTicketsProps) {
+export default function RegistrationTickets({ onSelectModality, onBankDetailsClick, onProofClick }: RegistrationTicketsProps) {
   return (
     <section className="py-12 bg-deep-blue border-t border-surface-card-high">
       <div className="max-w-[1280px] mx-auto px-5 md:px-[80px]">
@@ -112,6 +114,34 @@ export default function RegistrationTickets({ onSelectModality }: RegistrationTi
             </button>
           </div>
 
+        </div>
+
+        {/* Registrarse + Datos bancarios + Comprobante */}
+        <div className="mt-10 flex flex-col sm:flex-row flex-wrap justify-center items-stretch sm:items-center gap-4">
+          <button
+            type="button"
+            onClick={() => onSelectModality('individual')}
+            id="btn-registrarse"
+            className="border-2 border-[#9333ea]/70 text-[#c084fc] hover:bg-[#9333ea]/10 hover:text-white hover:border-[#d946ef] font-headline text-sm font-bold uppercase tracking-wider px-10 py-4 cursor-pointer rounded-none transition-all"
+          >
+            Registrarse
+          </button>
+          <button
+            type="button"
+            onClick={onBankDetailsClick}
+            id="btn-datos-bancarios"
+            className="border-2 border-emerald-400/70 text-emerald-300 hover:bg-emerald-400/10 hover:text-white hover:border-emerald-300 font-headline text-sm font-bold uppercase tracking-wider px-10 py-4 cursor-pointer rounded-none transition-all"
+          >
+            Datos bancarios
+          </button>
+          <button
+            type="button"
+            onClick={onProofClick}
+            id="btn-comprobante"
+            className="border-2 border-[#fe9800]/70 text-[#ffc080] hover:bg-[#fe9800]/10 hover:text-white hover:border-[#fe9800] font-headline text-sm font-bold uppercase tracking-wider px-10 py-4 cursor-pointer rounded-none transition-all"
+          >
+            Comprobante
+          </button>
         </div>
 
         {/* Billing Inquiry Contact details */}

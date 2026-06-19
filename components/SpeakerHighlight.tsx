@@ -106,32 +106,52 @@ export default function SpeakerHighlight() {
                 <div className="absolute -inset-4 border border-secondary-orange/30 scale-102 group-hover:scale-100 transition-transform duration-500 pointer-events-none" />
 
                 {currentSpeaker.id === 'cumbre-intro' ? (
-                  <div className="relative w-full aspect-[4/5] select-none group/collage overflow-hidden">
-                    {/* Card 1: Claudia */}
-                    <div className="absolute left-[5%] bottom-[3%] w-[42%] h-[82%] overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 ease-out z-10 rotate-[-6deg] origin-bottom group-hover/collage:-translate-x-4 group-hover/collage:rotate-[-10deg] group-hover/collage:scale-[1.03] group-hover/collage:opacity-100 opacity-85">
+                  <div className="relative w-full max-w-[92%] mx-auto aspect-[4/5] select-none group/collage overflow-hidden">
+                    {/* Claudia — izquierda */}
+                    <div className="absolute left-[6%] bottom-[5%] w-[32%] h-[72%] overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 ease-out z-10 rotate-[-6deg] origin-bottom group-hover/collage:-translate-x-1 group-hover/collage:rotate-[-8deg] group-hover/collage:opacity-100 opacity-90">
                       <img 
                         src={SPEAKERS.find(s => s.id === 'invitado-keynote')?.imageUrl} 
                         alt="Claudia Alcalá Portrait" 
                         className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-700" 
                       />
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent pt-7 pb-2 px-1.5 pointer-events-none">
+                        <p className="font-headline text-[10px] md:text-xs text-white/95 font-bold uppercase tracking-wide text-center leading-tight">
+                          Claudia<br />Alcalá
+                        </p>
+                      </div>
                     </div>
                     
-                    {/* Card 2: Néstor */}
-                    <div className="absolute right-[5%] bottom-[3%] w-[42%] h-[82%] overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 ease-out z-12 rotate-[6deg] origin-bottom group-hover/collage:translate-x-4 group-hover/collage:rotate-[10deg] group-hover/collage:scale-[1.03] group-hover/collage:opacity-100 opacity-85">
-                      <img 
-                        src={SPEAKERS.find(s => s.id === 'nestor')?.imageUrl} 
-                        alt="Néstor Guerra Portrait" 
-                        className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-700" 
-                      />
-                    </div>
-
-                    {/* Card 3: Humberto (Center-Front) */}
-                    <div className="absolute left-[29%] bottom-0 w-[42%] h-[88%] overflow-hidden border-2 border-secondary-orange/30 shadow-[0_25px_50px_rgba(0,0,0,0.7)] transition-all duration-500 ease-out z-20 group-hover/collage:scale-[1.05] group-hover/collage:border-secondary-orange">
+                    {/* Humberto — derecha */}
+                    <div className="absolute right-[6%] bottom-[5%] w-[32%] h-[72%] overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 ease-out z-12 rotate-[6deg] origin-bottom group-hover/collage:translate-x-1 group-hover/collage:rotate-[8deg] group-hover/collage:opacity-100 opacity-90">
                       <img 
                         src={SPEAKERS.find(s => s.id === 'invitado-keynote')?.imageUrl2} 
                         alt="Humberto Nevárez Portrait" 
                         className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-700" 
                       />
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent pt-7 pb-2 px-1.5 pointer-events-none">
+                        <p className="font-headline text-[10px] md:text-xs text-white/95 font-bold uppercase tracking-wide text-center leading-tight">
+                          Humberto Nevárez
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Néstor — centro */}
+                    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[30%] h-[76%] overflow-hidden border border-secondary-orange/40 shadow-[0_20px_40px_rgba(0,0,0,0.6)] transition-all duration-500 ease-out z-20 group-hover/collage:border-secondary-orange/70">
+                      <img 
+                        src={SPEAKERS.find(s => s.id === 'nestor')?.imageUrl} 
+                        alt="Néstor Guerra Portrait" 
+                        className="w-full h-full object-cover object-top grayscale contrast-125 hover:grayscale-0 transition-all duration-700" 
+                      />
+                      <div className="absolute inset-x-0 bottom-0 z-30 bg-gradient-to-t from-black/90 via-black/55 to-transparent pt-9 pb-2 px-1 pointer-events-none">
+                        <div className="flex flex-col items-center gap-0.5">
+                          <span className="text-secondary-orange text-base md:text-lg font-bold leading-none drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
+                            ★
+                          </span>
+                          <p className="font-headline text-[10px] md:text-xs text-white font-bold uppercase tracking-wide text-center leading-tight">
+                            Néstor Guerra
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ) : currentSpeaker.imageUrl2 ? (
@@ -189,20 +209,6 @@ export default function SpeakerHighlight() {
                     </span>
                   </div>
                 )}
-
-                {/* Bolt orange indicator sticker */}
-                <div className="absolute -bottom-6 -right-6 z-30 bg-secondary-orange p-5 w-44 hover:bg-white transition-colors duration-200 hidden lg:block select-none shadow-lg">
-                  <span className="font-headline font-black text-xs text-deep-blue block mb-0.5 tracking-wider">
-                    {currentSpeaker.id === 'cumbre-intro' 
-                      ? '★ CUMBRE DE VENTAS' 
-                      : (currentSpeaker.name.includes('&') ? '★ DUPLA KEYNOTE' : '★ CONFERENCISTA')}
-                  </span>
-                  <p className="font-mono text-[9px] text-deep-blue font-semibold uppercase">
-                    {currentSpeaker.id === 'cumbre-intro' 
-                      ? 'Programa Académico' 
-                      : (currentSpeaker.name.includes('&') ? 'Participación Especial' : 'Featured Keynote')}
-                  </p>
-                </div>
 
               </div>
             </div>

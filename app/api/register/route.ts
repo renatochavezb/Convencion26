@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
         name: payload.partnerName,
         email: partnerEmail,
         company: payload.company || '',
+        city: payload.city || '',
         position: payload.position || '',
         badgeRole: 'Convencionista',
         ticketType: 'pareja',
