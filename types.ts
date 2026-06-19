@@ -27,6 +27,7 @@ export interface RegistrationDetails {
   ticketId: string;
   name: string;
   email: string;
+  phone: string;
   company: string;
   city?: string;
   position: string; // cargo/puesto
@@ -34,6 +35,7 @@ export interface RegistrationDetails {
   ticketType: 'individual' | 'pareja';
   partnerName?: string;
   partnerEmail?: string;
+  partnerPhone?: string;
   registeredAt: string;
   status?: 'pendiente' | 'confirmado';
   comprobante?: string;

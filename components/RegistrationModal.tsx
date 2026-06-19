@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { RegistrationDetails } from '../types';
 import { buildPaymentReference } from '@/lib/paymentReference';
+import { joinWhatsAppRegistrationGroup } from '@/constants/whatsapp';
 import { X, CreditCard, Landmark, CheckCircle2, Loader2, ArrowRight, Star, Tag, Smartphone, Copy, Check } from 'lucide-react';
 
 const BANK_DETAILS = {
@@ -20,11 +21,16 @@ function buildBankCopyText(referencia: string): string {
   ].join('\n');
 }
 
+function isValidPhone(value: string): boolean {
+  return value.replace(/\D/g, '').length >= 10;
+}
+
 interface RegistrationModalProps {
   modality: 'individual' | 'pareja';
   initialStep?: 1 | 2 | 3;
   prefill?: RegistrationDetails;
   onClose: () => void;
+  onSaveProgress: (data: RegistrationDetails) => Promise<void>;
   onSuccess: (data: RegistrationDetails) => void;
 }
 
@@ -33,6 +39,7 @@ export default function RegistrationModal({
   initialStep = 1,
   prefill,
   onClose,
+  onSaveProgress,
   onSuccess,
 }: RegistrationModalProps) {
   const [modality, setModality] = useState(prefill?.ticketType ?? initialModality);
@@ -42,6 +49,7 @@ export default function RegistrationModal({
   // Form Fields
   const [name, setName] = useState(prefill?.name ?? '');
   const [email, setEmail] = useState(prefill?.email ?? '');
+  const [phone, setPhone] = useState(prefill?.phone ?? '');
   const [company, setCompany] = useState(prefill?.company ?? '');
   const [city, setCity] = useState(prefill?.city ?? '');
   const [position, setPosition] = useState(prefill?.position ?? '');
@@ -50,6 +58,7 @@ export default function RegistrationModal({
   // Partner Fields if "pareja"
   const [partnerName, setPartnerName] = useState(prefill?.partnerName ?? '');
   const [partnerEmail, setPartnerEmail] = useState(prefill?.partnerEmail ?? '');
+  const [partnerPhone, setPartnerPhone] = useState(prefill?.partnerPhone ?? '');
 
   // Payment simulated values
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'wire'>('wire');
@@ -68,6 +77,44 @@ export default function RegistrationModal({
   }, [initialModality]);
 
   const paymentReference = buildPaymentReference(name, city) || prefill?.ticketId || '';
+
+  const buildPayload = (
+    status: RegistrationDetails['status'],
+    extras?: Partial<RegistrationDetails>
+  ): RegistrationDetails => ({
+    ticketId: paymentReference,
+    name,
+    email,
+    phone,
+    company,
+    city,
+    position,
+    badgeRole,
+    ticketType: modality,
+    status,
+    partnerName: modality === 'pareja' ? partnerName : undefined,
+    partnerEmail: modality === 'pareja' ? partnerEmail : undefined,
+    partnerPhone: modality === 'pareja' ? partnerPhone : undefined,
+    registeredAt:
+      prefill?.registeredAt ||
+      new Date().toLocaleDateString('es-MX', {
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+      }),
+    ...extras,
+  });
+
+  const saveToBackend = async (payload: RegistrationDetails) => {
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      throw new Error('No se pudo guardar el registro');
+    }
+  };
 
   const handleCopyAllBankDetails = () => {
     navigator.clipboard.writeText(buildBankCopyText(paymentReference));
@@ -130,36 +177,19 @@ export default function RegistrationModal({
     }
   };
 
-  const handleUploadAndFinish = () => {
+  const handleUploadAndFinish = async () => {
     setLoading(true);
-    const payload: RegistrationDetails = {
-      ticketId: paymentReference,
-      name,
-      email,
-      company,
-      city,
-      position,
-      badgeRole,
-      ticketType: modality,
-      status: 'confirmado',
-      comprobante: fileBase64 || undefined,
-      partnerName: modality === 'pareja' ? partnerName : undefined,
-      partnerEmail: modality === 'pareja' ? partnerEmail : undefined,
-      registeredAt: new Date().toLocaleDateString('es-MX', {
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit'
-      })
-    };
+    const payload = buildPayload('confirmado', { comprobante: fileBase64 || undefined });
 
-    // Save final status and file to MongoDB/Sheets in the background
-    fetch('/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    }).catch(err => {
+    try {
+      await saveToBackend(payload);
+      await onSaveProgress(payload);
+    } catch (err) {
       console.error('Failed to upload proof and finish:', err);
-    });
+      setValidationError('No se pudo guardar tu comprobante. Intenta de nuevo.');
+      setLoading(false);
+      return;
+    }
 
     // Attempt to copy image to clipboard so they can paste it directly in WhatsApp
     if (selectedFile && navigator.clipboard && navigator.clipboard.write && selectedFile.type.startsWith('image/')) {
@@ -176,6 +206,7 @@ export default function RegistrationModal({
     const textMessage = `¡Hola! Adjunto mi comprobante de pago para la Convención COMEV 2026.\n\n` +
       `• Nombre: ${name}\n` +
       `• Correo: ${email}\n` +
+      `• Celular: ${phone}\n` +
       `• Asociación: ${company}\n` +
       `• ID Ticket: ${paymentReference}\n` +
       `• Referencia de pago: ${paymentReference}\n` +
@@ -195,7 +226,7 @@ export default function RegistrationModal({
     setValidationError(null);
 
     // Initial validations
-    if (!name.trim() || !email.trim() || !company.trim() || !city.trim() || !position.trim()) {
+    if (!name.trim() || !email.trim() || !phone.trim() || !company.trim() || !city.trim() || !position.trim()) {
       setValidationError('Todos los campos primarios son obligatorios para generar tu credencial.');
       return;
     }
@@ -205,83 +236,60 @@ export default function RegistrationModal({
       return;
     }
 
+    if (!isValidPhone(phone)) {
+      setValidationError('Ingresa un número de celular válido (mínimo 10 dígitos).');
+      return;
+    }
+
     if (modality === 'pareja') {
-      if (!partnerName.trim() || !partnerEmail.trim()) {
-        setValidationError('La modalidad compartida requiere ingresar los datos del acompañante.');
+      if (!partnerName.trim() || !partnerEmail.trim() || !partnerPhone.trim()) {
+        setValidationError('La modalidad compartida requiere ingresar los datos del segundo asistente beneficiado.');
         return;
       }
       if (!partnerEmail.includes('@')) {
         setValidationError('Por favor ingresa un correo electrónico válido para tu acompañante.');
         return;
       }
+      if (!isValidPhone(partnerPhone)) {
+        setValidationError('Ingresa un celular válido para tu acompañante (mínimo 10 dígitos).');
+        return;
+      }
     }
 
-    // Pre-register in MongoDB as pending in the background
-    try {
-      const payload = {
-        ticketId: paymentReference,
-        name,
-        email,
-        company,
-        city,
-        position,
-        badgeRole,
-        ticketType: modality,
-        status: 'pendiente',
-        partnerName: modality === 'pareja' ? partnerName : undefined,
-        partnerEmail: modality === 'pareja' ? partnerEmail : undefined,
-      };
+    // Abrir invite del grupo (mismo gesto del usuario — evita bloqueo de popups)
+    joinWhatsAppRegistrationGroup();
 
-      // Call register API silently in the background
-      fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      }).catch(err => console.error('Background pre-register error:', err));
+    // Pre-register in MongoDB and mark as registered after step 1
+    setLoading(true);
+    try {
+      const payload = buildPayload('pendiente');
+      await saveToBackend(payload);
+      await onSaveProgress(payload);
+      setStep(2);
     } catch (err) {
       console.error('Pre-register failed:', err);
+      setValidationError('No se pudo guardar tu registro. Verifica tu conexión e intenta de nuevo.');
+    } finally {
+      setLoading(false);
     }
-
-    setStep(2);
   };
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Save as confirmed in MongoDB and Sheets in the background immediately
+    // Save as confirmed in MongoDB after step 2
     try {
-      const payload = {
-        ticketId: paymentReference,
-        name,
-        email,
-        company,
-        city,
-        position,
-        badgeRole,
-        ticketType: modality,
-        status: 'confirmado',
-        partnerName: modality === 'pareja' ? partnerName : undefined,
-        partnerEmail: modality === 'pareja' ? partnerEmail : undefined,
-        registeredAt: new Date().toLocaleDateString('es-MX', {
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit'
-        })
-      };
-
-      // Call register API in Next.js backend
-      await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      const payload = buildPayload('confirmado');
+      await saveToBackend(payload);
+      await onSaveProgress(payload);
+      setStep(3);
     } catch (err) {
       console.error('Failed to confirm registration:', err);
+      setValidationError('No se pudo actualizar tu registro. Intenta de nuevo.');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
-    setStep(3); // Go to step 3 (file upload)
   };
 
   return (
@@ -385,17 +393,29 @@ export default function RegistrationModal({
                 </div>
 
                 <div>
-                  <label className="font-mono text-[10px] text-on-surface-variant uppercase block mb-1">Clasificación Carnet *</label>
-                  <select
-                    value={badgeRole}
-                    onChange={(e) => setBadgeRole(e.target.value as any)}
-                    className="w-full bg-surface-container-lowest border border-surface-variant px-3 py-2 text-xs text-white focus:outline-none focus:border-secondary-orange rounded-none font-mono"
-                  >
-                    <option value="Convencionista">Convencionista</option>
-                    <option value="Prensa">Prensa / Reportero</option>
-                    <option value="Invitado Especial">Invitado Especial</option>
-                  </select>
+                  <label className="font-mono text-[10px] text-on-surface-variant uppercase block mb-1 font-semibold">Celular / WhatsApp *</label>
+                  <input 
+                    type="tel"
+                    required
+                    placeholder="614 123 4567"
+                    value={phone}
+                    onChange={(e) => { setPhone(e.target.value); setValidationError(null); }}
+                    className="w-full bg-surface-container-lowest border border-surface-variant px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary-orange rounded-none font-sans"
+                  />
                 </div>
+              </div>
+
+              <div>
+                <label className="font-mono text-[10px] text-on-surface-variant uppercase block mb-1">Clasificación Carnet *</label>
+                <select
+                  value={badgeRole}
+                  onChange={(e) => setBadgeRole(e.target.value as any)}
+                  className="w-full bg-surface-container-lowest border border-surface-variant px-3 py-2 text-xs text-white focus:outline-none focus:border-secondary-orange rounded-none font-mono"
+                >
+                  <option value="Convencionista">Convencionista</option>
+                  <option value="Prensa">Prensa / Reportero</option>
+                  <option value="Invitado Especial">Invitado Especial</option>
+                </select>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -486,15 +506,36 @@ export default function RegistrationModal({
                       className="w-full bg-surface-container-lowest border border-surface-variant/70 px-3 py-1.5 text-sm text-white focus:outline-none focus:border-secondary-orange rounded-none font-sans"
                     />
                   </div>
+
+                  <div>
+                    <label className="font-mono text-[10px] text-on-surface-variant uppercase block mb-1">Celular / WhatsApp Acompañante *</label>
+                    <input 
+                      type="tel"
+                      required
+                      placeholder="614 987 6543"
+                      value={partnerPhone}
+                      onChange={(e) => { setPartnerPhone(e.target.value); setValidationError(null); }}
+                      className="w-full bg-surface-container-lowest border border-surface-variant/70 px-3 py-1.5 text-sm text-white focus:outline-none focus:border-secondary-orange rounded-none font-sans"
+                    />
+                  </div>
                 </div>
               )}
 
               <button 
                 type="submit"
                 id="btn-next-checkout"
-                className="w-full bg-secondary-orange hover:bg-white text-deep-blue font-mono text-xs font-bold leading-none tracking-widest py-4 transition-all uppercase flex items-center justify-center gap-2 mt-6"
+                disabled={loading}
+                className="w-full bg-secondary-orange hover:bg-white disabled:bg-surface-variant disabled:text-on-surface-variant text-deep-blue font-mono text-xs font-bold leading-none tracking-widest py-4 transition-all uppercase flex items-center justify-center gap-2 mt-6"
               >
-                Continuar al Pago <ArrowRight className="w-4 h-4" />
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" /> GUARDANDO...
+                  </>
+                ) : (
+                  <>
+                    Continuar al Pago <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </form>
           ) : step === 2 ? (

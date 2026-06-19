@@ -14,6 +14,7 @@ import FlightDiscountsSection from '@/components/FlightDiscountsSection';
 import Footer from '@/components/Footer';
 import PassportPage from '@/components/PassportPage';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
+import { joinWhatsAppRegistrationGroup } from '@/constants/whatsapp';
 import { RegistrationDetails } from '@/types';
 import { Star, ShieldAlert, Award, RefreshCw, Ticket } from 'lucide-react';
 
@@ -107,20 +108,32 @@ export default function App() {
     };
   }, []);
 
-  const handleRegistrationSuccess = async (data: RegistrationDetails) => {
+  const persistRegistration = async (data: RegistrationDetails) => {
     setRegistration(data);
-    setModalConfig(null);
+    localStorage.setItem('comev_badge_2026', JSON.stringify(data));
+    await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  };
+
+  const handleRegistrationProgress = async (data: RegistrationDetails) => {
     try {
-      localStorage.setItem('comev_badge_2026', JSON.stringify(data));
-      // Save to MongoDB database
-      await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+      await persistRegistration(data);
+    } catch (e) {
+      console.error('Failed to save registration progress', e);
+      throw e;
+    }
+  };
+
+  const handleRegistrationSuccess = async (data: RegistrationDetails) => {
+    try {
+      await persistRegistration(data);
     } catch (e) {
       console.error('Failed to cache credentials or save to database', e);
     }
+    setModalConfig(null);
 
     // Redirect directly to passport page
     setTimeout(() => {
@@ -134,6 +147,7 @@ export default function App() {
     if (confirm('¿Estás seguro de que deseas eliminar tu carnet registrado en este dispositivo? Deberás registrarte nuevamente.')) {
       setRegistration(null);
       localStorage.removeItem('comev_badge_2026');
+      localStorage.removeItem('comev_whatsapp_grupo_2026');
       localStorage.removeItem('comev_perfil');
       localStorage.removeItem('comev_folio');
     }
@@ -287,21 +301,50 @@ export default function App() {
                 <div className="absolute inset-0 grid-pattern opacity-10 pointer-events-none" />
                 
                 <div className="relative z-10 space-y-6">
-                  <div className="inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 px-4 py-1.5 font-mono text-[10px] font-bold uppercase tracking-widest border border-emerald-500/20 rounded-full">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
-                    REGISTRO CONFIRMADO
+                  <div className={`inline-flex items-center gap-1.5 px-4 py-1.5 font-mono text-[10px] font-bold uppercase tracking-widest border rounded-full ${
+                    registration.comprobante
+                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                      : registration.status === 'confirmado'
+                        ? 'bg-secondary-orange/10 text-secondary-orange border-secondary-orange/20'
+                        : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                  }`}>
+                    <span className={`w-1.5 h-1.5 rounded-full inline-block animate-pulse ${
+                      registration.comprobante
+                        ? 'bg-emerald-500'
+                        : registration.status === 'confirmado'
+                          ? 'bg-secondary-orange'
+                          : 'bg-amber-500'
+                    }`} />
+                    {registration.comprobante
+                      ? 'REGISTRO COMPLETO'
+                      : registration.status === 'confirmado'
+                        ? 'PAGO REGISTRADO'
+                        : 'REGISTRO INICIADO'}
                   </div>
                   
                   <div>
-                    <h4 className="font-headline font-black text-white text-2xl uppercase tracking-tight">¡TU REGISTRO ESTÁ LISTO!</h4>
+                    <h4 className="font-headline font-black text-white text-2xl uppercase tracking-tight">
+                      {registration.comprobante ? '¡TU REGISTRO ESTÁ LISTO!' : '¡YA ESTÁS REGISTRADO!'}
+                    </h4>
                     <p className="font-sans text-xs text-on-surface-variant mt-2 leading-relaxed max-w-sm mx-auto">
-                      Has registrado tus datos para la inscripcion para la Convención ¡VIVA CHIHUAHUA!, asegurate de mandar el comprobante de pago.
+                      {registration.comprobante
+                        ? 'Has completado tu inscripción para la Convención ¡VIVA CHIHUAHUA! con comprobante de pago.'
+                        : registration.status === 'confirmado'
+                          ? 'Tu registro está guardado. Sube tu comprobante de pago cuando lo tengas.'
+                          : 'Tus datos ya están guardados. Continúa con la transferencia SPEI y únete al grupo de WhatsApp de la convención.'}
                     </p>
                   </div>
 
                   <div className="border-t border-outline/10 my-4" />
 
                   <div className="flex flex-col sm:flex-row flex-wrap justify-center items-stretch sm:items-center gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => joinWhatsAppRegistrationGroup(true)}
+                      className="w-full sm:w-auto border-2 border-[#25D366]/70 text-[#25D366] hover:bg-[#25D366]/10 hover:text-white hover:border-[#25D366] font-headline text-xs font-bold uppercase tracking-wider py-3.5 px-6 transition-all cursor-pointer shrink-0"
+                    >
+                      Grupo WhatsApp
+                    </button>
                     <button
                       type="button"
                       onClick={handleBankDetailsClick}
@@ -361,6 +404,7 @@ export default function App() {
           initialStep={modalConfig.initialStep}
           prefill={modalConfig.prefill}
           onClose={() => setModalConfig(null)}
+          onSaveProgress={handleRegistrationProgress}
           onSuccess={handleRegistrationSuccess}
         />
       )}
