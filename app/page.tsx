@@ -170,9 +170,10 @@ export default function App() {
 
   const handleBankDetailsClick = () => {
     if (registration) {
+      const needsPhone = !registration.phone?.trim();
       setModalConfig({
         modality: registration.ticketType,
-        initialStep: 2,
+        initialStep: needsPhone ? 1 : 2,
         prefill: registration,
       });
       return;
@@ -188,9 +189,10 @@ export default function App() {
 
   const handleProofClick = () => {
     if (registration) {
+      const needsPhone = !registration.phone?.trim();
       setModalConfig({
         modality: registration.ticketType,
-        initialStep: 3,
+        initialStep: needsPhone ? 1 : 3,
         prefill: registration,
       });
       return;

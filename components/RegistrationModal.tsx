@@ -76,6 +76,21 @@ export default function RegistrationModal({
     setModality(initialModality);
   }, [initialModality]);
 
+  useEffect(() => {
+    if (!prefill) return;
+    if (prefill.name) setName(prefill.name);
+    if (prefill.email) setEmail(prefill.email);
+    if (prefill.phone) setPhone(prefill.phone);
+    if (prefill.company) setCompany(prefill.company);
+    if (prefill.city) setCity(prefill.city);
+    if (prefill.position) setPosition(prefill.position);
+    if (prefill.badgeRole) setBadgeRole(prefill.badgeRole);
+    if (prefill.partnerName) setPartnerName(prefill.partnerName);
+    if (prefill.partnerEmail) setPartnerEmail(prefill.partnerEmail);
+    if (prefill.partnerPhone) setPartnerPhone(prefill.partnerPhone);
+    if (prefill.ticketType) setModality(prefill.ticketType);
+  }, [prefill]);
+
   const paymentReference = buildPaymentReference(name, city) || prefill?.ticketId || '';
 
   const buildPayload = (
@@ -178,6 +193,7 @@ export default function RegistrationModal({
   };
 
   const handleUploadAndFinish = async () => {
+    if (!ensureContactFields()) return;
     setLoading(true);
     const payload = buildPayload('confirmado', { comprobante: fileBase64 || undefined });
 
@@ -274,8 +290,23 @@ export default function RegistrationModal({
     }
   };
 
+  const ensureContactFields = (): boolean => {
+    if (!phone.trim() || !isValidPhone(phone)) {
+      setValidationError('Ingresa tu número de celular en el paso 1 antes de continuar.');
+      setStep(1);
+      return false;
+    }
+    if (modality === 'pareja' && (!partnerPhone.trim() || !isValidPhone(partnerPhone))) {
+      setValidationError('Ingresa el celular de tu acompañante en el paso 1 antes de continuar.');
+      setStep(1);
+      return false;
+    }
+    return true;
+  };
+
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!ensureContactFields()) return;
     setLoading(true);
 
     // Save as confirmed in MongoDB after step 2

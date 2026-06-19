@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/libs/mongo';
+import { buildSheetsRegistrationPayload } from '@/lib/sheetsRegistrationPayload';
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,12 +11,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
     const email = data.email.toLowerCase().trim();
+
+    const existing = await db.collection('registrations').findOne({ email });
+
     const payload = {
       ...data,
       email,
-      updatedAt: new Date().toISOString()
+      phone: data.phone || existing?.phone || '',
+      partnerPhone: data.partnerPhone || existing?.partnerPhone || '',
+      updatedAt: new Date().toISOString(),
     };
-    
+
     // Prevent Mongo immutable _id error
     delete payload._id;
 
@@ -28,11 +34,12 @@ export async function POST(req: NextRequest) {
     // If couple modality, register the companion as a separate document
     if (payload.ticketType === 'pareja' && payload.partnerEmail && payload.partnerName) {
       const partnerEmail = payload.partnerEmail.toLowerCase().trim();
+      const existingPartner = await db.collection('registrations').findOne({ email: partnerEmail });
       const partnerPayload = {
         ticketId: payload.ticketId ? `${payload.ticketId}-P` : '',
         name: payload.partnerName,
         email: partnerEmail,
-        phone: payload.partnerPhone || '',
+        phone: payload.partnerPhone || existingPartner?.phone || '',
         company: payload.company || '',
         city: payload.city || '',
         position: payload.position || '',
@@ -44,9 +51,9 @@ export async function POST(req: NextRequest) {
         partnerPhone: payload.phone || '',
         comprobante: payload.comprobante || undefined,
         registeredAt: payload.registeredAt || new Date().toLocaleDateString('es-MX'),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
-      
+
       await db.collection('registrations').updateOne(
         { email: partnerEmail },
         { $set: partnerPayload },
@@ -54,40 +61,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Send to Google Sheets Webhook asynchronously if configured
+    // Send to Google Sheets Webhook if configured
     const sheetsWebhook = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
     if (sheetsWebhook) {
       try {
-        fetch(sheetsWebhook, {
+        const sheetsRes = await fetch(sheetsWebhook, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ticketId: payload.ticketId || '',
-            name: payload.name || '',
-            email: payload.email || '',
-            'Celular ppal': payload.phone || '',
-            'Celular pareja': payload.partnerPhone || '',
-            phone: payload.phone || '',
-            company: payload.company || '',
-            city: payload.city || '',
-            position: payload.position || '',
-            badgeRole: payload.badgeRole || '',
-            ticketType: payload.ticketType || '',
-            status: payload.status || 'pendiente',
-            partnerName: payload.partnerName || '',
-            partnerEmail: payload.partnerEmail || '',
-            partnerPhone: payload.partnerPhone || '',
-            nombreAcompanante: payload.partnerName || '',
-            correoAcompanante: payload.partnerEmail || '',
-            celularAcompanante: payload.partnerPhone || '',
-            nombreacompanante: payload.partnerName || '',
-            correoacompanante: payload.partnerEmail || '',
-            celularacompanante: payload.partnerPhone || '',
-            comprobante: payload.comprobante ? 'SÍ' : 'NO',
-            registeredAt: payload.registeredAt || new Date().toLocaleDateString('es-MX'),
-            updatedAt: payload.updatedAt
-          }),
-        }).catch(err => console.error('Google Sheets webhook post error:', err));
+          body: JSON.stringify(buildSheetsRegistrationPayload(payload)),
+          redirect: 'follow',
+        });
+        if (!sheetsRes.ok) {
+          console.error('Google Sheets webhook HTTP error:', sheetsRes.status, await sheetsRes.text());
+        }
       } catch (sheetsErr) {
         console.error('Google Sheets sync error:', sheetsErr);
       }
