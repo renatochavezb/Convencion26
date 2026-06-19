@@ -65,6 +65,8 @@ export async function POST(req: NextRequest) {
             ticketId: payload.ticketId || '',
             name: payload.name || '',
             email: payload.email || '',
+            'Celular ppal': payload.phone || '',
+            'Celular pareja': payload.partnerPhone || '',
             phone: payload.phone || '',
             company: payload.company || '',
             city: payload.city || '',
