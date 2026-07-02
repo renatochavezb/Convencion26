@@ -4,33 +4,27 @@ import { useState, useEffect } from 'react';
 import { Ticket } from 'lucide-react';
 import logoGradiente from '../assets/logo-gradiente.png';
 import comevLogo from '../assets/comev-logo.png';
+import {
+  EVENT_START_LABEL,
+  getEventTimeLeft,
+  type EventTimeLeft,
+} from '@/lib/eventCountdown';
 
-/** Inicio del evento: 3 sep 2026, 19:00 hora de Chihuahua (UTC-6) */
-const EVENT_START_MS = new Date('2026-09-03T19:00:00-06:00').getTime();
-
-function getTimeLeft() {
-  const difference = EVENT_START_MS - Date.now();
-  if (difference <= 0) {
-    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-  }
-  return {
-    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((difference / (1000 * 60)) % 60),
-    seconds: Math.floor((difference / 1000) % 60),
-  };
-}
+const EMPTY_TIME: EventTimeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
 
 interface HeroProps {
   onCtaclick: () => void;
 }
 
 export default function Hero({ onCtaclick }: HeroProps) {
-  const [timeLeft, setTimeLeft] = useState(getTimeLeft);
+  const [mounted, setMounted] = useState(false);
+  const [timeLeft, setTimeLeft] = useState<EventTimeLeft>(EMPTY_TIME);
 
   useEffect(() => {
-    setTimeLeft(getTimeLeft());
-    const timer = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
+    setMounted(true);
+    const tick = () => setTimeLeft(getEventTimeLeft());
+    tick();
+    const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -159,21 +153,32 @@ export default function Hero({ onCtaclick }: HeroProps) {
                 <p className="font-mono text-[9px] text-on-surface-variant tracking-wider uppercase font-semibold">
                   TIEMPO RESTANTE PARA EL INICIO:
                 </p>
+                <p className="font-mono text-[8px] text-[#fe9800]/90 tracking-wider uppercase">
+                  Meta: {EVENT_START_LABEL}
+                </p>
                 <div className="grid grid-cols-4 gap-2 text-center">
                   <div className="bg-white/[0.02] border border-white/5 p-3">
-                    <span suppressHydrationWarning className="block font-headline text-2xl font-black text-white leading-none">{timeLeft.days}</span>
+                    <span className="block font-headline text-2xl font-black text-white leading-none">
+                      {mounted ? timeLeft.days : '--'}
+                    </span>
                     <span className="font-mono text-[8px] text-on-surface-variant block uppercase mt-1">Días</span>
                   </div>
                   <div className="bg-white/[0.02] border border-white/5 p-3">
-                    <span suppressHydrationWarning className="block font-headline text-2xl font-black text-white leading-none">{String(timeLeft.hours).padStart(2, '0')}</span>
+                    <span className="block font-headline text-2xl font-black text-white leading-none">
+                      {mounted ? String(timeLeft.hours).padStart(2, '0') : '--'}
+                    </span>
                     <span className="font-mono text-[8px] text-on-surface-variant block uppercase mt-1">Horas</span>
                   </div>
                   <div className="bg-white/[0.02] border border-white/5 p-3">
-                    <span suppressHydrationWarning className="block font-headline text-2xl font-black text-white leading-none">{String(timeLeft.minutes).padStart(2, '0')}</span>
+                    <span className="block font-headline text-2xl font-black text-white leading-none">
+                      {mounted ? String(timeLeft.minutes).padStart(2, '0') : '--'}
+                    </span>
                     <span className="font-mono text-[8px] text-on-surface-variant block uppercase mt-1">Min</span>
                   </div>
                   <div className="bg-white/[0.02] border border-white/5 p-3">
-                    <span suppressHydrationWarning className="block font-headline text-2xl font-black text-white leading-none">{String(timeLeft.seconds).padStart(2, '0')}</span>
+                    <span className="block font-headline text-2xl font-black text-white leading-none">
+                      {mounted ? String(timeLeft.seconds).padStart(2, '0') : '--'}
+                    </span>
                     <span className="font-mono text-[8px] text-on-surface-variant block uppercase mt-1">Seg</span>
                   </div>
                 </div>
