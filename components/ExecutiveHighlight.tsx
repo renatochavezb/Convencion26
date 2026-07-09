@@ -1,15 +1,28 @@
-import { useState } from 'react';
-import { Award, ChevronRight, FileText } from 'lucide-react';
-import { WHATSAPP_EJECUTIVO_URL } from '../constants/whatsapp';
+import { Award, Briefcase, Globe, Users } from 'lucide-react';
 
 export default function ExecutiveHighlight() {
-  const [showFullSemblance, setShowFullSemblance] = useState(false);
 
   const achievements = [
-    'Director General de Desarrollo Industrial en el Norte de México',
-    'Fundador y Presidente Honorario del Clúster Aeroespacial de Chihuahua',
-    'Presea al Mérito Industrial y Empresarial 2024',
-    'Consejero de Vinculación y Desarrollo Tecnológico Nacional'
+    {
+      title: 'Fundador de Grupo Gardea',
+      desc: 'Consolidó marcas líderes como 2CAP (77 tiendas en México), Bordados Gardea e Inmobiliaria OSCA.',
+      icon: Briefcase
+    },
+    {
+      title: 'Liderazgo Gremial',
+      desc: 'Presidente de EVM Chihuahua (2024–2026) y del comité organizador de COMEV Nacional 2022.',
+      icon: Award
+    },
+    {
+      title: 'Impacto en el Empleo',
+      desc: 'Genera desarrollo y oportunidades para más de 375 colaboradores y sus familias.',
+      icon: Users
+    },
+    {
+      title: 'Sinergia Internacional',
+      desc: 'Promotor de misiones comerciales a China, ampliando horizontes para empresarios mexicanos.',
+      icon: Globe
+    }
   ];
 
   return (
@@ -20,7 +33,7 @@ export default function ExecutiveHighlight() {
       
       <div className="max-w-[1280px] mx-auto px-5 md:px-[80px]">
         
-        {/* Section Header (remains sharp and readable) */}
+        {/* Section Header */}
         <div className="mb-10 text-center md:text-left relative z-10">
           <div className="inline-flex items-center gap-2 mb-3">
             <div className="p-1.5 bg-secondary-orange/15 border border-secondary-orange/30 text-secondary-orange">
@@ -35,60 +48,16 @@ export default function ExecutiveHighlight() {
           </h3>
         </div>
 
-        {/* Outer Wrapper for Teaser & Blurred Grid */}
-        <div className="relative min-h-[450px] md:min-h-[400px] flex items-center justify-center">
+        {/* Outer Wrapper for Grid */}
+        <div className="relative flex items-center justify-center">
           
-          {/* Teaser Overlay Card (Glassmorphic & Premium) */}
-          <div className="absolute inset-0 z-20 flex items-center justify-center p-2">
-            <div className="bg-[#05172b]/95 backdrop-blur-md border-2 border-secondary-orange p-8 md:p-12 text-center shadow-2xl max-w-2xl w-full space-y-6">
-              <div className="w-16 h-16 bg-secondary-orange/10 border border-secondary-orange/30 text-secondary-orange flex items-center justify-center rounded-full mx-auto animate-pulse">
-                <Award className="w-8 h-8" />
-              </div>
-              <div className="space-y-3">
-                <h4 className="font-headline font-black text-2xl md:text-3xl text-white uppercase tracking-tight">
-                  REVELACIÓN DEL GALARDONADO
-                </h4>
-                <p className="font-sans text-sm md:text-base text-on-surface-variant leading-relaxed">
-                  El próximo <span className="text-secondary-orange font-bold text-lg">6 de Julio</span> se anunciará oficialmente al galardonado como Ejecutivo Distinguido Nacional 2026.
-                </p>
-              </div>
-
-              {/* WhatsApp Group CTA */}
-              <div className="pt-4 border-t border-white/10 flex flex-col items-center gap-3">
-                <p className="font-sans text-xs text-[#c4c6cf] max-w-md mx-auto leading-relaxed">
-                  Únete a nuestro grupo oficial de WhatsApp para enterarte de la revelación al instante y recibir actualizaciones de la Convención:
-                </p>
-                <a
-                  href={WHATSAPP_EJECUTIVO_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-[#05172b] hover:text-white px-6 py-2.5 font-mono text-xs font-black uppercase tracking-wider transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(37,211,102,0.3)] active:scale-95 cursor-pointer"
-                >
-                  <svg className="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.66.986 3.292 1.503 4.883 1.504 5.428 0 9.845-4.414 9.848-9.841.002-2.63-1.018-5.101-2.871-6.958C16.6 2.002 14.127.985 11.999.985 6.574.985 2.158 5.4 2.156 10.826c-.001 1.688.455 3.336 1.32 4.793l-.988 3.606 3.693-.97c1.47.801 3.055 1.202 4.673 1.202H6.602a.01.01 0 0 0-.012.001zm11.53-3.691c-.296-.148-1.748-.862-2.019-.962-.27-.099-.467-.148-.662.148-.196.297-.76.962-.931 1.16-.171.197-.341.221-.637.074-1.28-.64-2.274-1.18-3.097-2.593-.217-.373.217-.346.621-1.152.069-.138.034-.259-.017-.358-.052-.099-.467-1.127-.64-1.54-.168-.405-.333-.351-.467-.358-.12-.006-.259-.007-.397-.007-.138 0-.363.052-.553.259-.19.208-.727.711-.727 1.733 0 1.022.744 2.01 1.848 2.158.11.015 2.137 3.262 5.178 4.57.72.311 1.282.497 1.72.636.724.23 1.381.197 1.902.12.58-.087 1.748-.714 1.993-1.401.246-.688.246-1.278.172-1.401-.074-.123-.27-.197-.566-.346z" />
-                  </svg>
-                  ÚNETE AL GRUPO DE WHATSAPP
-                </a>
-              </div>
-
-              <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row justify-center gap-4 text-xs font-mono">
-                <span className="bg-secondary-orange/10 text-secondary-orange px-3 py-1 border border-secondary-orange/20">
-                  📅 ANUNCIO: 6 DE JULIO, 2026
-                </span>
-                <span className="bg-white/5 text-white/60 px-3 py-1 border border-white/10">
-                  🔒 CONTENIDO RESERVADO
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Blurred Original Content Grid */}
-          <div className="grid md:grid-cols-12 gap-12 items-center blur-md select-none pointer-events-none opacity-20 w-full">
+          {/* Original Content Grid */}
+          <div className="grid md:grid-cols-12 gap-12 items-center w-full">
             
             {/* Left Column: Semblance and details */}
             <div className="md:col-span-7 space-y-6 relative z-10">
               <div>
-                <h4 className="font-headline text-xl md:text-3xl font-extrabold text-[#ffc080] mt-1 uppercase">
+                <h4 className="font-headline text-xl md:text-3xl font-extrabold text-[#ffc080] mt-1 uppercase italic tracking-tight">
                   OSCAR OCTAVIO GARDEA ACOSTA
                 </h4>
                 <p className="font-sans text-xs md:text-sm text-secondary-orange/90 font-bold tracking-wide uppercase mt-1">
@@ -98,45 +67,59 @@ export default function ExecutiveHighlight() {
 
               {/* Biography text */}
               <div className="space-y-4 font-sans text-sm text-on-surface-variant leading-relaxed">
-                <p className="text-white/80 font-medium">
-                  Con más de 30 años de destacada trayectoria en el sector de manufactura avanzada y desarrollo tecnológico en el norte de México, Oscar Octavio Gardea Acosta ha sido un pilar fundamental en la consolidación de Chihuahua como un hub de innovación industrial aeroespacial.
+                <p className="text-white font-medium text-base md:text-lg border-l-2 border-secondary-orange pl-4 italic">
+                  "Para él, vender no significa únicamente concretar negocios, sino generar valor, construir alianzas y crear condiciones que permitan el crecimiento mutuo."
                 </p>
                 
-                <p>
-                  Su liderazgo estratégico en la vinculación academia-industria y su compromiso social lo han consolidado como un referente indiscutible del gremio empresarial nacional. Durante esta gala especial, la Convención Nacional COMEV le rinde homenaje por su legado de excelencia e impacto en la competitividad global del país.
+                <p className="text-white/80">
+                  Oscar Octavio Gardea Acosta es un empresario chihuahuense cuya trayectoria se ha distinguido por el emprendimiento, el liderazgo y una profunda pasión por las ventas y las negociaciones. Su visión empresarial basada en el crecimiento sostenible, la generación de empleo y la construcción de relaciones de largo plazo lo consolidan como un referente nacional.
                 </p>
-
-                {/* Show more collapsible */}
-                {showFullSemblance && (
-                  <div className="pt-2 space-y-3 border-l border-secondary-orange/30 pl-4 mt-2 animate-fadeIn text-xs md:text-sm">
-                    <p>
-                      Ha dirigido la expansión de parques tecnológicos industriales y presidido comisiones de desarrollo sustentable en la frontera. Su visión ha permitido el establecimiento de centros de diseño e ingeniería que hoy emplean a miles de técnicos calificados.
-                    </p>
-                    <p>
-                      Además de su labor corporativa, colabora activamente con fundaciones locales enfocadas en la educación STEAM para jóvenes de comunidades vulnerables, promoviendo el talento y la movilidad social a través del conocimiento tecnológico.
-                    </p>
-                  </div>
-                )}
-
-                <button
-                  onClick={() => setShowFullSemblance(!showFullSemblance)}
-                  className="inline-flex items-center gap-1.5 font-mono text-xs text-secondary-orange font-bold uppercase border-b border-dashed border-secondary-orange hover:text-white hover:border-white pb-0.5 mt-2 transition-colors cursor-pointer"
-                >
-                  <FileText className="w-3.5 h-3.5" />
-                  {showFullSemblance ? 'Ocultar Semblanza' : 'Leer Semblanza Completa ➔'}
-                </button>
+                {/* Full Semblance */}
+                <div className="pt-2 space-y-3 border-l border-secondary-orange/30 pl-4 mt-2 text-xs md:text-sm text-justify">
+                  <p>
+                    Fundador y director de Grupo Gardea, ha dedicado gran parte de su vida al desarrollo de empresas orientadas a generar valor, oportunidades y crecimiento. Bajo su liderazgo se han consolidado Grupo Gardea, empresa especializada en la distribución mayorista de gorras de marcas reconocidas; Bordados Gardea, enfocada en la personalización de prendas y artículos promocionales; 2CAP, cadena comercial especializada en la venta al detalle de gorras y accesorios con 77 puntos de venta distribuidos en México; e Inmobiliaria OSCA, dedicada al desarrollo, comercialización y administración de proyectos inmobiliarios.
+                  </p>
+                  <p>
+                    Su visión empresarial lo ha llevado a establecer relaciones comerciales internacionales y a impulsar proyectos de vinculación que han beneficiado a numerosos empresarios. Convencido de la importancia de ampliar horizontes y conocer nuevas tendencias de negocio, ha promovido y participado en diversas misiones comerciales a la República Popular China, fortaleciendo oportunidades de intercambio comercial, aprendizaje y desarrollo empresarial para empresarios mexicanos.
+                  </p>
+                  <p>
+                    Paralelamente a su actividad empresarial, ha mantenido una participación activa y comprometida dentro de la vida gremial, colaborando en diversos proyectos orientados al fortalecimiento empresarial, la vinculación y el desarrollo de líderes. Su disposición para servir y contribuir al crecimiento de otros empresarios le ha permitido ocupar distintas responsabilidades dentro de la organización, culminando con su gestión como Presidente de EVM Chihuahua durante el periodo 2024–2026.
+                  </p>
+                  <p>
+                    Asimismo, ha formado parte de organismos e instituciones como el Consejo Coordinador Empresarial de Chihuahua (CCE), CANACO Chihuahua, Vector Empresarial Chihuahuense, Toastmasters Business Club y el Consejo de la Junta Municipal de Agua y Saneamiento de Chihuahua, aportando su experiencia, liderazgo y visión en beneficio de la comunidad empresarial y la sociedad chihuahuense.
+                  </p>
+                  <p>
+                    Dentro de su trayectoria gremial sobresalen la organización de diversas misiones comerciales internacionales, la promoción de programas de capacitación y vinculación empresarial, la participación como conferencista en proyectos de formación para jóvenes y empresarios, así como su destacada labor como presidente del comité organizador de la Convención Nacional COMEV “Reencuentro en Chihuahua 2022”, uno de los eventos más representativos para la organización en los últimos años.
+                  </p>
+                  <p>
+                    Quienes han trabajado a su lado reconocen en él a un líder íntegro, cercano y comprometido con las personas; un empresario que ha sabido combinar la visión estratégica con la sencillez, la honestidad y la vocación de servicio. Su capacidad para inspirar confianza, construir equipos y transformar desafíos en oportunidades ha sido una constante a lo largo de su trayectoria.
+                  </p>
+                  <p>
+                    Más allá de los logros empresariales alcanzados, su legado se refleja en las organizaciones que ha construido, en las oportunidades que ha generado para cientos de familias y en el ejemplo de liderazgo que ha compartido con quienes han tenido la oportunidad de trabajar a su lado. Hombre de familia, promotor de valores y firme creyente en el trabajo como motor de transformación, ha sabido transmitir su visión a las nuevas generaciones, integrando a sus hijos al desarrollo y continuidad de los proyectos empresariales que ha construido durante décadas.
+                  </p>
+                </div>
               </div>
 
-              {/* Bullets List */}
-              <div className="pt-4 border-t border-surface-card-high/60">
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 font-sans text-xs md:text-sm text-on-surface-variant">
-                  {achievements.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5">
-                      <ChevronRight className="w-4 h-4 text-secondary-orange shrink-0 mt-0.5" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
+              {/* Achievements Grid */}
+              <div className="pt-6 border-t border-surface-card-high/60">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {achievements.map((item, idx) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={idx} className="bg-surface-card/15 border border-surface-card/40 p-4 hover:border-secondary-orange/30 hover:bg-surface-card/35 transition-all duration-300 rounded">
+                        <div className="flex gap-3 items-start">
+                          <div className="p-2 bg-secondary-orange/10 border border-secondary-orange/20 text-secondary-orange rounded shrink-0">
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <div className="space-y-1">
+                            <h5 className="font-mono text-xs font-bold text-white uppercase tracking-wider">{item.title}</h5>
+                            <p className="font-sans text-[11px] md:text-xs text-on-surface-variant/80 leading-normal">{item.desc}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
@@ -149,18 +132,18 @@ export default function ExecutiveHighlight() {
                 <div className="relative overflow-hidden border border-surface-variant bg-surface-card">
                   <img 
                     alt="Oscar Octavio Gardea Acosta Portrait" 
-                    className="w-full grayscale contrast-110 hover:grayscale-0 transition-all duration-750 aspect-[4/5] object-cover"
-                    src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=800"
+                    className="w-full aspect-[4/5] object-cover"
+                    src="/assets/oscar_gardea.jpg"
                   />
                 </div>
 
                 {/* Float sticker badge */}
                 <div className="absolute -bottom-6 -left-6 z-20 bg-secondary-orange py-4 px-5 min-w-44 shadow-2xl border border-secondary-orange/20 select-none">
                   <span className="font-headline font-black text-xs text-deep-blue block tracking-wider">
-                    ★ Homenajeado
+                    ★ GALARDONADO NACIONAL
                   </span>
                   <p className="font-mono text-[9px] text-deep-blue font-bold uppercase mt-0.5">
-                    Gala de Clausura
+                    Presidente EVM 2024–2026
                   </p>
                 </div>
               </div>

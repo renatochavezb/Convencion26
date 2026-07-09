@@ -112,7 +112,7 @@ export default function SpeakerHighlight() {
                       <img 
                         src={SPEAKERS.find(s => s.id === 'invitado-keynote')?.imageUrl} 
                         alt="Claudia Alcalá Portrait" 
-                        className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-700" 
+                        className="w-full h-full object-cover" 
                       />
                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent pt-7 pb-2 px-1.5 pointer-events-none">
                         <p className="font-headline text-[10px] md:text-xs text-white/95 font-bold uppercase tracking-wide text-center leading-tight">
@@ -126,7 +126,7 @@ export default function SpeakerHighlight() {
                       <img 
                         src={SPEAKERS.find(s => s.id === 'invitado-keynote')?.imageUrl2} 
                         alt="Humberto Nevárez Portrait" 
-                        className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-700" 
+                        className="w-full h-full object-cover" 
                       />
                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent pt-7 pb-2 px-1.5 pointer-events-none">
                         <p className="font-headline text-[10px] md:text-xs text-white/95 font-bold uppercase tracking-wide text-center leading-tight">
@@ -140,7 +140,7 @@ export default function SpeakerHighlight() {
                       <img 
                         src={SPEAKERS.find(s => s.id === 'nestor')?.imageUrl} 
                         alt="Néstor Guerra Portrait" 
-                        className="w-full h-full object-cover object-top grayscale contrast-125 hover:grayscale-0 transition-all duration-700" 
+                        className="w-full h-full object-cover object-top" 
                       />
                       <div className="absolute inset-x-0 bottom-0 z-30 bg-gradient-to-t from-black/90 via-black/55 to-transparent pt-9 pb-2 px-1 pointer-events-none">
                         <div className="flex flex-col items-center gap-0.5">
@@ -161,7 +161,7 @@ export default function SpeakerHighlight() {
                       <img 
                         src={currentSpeaker.imageUrl} 
                         alt="Claudia Alcalá Portrait"
-                        className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-700"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                     {/* Photo 2 (Humberto - top-right foreground) */}
@@ -169,14 +169,14 @@ export default function SpeakerHighlight() {
                       <img 
                         src={currentSpeaker.imageUrl2} 
                         alt="Humberto Nevárez Portrait"
-                        className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-700"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   </div>
                 ) : (
                   <img 
                     alt={`${currentSpeaker.name} Professional Portrait`} 
-                    className="relative z-10 w-full grayscale contrast-125 hover:grayscale-0 transition-all duration-700 aspect-[4/5] object-cover border border-surface-variant select-none"
+                    className="relative z-10 w-full aspect-[4/5] object-cover border border-surface-variant select-none"
                     src={currentSpeaker.imageUrl}
                   />
                 )}
