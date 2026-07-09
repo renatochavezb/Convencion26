@@ -116,7 +116,7 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   },
   {
     id: 'd4-2',
-    title: 'Cumbre: Néstor Guerra. CONFERENCISTA INTERNACIONAL IA & NEGOCIOS',
+    title: 'Agentes IA: el futuro de las ventas inteligentes',
     speakerId: 'nestor',
     speakerName: 'NÉSTOR GUERRA',
     time: '11:00 AM - 01:00 PM',

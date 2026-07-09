@@ -266,7 +266,7 @@ export default function SpeakerHighlight() {
                       >
                         <div className="space-y-1">
                           <h5 className="font-headline font-bold text-white text-sm md:text-base leading-snug group-hover:text-cyan-400 transition-colors">
-                            IA & NEGOCIOS: DECISIÓN DEL PRESENTE
+                            AGENTES IA: EL FUTURO DE LAS VENTAS INTELIGENTES
                           </h5>
                           <p className="font-sans text-xs text-on-surface-variant">
                             Néstor Guerra

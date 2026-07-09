@@ -1,6 +1,10 @@
+"use client";
+
+import { useState } from 'react';
 import { Award, Briefcase, Globe, Users } from 'lucide-react';
 
 export default function ExecutiveHighlight() {
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const achievements = [
     {
@@ -74,30 +78,45 @@ export default function ExecutiveHighlight() {
                 <p className="text-white/80">
                   Oscar Octavio Gardea Acosta es un empresario chihuahuense cuya trayectoria se ha distinguido por el emprendimiento, el liderazgo y una profunda pasión por las ventas y las negociaciones. Su visión empresarial basada en el crecimiento sostenible, la generación de empleo y la construcción de relaciones de largo plazo lo consolidan como un referente nacional.
                 </p>
-                {/* Full Semblance */}
-                <div className="pt-2 space-y-3 border-l border-secondary-orange/30 pl-4 mt-2 text-xs md:text-sm text-justify">
-                  <p>
-                    Fundador y director de Grupo Gardea, ha dedicado gran parte de su vida al desarrollo de empresas orientadas a generar valor, oportunidades y crecimiento. Bajo su liderazgo se han consolidado Grupo Gardea, empresa especializada en la distribución mayorista de gorras de marcas reconocidas; Bordados Gardea, enfocada en la personalización de prendas y artículos promocionales; 2CAP, cadena comercial especializada en la venta al detalle de gorras y accesorios con 77 puntos de venta distribuidos en México; e Inmobiliaria OSCA, dedicada al desarrollo, comercialización y administración de proyectos inmobiliarios.
-                  </p>
-                  <p>
-                    Su visión empresarial lo ha llevado a establecer relaciones comerciales internacionales y a impulsar proyectos de vinculación que han beneficiado a numerosos empresarios. Convencido de la importancia de ampliar horizontes y conocer nuevas tendencias de negocio, ha promovido y participado en diversas misiones comerciales a la República Popular China, fortaleciendo oportunidades de intercambio comercial, aprendizaje y desarrollo empresarial para empresarios mexicanos.
-                  </p>
-                  <p>
-                    Paralelamente a su actividad empresarial, ha mantenido una participación activa y comprometida dentro de la vida gremial, colaborando en diversos proyectos orientados al fortalecimiento empresarial, la vinculación y el desarrollo de líderes. Su disposición para servir y contribuir al crecimiento de otros empresarios le ha permitido ocupar distintas responsabilidades dentro de la organización, culminando con su gestión como Presidente de EVM Chihuahua durante el periodo 2024–2026.
-                  </p>
-                  <p>
-                    Asimismo, ha formado parte de organismos e instituciones como el Consejo Coordinador Empresarial de Chihuahua (CCE), CANACO Chihuahua, Vector Empresarial Chihuahuense, Toastmasters Business Club y el Consejo de la Junta Municipal de Agua y Saneamiento de Chihuahua, aportando su experiencia, liderazgo y visión en beneficio de la comunidad empresarial y la sociedad chihuahuense.
-                  </p>
-                  <p>
-                    Dentro de su trayectoria gremial sobresalen la organización de diversas misiones comerciales internacionales, la promoción de programas de capacitación y vinculación empresarial, la participación como conferencista en proyectos de formación para jóvenes y empresarios, así como su destacada labor como presidente del comité organizador de la Convención Nacional COMEV “Reencuentro en Chihuahua 2022”, uno de los eventos más representativos para la organización en los últimos años.
-                  </p>
-                  <p>
-                    Quienes han trabajado a su lado reconocen en él a un líder íntegro, cercano y comprometido con las personas; un empresario que ha sabido combinar la visión estratégica con la sencillez, la honestidad y la vocación de servicio. Su capacidad para inspirar confianza, construir equipos y transformar desafíos en oportunidades ha sido una constante a lo largo de su trayectoria.
-                  </p>
-                  <p>
-                    Más allá de los logros empresariales alcanzados, su legado se refleja en las organizaciones que ha construido, en las oportunidades que ha generado para cientos de familias y en el ejemplo de liderazgo que ha compartido con quienes han tenido la oportunidad de trabajar a su lado. Hombre de familia, promotor de valores y firme creyente en el trabajo como motor de transformación, ha sabido transmitir su visión a las nuevas generaciones, integrando a sus hijos al desarrollo y continuidad de los proyectos empresariales que ha construido durante décadas.
-                  </p>
+                {/* Toggle button */}
+                <div className="pt-2">
+                  <button 
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="inline-flex items-center gap-2 px-4 py-2 text-xs md:text-sm font-semibold border border-secondary-orange/30 bg-secondary-orange/10 hover:bg-secondary-orange/20 text-secondary-orange hover:text-white transition-all rounded duration-300 cursor-pointer group shadow-sm"
+                  >
+                    <span>{isExpanded ? 'Ocultar semblanza completa' : 'Ver semblanza completa'}</span>
+                    <span className={`transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : 'group-hover:translate-y-0.5'}`}>
+                      ▼
+                    </span>
+                  </button>
                 </div>
+
+                {/* Full Semblance */}
+                {isExpanded && (
+                  <div className="pt-2 space-y-3 border-l border-secondary-orange/30 pl-4 mt-2 text-xs md:text-sm text-justify animate-opacity">
+                    <p>
+                      Fundador y director de Grupo Gardea, ha dedicado gran parte de su vida al desarrollo de empresas orientadas a generar valor, oportunidades y crecimiento. Bajo su liderazgo se han consolidado Grupo Gardea, empresa especializada en la distribución mayorista de gorras de marcas reconocidas; Bordados Gardea, enfocada en la personalización de prendas y artículos promocionales; 2CAP, cadena comercial especializada en la venta al detalle de gorras y accesorios con 77 puntos de venta distribuidos en México; e Inmobiliaria OSCA, dedicada al desarrollo, comercialización y administración de proyectos inmobiliarios.
+                    </p>
+                    <p>
+                      Su visión empresarial lo ha llevado a establecer relaciones comerciales internacionales y a impulsar proyectos de vinculación que han beneficiado a numerosos empresarios. Convencido de la importancia de ampliar horizontes y conocer nuevas tendencias de negocio, ha promovido y participado en diversas misiones comerciales a la República Popular China, fortaleciendo oportunidades de intercambio comercial, aprendizaje y desarrollo empresarial para empresarios mexicanos.
+                    </p>
+                    <p>
+                      Paralelamente a su actividad empresarial, ha mantenido una participación activa y comprometida dentro de la vida gremial, colaborando en diversos proyectos orientados al fortalecimiento empresarial, la vinculación y el desarrollo de líderes. Su disposición para servir y contribuir al crecimiento de otros empresarios le ha permitido ocupar distintas responsabilidades dentro de la organización, culminando con su gestión como Presidente de EVM Chihuahua durante el periodo 2024–2026.
+                    </p>
+                    <p>
+                      Asimismo, ha formado parte de organismos e instituciones como el Consejo Coordinador Empresarial de Chihuahua (CCE), CANACO Chihuahua, Vector Empresarial Chihuahuense, Toastmasters Business Club y el Consejo de la Junta Municipal de Agua y Saneamiento de Chihuahua, aportando su experiencia, liderazgo y visión en beneficio de la comunidad empresarial y la sociedad chihuahuense.
+                    </p>
+                    <p>
+                      Dentro de su trayectoria gremial sobresalen la organización de diversas misiones comerciales internacionales, la promoción de programas de capacitación y vinculación empresarial, la participación como conferencista en proyectos de formación para jóvenes y empresarios, así como su destacada labor como presidente del comité organizador de la Convención Nacional COMEV “Reencuentro en Chihuahua 2022”, uno de los eventos más representativos para la organización en los últimos años.
+                    </p>
+                    <p>
+                      Quienes han trabajado a su lado reconocen en él a un líder íntegro, cercano y comprometido con las personas; un empresario que ha sabido combinar la visión estratégica con la sencillez, la honestidad y la vocación de servicio. Su capacidad para inspirar confianza, construir equipos y transformar desafíos en oportunidades ha sido una constante a lo largo de su trayectoria.
+                    </p>
+                    <p>
+                      Más allá de los logros empresariales alcanzados, su legado se refleja en las organizaciones que ha construido, en las oportunidades que ha generado para cientos de familias y en el ejemplo de liderazgo que ha compartido con quienes han tenido la oportunidad de trabajar a su lado. Hombre de familia, promotor de valores y firme creyente en el trabajo como motor de transformación, ha sabido transmitir su visión a las nuevas generaciones, integrando a sus hijos al desarrollo y continuidad de los proyectos empresariales que ha construido durante décadas.
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Achievements Grid */}

@@ -11,7 +11,7 @@ export const EVENTO_CONTEXTO = {
   tono: 'profesional, energético, norteño, empresarial, sin clichés vacíos',
   coloresMarca: 'naranja #fe9800, azul marino #000814, morado acento',
   speakers: [
-    'Néstor Guerra — IA y negocios (keynote)',
+    'Néstor Guerra — Agentes IA: el futuro de las ventas inteligentes (keynote)',
     'Claudia Alcalá & Humberto Nevárez — Cumbre de Ventas',
     'Ejecutivo Distinguido Nacional (revelación en convención)',
   ],

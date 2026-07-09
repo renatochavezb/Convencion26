@@ -794,8 +794,7 @@ export default function ScheduleSection() {
                               </div>
 
                               <h4 className="font-headline text-lg md:text-xl font-bold text-white leading-snug flex items-center flex-wrap gap-2">
-                                <span>Cumbre: Néstor Guerra</span>
-                                <span className="text-xs md:text-sm font-sans font-normal text-on-surface-variant">. CONFERENCISTA INTERNACIONAL IA & NEGOCIOS</span>
+                                <span>Agentes IA: el futuro de las ventas inteligentes</span>
                               </h4>
 
                               <div className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-secondary-orange uppercase">
@@ -932,13 +931,12 @@ export default function ScheduleSection() {
                               <span>Conferencia Magistral: {linkedSpeaker.role}</span>
                             ) : event.id === 'd4-2' ? (
                               <span className="inline-flex flex-wrap items-center gap-2">
-                                <span>Cumbre: Néstor Guerra</span>
+                                <span>Agentes IA: el futuro de las ventas inteligentes</span>
                                 <svg className="w-8 h-5.5 shadow-md border border-white/10 rounded-sm inline-block shrink-0" viewBox="0 0 3 2" fill="none" xmlns="http://www.w3.org/2000/svg">
                                   <title>España</title>
                                   <rect width="3" height="2" fill="#AD1519" />
                                   <rect y="0.5" width="3" height="1" fill="#FABD00" />
                                 </svg>
-                                <span>. CONFERENCISTA INTERNACIONAL IA & NEGOCIOS</span>
                               </span>
                             ) : (
                               event.title
