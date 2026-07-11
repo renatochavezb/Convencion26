@@ -91,7 +91,8 @@ export default function RegistrationTickets({ onSelectModality, onBankDetailsCli
               <div className="py-4 font-sans text-on-surface-variant text-sm space-y-2 border-y border-surface-card-high/50">
                 <p className="flex items-center gap-2 text-white font-semibold">★ Incluye DOS carnets de acceso total a precio preferencial.</p>
                 <p className="flex items-center gap-2">✔ Doble kit de bienvenida para ambos participantes.</p>
-                <p className="flex items-center gap-2">✔ Acceso al Cóctel de Gala VIP en la Terraza Estelar el Día 4.</p>
+                <p className="flex items-center gap-2">✔ Evento especial para Damas Ejecutivas.</p>
+                <p className="flex items-center gap-2">✔ Cata para los Socios.</p>
               </div>
 
               <div className="mb-0 pt-4">

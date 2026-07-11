@@ -15,9 +15,9 @@ export interface ScheduleEvent {
   title: string;
   speakerId?: string;
   speakerName?: string;
-  time: string;
+  time?: string;
   day: number; // 3, 4, 5 de Septiembre
-  location: string;
+  location?: string;
   locationUrl?: string;
   track: 'negocios' | 'ia' | 'casos_reales' | 'herramientas';
   description: string;

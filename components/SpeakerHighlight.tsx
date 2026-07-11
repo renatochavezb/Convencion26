@@ -10,9 +10,8 @@ export default function SpeakerHighlight() {
 
   const rawFeatured = SPEAKERS.filter((s) => s.featured);
   
-  // Arrange chronologically: Claudia & Humberto first, Néstor second
+  // Por ahora solo Néstor en carrusel; Claudia & Humberto ocultos temporalmente
   const orderedFeatured = [
-    rawFeatured.find(s => s.id === 'invitado-keynote'),
     rawFeatured.find(s => s.id === 'nestor')
   ].filter(Boolean) as Speaker[];
 
@@ -106,51 +105,18 @@ export default function SpeakerHighlight() {
                 <div className="absolute -inset-4 border border-secondary-orange/30 scale-102 group-hover:scale-100 transition-transform duration-500 pointer-events-none" />
 
                 {currentSpeaker.id === 'cumbre-intro' ? (
-                  <div className="relative w-full max-w-[92%] mx-auto aspect-[4/5] select-none group/collage overflow-hidden">
-                    {/* Claudia — izquierda */}
-                    <div className="absolute left-[6%] bottom-[5%] w-[32%] h-[72%] overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 ease-out z-10 rotate-[-6deg] origin-bottom group-hover/collage:-translate-x-1 group-hover/collage:rotate-[-8deg] group-hover/collage:opacity-100 opacity-90">
-                      <img 
-                        src={SPEAKERS.find(s => s.id === 'invitado-keynote')?.imageUrl} 
-                        alt="Claudia Alcalá Portrait" 
-                        className="w-full h-full object-cover" 
-                      />
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent pt-7 pb-2 px-1.5 pointer-events-none">
-                        <p className="font-headline text-[10px] md:text-xs text-white/95 font-bold uppercase tracking-wide text-center leading-tight">
-                          Claudia<br />Alcalá
+                  <div className="relative w-full max-w-[320px] md:max-w-[380px] mx-auto aspect-[4/5] overflow-hidden border border-secondary-orange/40 shadow-[0_20px_40px_rgba(0,0,0,0.45)]">
+                    <img 
+                      src={SPEAKERS.find(s => s.id === 'nestor')?.imageUrl} 
+                      alt="Néstor Guerra Portrait" 
+                      className="w-full h-full object-cover object-top" 
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent pt-10 pb-3 px-3 pointer-events-none">
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-secondary-orange text-lg font-bold leading-none">★</span>
+                        <p className="font-headline text-sm md:text-base text-white font-bold uppercase tracking-wide text-center leading-tight">
+                          Néstor Guerra
                         </p>
-                      </div>
-                    </div>
-                    
-                    {/* Humberto — derecha */}
-                    <div className="absolute right-[6%] bottom-[5%] w-[32%] h-[72%] overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 ease-out z-12 rotate-[6deg] origin-bottom group-hover/collage:translate-x-1 group-hover/collage:rotate-[8deg] group-hover/collage:opacity-100 opacity-90">
-                      <img 
-                        src={SPEAKERS.find(s => s.id === 'invitado-keynote')?.imageUrl2} 
-                        alt="Humberto Nevárez Portrait" 
-                        className="w-full h-full object-cover" 
-                      />
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent pt-7 pb-2 px-1.5 pointer-events-none">
-                        <p className="font-headline text-[10px] md:text-xs text-white/95 font-bold uppercase tracking-wide text-center leading-tight">
-                          Humberto Nevárez
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Néstor — centro */}
-                    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[30%] h-[76%] overflow-hidden border border-secondary-orange/40 shadow-[0_20px_40px_rgba(0,0,0,0.6)] transition-all duration-500 ease-out z-20 group-hover/collage:border-secondary-orange/70">
-                      <img 
-                        src={SPEAKERS.find(s => s.id === 'nestor')?.imageUrl} 
-                        alt="Néstor Guerra Portrait" 
-                        className="w-full h-full object-cover object-top" 
-                      />
-                      <div className="absolute inset-x-0 bottom-0 z-30 bg-gradient-to-t from-black/90 via-black/55 to-transparent pt-9 pb-2 px-1 pointer-events-none">
-                        <div className="flex flex-col items-center gap-0.5">
-                          <span className="text-secondary-orange text-base md:text-lg font-bold leading-none drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
-                            ★
-                          </span>
-                          <p className="font-headline text-[10px] md:text-xs text-white font-bold uppercase tracking-wide text-center leading-tight">
-                            Néstor Guerra
-                          </p>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -241,27 +207,24 @@ export default function SpeakerHighlight() {
                     </h4>
                     
                     <div className="grid gap-3.5 max-w-xl">
-                      {/* Slot 1: Claudia & Humberto */}
-                      <button
-                        onClick={() => setActiveFeaturedIdx(1)}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-surface-card hover:bg-surface-card-high border border-surface-card-high hover:border-[#fe9800]/50 transition-all duration-300 text-left gap-3 group cursor-pointer"
+                      {/* Slot 1: Claudia & Humberto — próximamente */}
+                      <div
+                        aria-disabled="true"
+                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-surface-card/60 border border-surface-card-high/80 text-left gap-3 opacity-60 cursor-not-allowed"
                       >
                         <div className="space-y-1">
-                          <h5 className="font-headline font-bold text-white text-sm md:text-base leading-snug group-hover:text-secondary-orange transition-colors">
+                          <h5 className="font-headline font-bold text-white/80 text-sm md:text-base leading-snug">
                             EL PODER DE LA IA EN VENTAS Y NEGOCIOS
                           </h5>
-                          <p className="font-sans text-xs text-on-surface-variant">
-                            Claudia Alcalá & Humberto Nevárez
-                          </p>
                         </div>
-                        <span className="font-mono text-xs text-secondary-orange/60 group-hover:text-[#fe9800] font-bold shrink-0 self-end sm:self-center transition-colors">
-                          Ver detalles ➔
+                        <span className="font-mono text-xs text-on-surface-variant font-bold shrink-0 self-end sm:self-center uppercase tracking-wider">
+                          Próximamente
                         </span>
-                      </button>
+                      </div>
 
                       {/* Slot 2: Néstor */}
                       <button
-                        onClick={() => setActiveFeaturedIdx(2)}
+                        onClick={() => setActiveFeaturedIdx(1)}
                         className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-surface-card hover:bg-surface-card-high border border-surface-card-high hover:border-cyan-500/30 transition-all duration-300 text-left gap-3 group cursor-pointer"
                       >
                         <div className="space-y-1">

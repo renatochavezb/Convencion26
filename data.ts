@@ -23,7 +23,7 @@ export const SPEAKERS: Speaker[] = [
   },
   {
     id: 'invitado-keynote',
-    name: 'Claudia Alcalá & Humberto Nevárez',
+    name: 'PRÓXIMAMENTE',
     role: 'EL PODER DE LA IA EN VENTAS Y NEGOCIOS',
     quote: '"La sinergia y la Inteligencia Artificial abren nuevos horizontes para el crecimiento comercial y empresarial."',
     bullets: [
@@ -35,7 +35,7 @@ export const SPEAKERS: Speaker[] = [
     imageUrl: claudiaPhoto.src,
     imageUrl2: humbertoPhoto.src,
     featured: true,
-    bio: 'Claudia Alcalá y Humberto Nevárez aportarán una visión conjunta y de gran valor práctico, compartiendo metodologías clave para integrar la Inteligencia Artificial de forma efectiva en estrategias de venta y planeación de negocios modernos.'
+    bio: 'Magna conferencia magistral sobre el impacto de la Inteligencia Artificial en ventas y negocios: tendencias del mercado, herramientas aplicables y oportunidades para fortalecer equipos comerciales y la toma de decisiones empresariales.'
   },
   {
     id: 'marisol',
@@ -83,7 +83,7 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   {
     id: 'd3-1',
     title: 'Rompe Hielo al estilo 80s',
-    time: '07:00 PM - 10:00 PM',
+    time: '19:00 - 23:00',
     day: 3,
     location: 'Hacienda San José',
     locationUrl: 'https://maps.google.com/?q=Hacienda+San+Jose+Chihuahua',
@@ -95,7 +95,7 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   {
     id: 'd4-1',
     title: 'Ceremonia de Inauguración',
-    time: '09:00 AM - 10:00 AM',
+    time: '08:30 - 09:30',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
@@ -106,20 +106,20 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
     id: 'd4-new-speaker',
     title: 'Conferencia Magistral: El poder de la IA en ventas y negocios',
     speakerId: 'invitado-keynote',
-    speakerName: 'Claudia Alcalá & Humberto Nevárez',
-    time: '10:00 AM - 11:00 AM',
+    speakerName: 'PRÓXIMAMENTE',
+    time: '09:30 - 13:40',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
     track: 'negocios',
-    description: 'Magna ponencia magistral enfocada en los retos de la competitividad en el mercado actual, mejores prácticas de liderazgo estratégico y el crecimiento sustentable para el desarrollo empresarial de vanguardia.'
+    description: 'Magna conferencia magistral sobre el impacto de la Inteligencia Artificial en ventas y negocios: tendencias del mercado, herramientas aplicables y oportunidades para fortalecer equipos comerciales y la toma de decisiones empresariales.'
   },
   {
     id: 'd4-2',
     title: 'Agentes IA: el futuro de las ventas inteligentes',
     speakerId: 'nestor',
     speakerName: 'NÉSTOR GUERRA',
-    time: '11:00 AM - 01:00 PM',
+    time: '09:30 - 13:40',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
@@ -128,8 +128,8 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   },
   {
     id: 'd4-3',
-    title: 'Foto del recuerdo',
-    time: '01:00 PM - 01:30 PM',
+    title: 'Fotografía',
+    time: '14:00 - 14:30',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
@@ -139,7 +139,7 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   {
     id: 'd4-4',
     title: 'Comida',
-    time: '01:30 PM - 04:00 PM',
+    time: '14:30 - 16:00',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
@@ -148,8 +148,8 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   },
   {
     id: 'd4-5',
-    title: 'Junta de presidentes',
-    time: '04:00 PM - 06:30 PM',
+    title: 'Junta de Presidentes',
+    time: '16:00 - 18:30',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
@@ -159,7 +159,7 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   {
     id: 'd4-6',
     title: 'Evento de damas',
-    time: '04:00 PM - 06:30 PM',
+    time: '16:00 - 18:30',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
@@ -167,9 +167,19 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
     description: 'Reunión y actividades de integración especialmente preparadas para las damas acompañantes.'
   },
   {
+    id: 'd4-cata-cerveza',
+    title: 'Cata de cerveza',
+    time: '16:00 - 18:30',
+    day: 4,
+    location: 'La Terraza: el Legado',
+    locationUrl: 'https://maps.app.goo.gl/MaU9HYKhkJ7ppmEB8',
+    track: 'casos_reales',
+    description: 'Experiencia de cata guiada con cervezas artesanales y etiquetas del norte de México. Convivencia, maridaje y networking.',
+  },
+  {
     id: 'd4-7',
     title: 'Ejecutivo Distinguido Nacional',
-    time: '08:00 PM - 11:30 PM',
+    time: '20:30 - 23:30',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
@@ -181,17 +191,16 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   {
     id: 'd5-1',
     title: 'Experiencia Regional: Paisajes y Tradición',
-    time: '09:00 AM - 01:30 PM',
+    time: '',
     day: 5,
-    location: 'María Bonita: Hotel Sede',
-    locationUrl: 'https://maps.google.com/?q=Hotel+Maria+Bonita+Chihuahua',
+    location: '',
     track: 'casos_reales',
     description: 'Una excursión de integración fuera de la ciudad para explorar la riqueza de la región, diseñada para descubrir espectaculares paisajes naturales o disfrutar de las nuevas propuestas locales que ofrece el entorno de Chihuahua.'
   },
   {
     id: 'd5-2',
     title: 'Toma de Protesta Consejo 2026-2027',
-    time: '08:00 PM - 10:00 PM',
+    time: '20:00 - 21:30',
     day: 5,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
@@ -201,7 +210,7 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   {
     id: 'd5-3',
     title: 'Cena & baile de cierre',
-    time: '10:00 PM - 01:30 AM',
+    time: '21:30 - 01:30',
     day: 5,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',

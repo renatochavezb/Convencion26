@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { SCHEDULE_EVENTS, SPEAKERS } from '../data';
 import { ScheduleEvent } from '../types';
-import { Clock, MapPin, Grid, Layers, CalendarCheck, BookOpen, UserCheck, Star } from 'lucide-react';
+import { Clock, MapPin, Grid, Layers, BookOpen, UserCheck, Star, Calendar } from 'lucide-react';
+import ProgramCalendarModal from './ProgramCalendarModal';
 import retro70sBgRaw from '../assets/retro-70s-bg.png';
 import inauguracionBgRaw from '../assets/inauguracion_bg.png';
 import conferenciaBgRaw from '../assets/conferencia_bg.png';
@@ -30,16 +31,23 @@ function parseEventTime(timeStr: string, day: number) {
   if (parts.length !== 2) return null;
 
   function to24h(timePart: string) {
-    const match = timePart.trim().match(/^(\d+):(\d+)\s*(AM|PM)$/i);
-    if (!match) return null;
-    let hrs = parseInt(match[1], 10);
-    const mins = parseInt(match[2], 10);
-    const ampm = match[3].toUpperCase();
+    const trimmed = timePart.trim();
+    const match12 = trimmed.match(/^(\d+):(\d+)\s*(AM|PM)$/i);
+    if (match12) {
+      let hrs = parseInt(match12[1], 10);
+      const mins = parseInt(match12[2], 10);
+      const ampm = match12[3].toUpperCase();
+      if (ampm === 'PM' && hrs < 12) hrs += 12;
+      if (ampm === 'AM' && hrs === 12) hrs = 0;
+      return { hrs, mins };
+    }
 
-    if (ampm === 'PM' && hrs < 12) hrs += 12;
-    if (ampm === 'AM' && hrs === 12) hrs = 0;
+    const match24 = trimmed.match(/^(\d{1,2}):(\d{2})$/);
+    if (match24) {
+      return { hrs: parseInt(match24[1], 10), mins: parseInt(match24[2], 10) };
+    }
 
-    return { hrs, mins };
+    return null;
   }
 
   const start = to24h(parts[0]);
@@ -61,17 +69,18 @@ function parseEventTime(timeStr: string, day: number) {
   return `${startDateStr}/${endDateStr}`;
 }
 
-function getGoogleCalendarUrl(event: ScheduleEvent) {
+function getGoogleCalendarUrl(event: ScheduleEvent, options?: { title?: string }) {
+  if (!event.time?.trim()) return '#';
   const dates = parseEventTime(event.time, event.day);
   if (!dates) return '#';
   
   const baseUrl = 'https://calendar.google.com/calendar/render';
   const params = new URLSearchParams({
     action: 'TEMPLATE',
-    text: `COMEV 2026: ${event.title}`,
+    text: `COMEV 2026: ${options?.title ?? event.title}`,
     dates: dates,
     details: event.description + (event.speakerName ? `\nPonente: ${event.speakerName}` : ''),
-    location: event.location,
+    location: event.location || '',
     ctz: 'America/Chihuahua'
   });
   
@@ -202,7 +211,36 @@ function getEventWatermark(eventId: string, title: string) {
     );
   }
 
-  // 4. Comida / Banquete
+  // 4. Cata de cerveza
+  if (titleLower.includes('cerveza') || titleLower.includes('cata')) {
+    return (
+      <div className="absolute right-[22%] top-1/2 -translate-y-1/2 pointer-events-none select-none z-0 hidden lg:block opacity-65 hover:opacity-100 transition-opacity duration-300">
+        <svg className="w-20 h-24" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="beerGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.55" />
+              <stop offset="60%" stopColor="#d97706" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#000000" stopOpacity="0" />
+            </radialGradient>
+            <linearGradient id="beerAmber" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#fde68a" />
+              <stop offset="100%" stopColor="#d97706" />
+            </linearGradient>
+          </defs>
+          <circle cx="20" cy="24" r="16" fill="url(#beerGlow)" className="animate-pulse" />
+          <path d="M12 14h12v3H12z" stroke="url(#beerAmber)" strokeWidth="1.5" fill="#041221" />
+          <path d="M13 17h10v18a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2V17z" stroke="url(#beerAmber)" strokeWidth="1.5" fill="#041221" />
+          <path d="M14 20h8v10H14z" fill="#fbbf24" fillOpacity="0.35" />
+          <path d="M25 18h4v14a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V18z" stroke="url(#beerAmber)" strokeWidth="1.5" fill="#041221" />
+          <path d="M15 24h6M15 27h6" stroke="#fde68a" strokeWidth="0.8" strokeLinecap="round" opacity="0.8" />
+          <circle cx="30" cy="16" r="2.5" fill="#ffffff" fillOpacity="0.7" className="animate-ping" style={{ animationDuration: '3s' }} />
+          <path d="M8 30l1 1 1-1-1-1z M32 34l1 1 1-1-1-1z" fill="#ffffff" className="animate-pulse" />
+        </svg>
+      </div>
+    );
+  }
+
+  // 5. Comida / Banquete
   if (titleLower.includes('comida') || titleLower.includes('coctel') || titleLower.includes('brindis')) {
     return (
       <div className="absolute right-[22%] top-1/2 -translate-y-1/2 pointer-events-none select-none z-0 hidden lg:block opacity-65 hover:opacity-100 transition-opacity duration-300">
@@ -528,7 +566,31 @@ function getEventCardStyle(eventId: string, title: string): EventCardStyle {
     };
   }
 
-  // 6. Evento de damas
+  // 6. Cata de cerveza
+  if (titleLower.includes('cerveza') || titleLower.includes('cata de cerveza')) {
+    return {
+      isRetro: false,
+      containerClass: 'bg-gradient-to-r from-[#f59e0b]/15 via-[#041221] to-[#92400e]/15 border border-[#fbbf24]/40 hover:border-[#fbbf24] shadow-[inset_0_0_15px_rgba(245,158,11,0.08)] hover:shadow-[0_0_20px_rgba(251,191,36,0.2)]',
+      patternOverlay: (
+        <div className="absolute inset-0 z-0 opacity-[0.18] pointer-events-none select-none mix-blend-overlay">
+          <img 
+            src={comidaBg} 
+            alt="Cata de cerveza background" 
+            className="w-full h-full object-cover object-center" 
+          />
+        </div>
+      ),
+      clockIconColor: 'text-[#fbbf24]',
+      pinIconColor: 'text-[#f59e0b]',
+      timeTextClass: 'text-[#fbbf24] font-bold',
+      descTextClass: 'text-on-surface-variant',
+      locationClass: 'hover:text-[#fbbf24] hover:underline',
+      titleClass: 'text-[#fde68a] font-extrabold hover:text-[#fbbf24] transition-colors duration-200',
+      calendarButtonClass: 'bg-transparent border border-[#fbbf24]/40 text-[#fbbf24] hover:border-[#fbbf24] hover:bg-[#f59e0b] hover:text-deep-blue shadow-[0_0_10px_rgba(251,191,36,0.1)]'
+    };
+  }
+
+  // 7. Evento de damas
   if (titleLower.includes('damas')) {
     return {
       isRetro: false,
@@ -639,8 +701,71 @@ function getEventCardStyle(eventId: string, title: string): EventCardStyle {
   };
 }
 
+function ParallelEventCard({ event }: { event: ScheduleEvent }) {
+  const cardStyle = getEventCardStyle(event.id, event.title);
+  const hasTime = Boolean(event.time?.trim());
+  const hasLocation = Boolean(event.location?.trim());
+  const hasCalendar = hasTime && parseEventTime(event.time!, event.day) !== null;
+
+  return (
+    <div className={`relative flex flex-col h-full overflow-hidden p-5 md:p-6 ${cardStyle.containerClass}`}>
+      {cardStyle.patternOverlay}
+
+      <div className="relative z-10 flex flex-col h-full gap-4">
+        {hasTime && (
+          <div className="flex items-center gap-2.5">
+            <Clock className={`w-5 h-5 shrink-0 ${cardStyle.clockIconColor}`} strokeWidth={2.5} />
+            <span className={`font-headline text-xl sm:text-lg font-extrabold leading-none tracking-tight tabular-nums ${cardStyle.timeTextClass}`}>
+              {event.time}
+            </span>
+          </div>
+        )}
+
+        <h4 className={`font-headline text-lg md:text-xl font-extrabold leading-snug ${cardStyle.titleClass}`}>
+          {event.title}
+        </h4>
+
+        {hasLocation && (
+          <div className={`flex items-start gap-1.5 font-sans leading-relaxed ${cardStyle.descTextClass}`}>
+            <MapPin className={`w-4 h-4 ${cardStyle.pinIconColor} shrink-0 mt-0.5`} />
+            {event.locationUrl ? (
+              <a
+                href={event.locationUrl}
+                target="_blank"
+                rel="noreferrer"
+                className={`transition-all duration-150 text-sm md:text-base font-bold ${cardStyle.locationClass}`}
+              >
+                {event.location}
+              </a>
+            ) : (
+              <span className="text-sm md:text-base font-bold">{event.location}</span>
+            )}
+          </div>
+        )}
+
+        <p className={`font-sans text-xs md:text-sm leading-relaxed flex-1 ${cardStyle.descTextClass}`}>
+          {event.description}
+        </p>
+
+        {hasCalendar && (
+          <a
+            href={getGoogleCalendarUrl(event)}
+            target="_blank"
+            rel="noreferrer"
+            id={`btn-calendar-event-${event.id}`}
+            className={`w-full px-5 py-3.5 md:py-2.5 font-headline text-sm md:text-xs font-bold tracking-wide transition-all duration-150 flex items-center justify-center text-center no-underline cursor-pointer ${cardStyle.calendarButtonClass}`}
+          >
+            Google Calendar
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function ScheduleSection() {
   const [selectedDay, setSelectedDay] = useState<number>(3);
+  const [isProgramCalendarOpen, setIsProgramCalendarOpen] = useState(false);
 
   const filteredEvents = SCHEDULE_EVENTS.filter((event) => {
     return event.day === selectedDay;
@@ -658,10 +783,25 @@ export default function ScheduleSection() {
               PROGRAMA <span className="text-[#ffc080]">DEL CONGRESO</span>
             </h3>
             <p className="text-on-surface-variant font-sans text-xs md:text-sm mt-3 max-w-lg leading-relaxed">
-              Planifica tu agenda diaria seleccionando los días del congreso y agregando las sesiones a tu Google Calendar.
+              Planifica tu agenda diaria seleccionando los días del congreso o abre el programa completo para agendar en Google Calendar.
             </p>
           </div>
+          <button
+            type="button"
+            id="btn-open-program-calendar"
+            onClick={() => setIsProgramCalendarOpen(true)}
+            className="shrink-0 px-5 py-3.5 md:py-4 border border-secondary-orange bg-secondary-orange/10 text-white font-headline text-xs md:text-sm font-bold tracking-wide uppercase hover:bg-secondary-orange hover:text-deep-blue transition-all duration-150 flex items-center gap-2 cursor-pointer"
+          >
+            <Calendar className="w-4 h-4 shrink-0" aria-hidden />
+            Agendar programa
+          </button>
         </div>
+
+        <ProgramCalendarModal
+          events={SCHEDULE_EVENTS}
+          isOpen={isProgramCalendarOpen}
+          onClose={() => setIsProgramCalendarOpen(false)}
+        />
 
         {/* Days Tabs (Sept 3, 4, 5) */}
         <div className="grid grid-cols-3 gap-2 md:gap-4 mb-8">
@@ -688,8 +828,24 @@ export default function ScheduleSection() {
         <div className="space-y-6">
           {filteredEvents.length > 0 ? (
             filteredEvents.map((event) => {
-                if (event.id === 'd4-2') {
+                if (event.id === 'd4-2' || event.id === 'd4-6' || event.id === 'd4-cata-cerveza') {
                   return null;
+                }
+
+                if (event.id === 'd4-5') {
+                  const parallelEvents = [
+                    event,
+                    filteredEvents.find((e) => e.id === 'd4-6'),
+                    filteredEvents.find((e) => e.id === 'd4-cata-cerveza'),
+                  ].filter((item): item is ScheduleEvent => Boolean(item));
+
+                  return (
+                    <div key="parallel-afternoon-group" className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+                      {parallelEvents.map((parallelEvent) => (
+                        <ParallelEventCard key={parallelEvent.id} event={parallelEvent} />
+                      ))}
+                    </div>
+                  );
                 }
 
                 if (event.id === 'd4-new-speaker') {
@@ -726,6 +882,24 @@ export default function ScheduleSection() {
                             alt="Cumbre de Ventas 2026" 
                             className="h-20 md:h-28 mx-auto object-contain drop-shadow-[0_0_20px_rgba(6,182,212,0.35)] hover:scale-105 transition-transform duration-300" 
                           />
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
+                          <div className="flex items-center gap-2.5">
+                            <Clock className="w-5 h-5 text-cyan-400 shrink-0" strokeWidth={2.5} />
+                            <span className="font-headline text-xl sm:text-lg font-extrabold text-cyan-300 tabular-nums tracking-tight">
+                              {event.time}
+                            </span>
+                          </div>
+                          <a
+                            href={getGoogleCalendarUrl(event, { title: 'Cumbre de Ventas 2026' })}
+                            target="_blank"
+                            rel="noreferrer"
+                            id="btn-calendar-event-cumbre-ventas"
+                            className="px-5 py-3 font-headline text-sm font-bold tracking-wide text-cyan-300 border border-cyan-400/40 hover:border-cyan-300 hover:bg-cyan-500/10 transition-all duration-150 no-underline"
+                          >
+                            Google Calendar
+                          </a>
                         </div>
                       </div>
 
@@ -840,6 +1014,12 @@ export default function ScheduleSection() {
 
                 const cardStyle = getEventCardStyle(event.id, event.title);
                 const linkedSpeaker = event.speakerId ? SPEAKERS.find((s) => s.id === event.speakerId) : null;
+                const hasTime = Boolean(event.time?.trim());
+                const hasLocation = Boolean(event.location?.trim());
+                const hasCalendar = hasTime && parseEventTime(event.time!, event.day) !== null;
+                const centerColSpan =
+                  !hasTime && !hasLocation ? 'md:col-span-12' : hasCalendar ? 'md:col-span-7' : 'md:col-span-9';
+
                 return (
                   <div 
                     key={event.id}
@@ -879,14 +1059,20 @@ export default function ScheduleSection() {
                     {/* Dynamic Event Representative Watermark for other events */}
                     {!cardStyle.isRetro && getEventWatermark(event.id, event.title)}
 
-                    {/* Left Column: Location (Timing is commented out but kept in code) */}
-                    <div className="md:col-span-3 space-y-2 relative z-10">
-                      {/* Horario oculto temporalmente - se reactivará después
-                      <div className="flex items-center gap-1.5 font-mono text-xs text-white">
-                        <Clock className={`w-3.5 h-3.5 ${cardStyle.clockIconColor}`} strokeWidth={2.5} />
-                        <span className={cardStyle.timeTextClass}>{event.time}</span>
+                    {/* Left Column: Time & Location */}
+                    {(hasTime || hasLocation) && (
+                    <div className="md:col-span-3 space-y-3 relative z-10">
+                      {hasTime && (
+                      <div className="flex items-center gap-2.5">
+                        <Clock className={`w-5 h-5 md:w-4 md:h-4 shrink-0 ${cardStyle.clockIconColor}`} strokeWidth={2.5} />
+                        <span
+                          className={`font-headline text-xl sm:text-lg md:text-base font-extrabold leading-none tracking-tight tabular-nums ${cardStyle.timeTextClass}`}
+                        >
+                          {event.time}
+                        </span>
                       </div>
-                      */}
+                      )}
+                      {hasLocation && (
                       <div className={`flex items-start gap-1.5 font-sans ${cardStyle.descTextClass} leading-relaxed`}>
                         <MapPin className={`w-4 h-4 ${cardStyle.pinIconColor} shrink-0 mt-0.5`} />
                         {event.locationUrl ? (
@@ -902,10 +1088,12 @@ export default function ScheduleSection() {
                           <span className="text-sm md:text-base font-bold">{event.location}</span>
                         )}
                       </div>
+                      )}
                     </div>
+                    )}
 
-                    {/* Center Column: Description and Speaker (Extended to 9 columns since calendar button is hidden) */}
-                    <div className="md:col-span-9 space-y-3 relative z-10">
+                    {/* Center Column: Description and Speaker */}
+                    <div className={`${centerColSpan} space-y-3 relative z-10`}>
                       <div>
                         {(event.id === 'd4-new-speaker' || event.id === 'd4-2') && (
                           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-[10px] md:text-xs font-mono font-bold tracking-wider mb-3 uppercase select-none w-fit">
@@ -966,20 +1154,20 @@ export default function ScheduleSection() {
                       </p>
                     </div>
 
-                    {/* Right Column: Interaction Action Selector (Commented out but kept in code) */}
-                    {/* 
+                    {/* Right Column: Google Calendar */}
+                    {hasCalendar && (
                     <div className="md:col-span-2 flex md:justify-end relative z-10">
                       <a
                         href={getGoogleCalendarUrl(event)}
                         target="_blank"
                         rel="noreferrer"
                         id={`btn-calendar-event-${event.id}`}
-                        className={`w-full md:w-auto px-4 py-2.5 font-mono text-[10px] font-black tracking-widest uppercase transition-all duration-150 flex items-center justify-center gap-1.5 text-center no-underline cursor-pointer ${cardStyle.calendarButtonClass}`}
+                        className={`w-full md:w-auto px-5 py-3.5 md:py-2.5 font-headline text-sm md:text-xs font-bold tracking-wide transition-all duration-150 flex items-center justify-center text-center no-underline cursor-pointer ${cardStyle.calendarButtonClass}`}
                       >
-                        <CalendarCheck className="w-3.5 h-3.5" /> AGREGAR A CALENDARIO
+                        Google Calendar
                       </a>
                     </div>
-                    */}
+                    )}
 
                   </div>
                 );
