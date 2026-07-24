@@ -12,7 +12,7 @@ export interface SelloInfo {
 export const SELLOS_INFO: SelloInfo[] = [
   { id: 1, name: 'Flash Back', desc: 'Rompe Hielo 80s', date: 'Jue 3 Sep · Hacienda San José · 19:00 - 23:00', color: '#d946ef', bgClass: 'bg-[#1e0a2e]', borderClass: 'border-[#d946ef]', textClass: 'text-[#d946ef]' },
   { id: 2, name: 'Hora Cero', desc: 'Inauguración Oficial', date: 'Vie 4 Sep · Centro de Exposiciones', color: '#f59e0b', bgClass: 'bg-[#1c0a00]', borderClass: 'border-[#f59e0b]', textClass: 'text-[#f59e0b]' },
-  { id: 3, name: 'Liderazgo · Innovación', desc: 'Conferencias Magistrales · Néstor Guerra', date: 'Vie 4 Sep · Sala Principal', color: '#06b6d4', bgClass: 'bg-[#020e1a]', borderClass: 'border-[#06b6d4]', textClass: 'text-[#06b6d4]' },
+  { id: 3, name: 'Liderazgo · Innovación', desc: 'Conferencias Magistrales · Alejandro Núñez & Néstor Guerra', date: 'Vie 4 Sep · Sala Principal', color: '#06b6d4', bgClass: 'bg-[#020e1a]', borderClass: 'border-[#06b6d4]', textClass: 'text-[#06b6d4]' },
   { id: 4, name: 'Somos COMEV', desc: 'Foto del Recuerdo', date: 'Vie 4 Sep · Centro de Convenciones', color: '#f8fafc', bgClass: 'bg-[#0f172a]', borderClass: 'border-[#f8fafc]', textClass: 'text-[#f8fafc]' },
   { id: 5, name: 'Ejecutivo Distinguido', desc: 'Cena de Gala · Oscar Gardea Acosta', date: 'Vie 4 Sep · Hotel María Bonita', color: '#facc15', bgClass: 'bg-[#00082e]', borderClass: 'border-[#1d4ed8]', textClass: 'text-[#facc15]' },
   { id: 6, name: 'Paisajes y Tradición', desc: 'Experiencia Regional', date: 'Sáb 5 Sep · Excursión', color: '#10b981', bgClass: 'bg-[#00150a]', borderClass: 'border-[#10b981]', textClass: 'text-[#10b981]' },

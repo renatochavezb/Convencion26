@@ -12,7 +12,7 @@ export const EVENTO_CONTEXTO = {
   coloresMarca: 'naranja #fe9800, azul marino #000814, morado acento',
   speakers: [
     'Néstor Guerra — Agentes IA: el futuro de las ventas inteligentes (keynote)',
-    'Conferencia magistral — Cumbre de Ventas (próximamente)',
+    'Alejandro Núñez — IA aplicada a ventas: construye un negocio completo en vivo (Cumbre de Ventas)',
     'Ejecutivo Distinguido Nacional (revelación en convención)',
   ],
   bullets: [

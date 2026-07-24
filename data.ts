@@ -1,8 +1,6 @@
 import { Speaker, ScheduleEvent } from './types';
 import nestorPhoto from './nestor_guerra.png';
-import keynoteGuestPhoto from './keynote_guest_placeholder.png';
-import claudiaPhoto from './claudia_alcala.jpg';
-import humbertoPhoto from './humberto_nevarez.jpg';
+import alexNunezPhoto from './alex_nunez.png';
 
 export const SPEAKERS: Speaker[] = [
   {
@@ -23,19 +21,18 @@ export const SPEAKERS: Speaker[] = [
   },
   {
     id: 'invitado-keynote',
-    name: 'PRÓXIMAMENTE',
-    role: 'EL PODER DE LA IA EN VENTAS Y NEGOCIOS',
-    quote: '"La sinergia y la Inteligencia Artificial abren nuevos horizontes para el crecimiento comercial y empresarial."',
+    name: 'ALEJANDRO NÚÑEZ',
+    role: 'IA aplicada a ventas: construye un negocio completo en vivo',
     bullets: [
-      'Perspectiva empresarial aplicada al entorno actual',
-      'Ideas prácticas para fortalecer liderazgo, ventas e innovación',
-      'Participación especial dentro del programa académico',
-      'Contenido enfocado en retos reales de las empresas'
+      'Fundador • IAcate',
+      'Mesa técnica • Ley de IA Chihuahua',
+      '+725 capacitados',
+      '31 proyectos con IA en producción',
+      'Millones en ventas generadas',
     ],
-    imageUrl: claudiaPhoto.src,
-    imageUrl2: humbertoPhoto.src,
+    imageUrl: alexNunezPhoto.src,
     featured: true,
-    bio: 'Magna conferencia magistral sobre el impacto de la Inteligencia Artificial en ventas y negocios: tendencias del mercado, herramientas aplicables y oportunidades para fortalecer equipos comerciales y la toma de decisiones empresariales.'
+    bio: 'Fundador de IAcate (Nitch Media), laboratorio de IA práctica. Miembro de la mesa técnica del Congreso del Estado de Chihuahua para la primera Ley de Inteligencia Artificial del estado. Ha capacitado a más de 725 personas y opera un portafolio de 31 proyectos con IA en producción. Antes, en marketing digital, generó millones de USD en ventas para terceros —solo con comisión de afiliado— con proyectos de hasta 400,000 visitas al mes.'
   },
   {
     id: 'marisol',
@@ -104,15 +101,15 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   },
   {
     id: 'd4-new-speaker',
-    title: 'Conferencia Magistral: El poder de la IA en ventas y negocios',
+    title: 'Conferencia Magistral: IA aplicada a ventas: construye un negocio completo en vivo',
     speakerId: 'invitado-keynote',
-    speakerName: 'PRÓXIMAMENTE',
+    speakerName: 'ALEJANDRO NÚÑEZ',
     time: '09:30 - 13:40',
     day: 4,
     location: 'Centro de Exposiciones y Convenciones',
     locationUrl: 'https://maps.google.com/?q=Centro+de+Convenciones+y+Exposiciones+de+Chihuahua',
     track: 'negocios',
-    description: 'Magna conferencia magistral sobre el impacto de la Inteligencia Artificial en ventas y negocios: tendencias del mercado, herramientas aplicables y oportunidades para fortalecer equipos comerciales y la toma de decisiones empresariales.'
+    description: 'Fundador de IAcate (Nitch Media), laboratorio de IA práctica. Miembro de la mesa técnica del Congreso del Estado de Chihuahua para la primera Ley de Inteligencia Artificial del estado. Ha capacitado a más de 725 personas y opera un portafolio de 31 proyectos con IA en producción.'
   },
   {
     id: 'd4-2',
