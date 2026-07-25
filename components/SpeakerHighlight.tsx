@@ -152,11 +152,18 @@ export default function SpeakerHighlight() {
               {currentSpeaker.id === 'cumbre-intro' ? (
                 <div className="space-y-6 animate-fadeIn">
                   <div>
-                    <img 
-                      src={cumbreVentasLogo.src} 
-                      className="h-14 md:h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(6,182,212,0.25)] mb-3 select-none" 
-                      alt="Cumbre de Ventas 2026" 
-                    />
+                    <button
+                      type="button"
+                      onClick={() => setActiveFeaturedIdx(0)}
+                      className="mb-3 cursor-pointer text-left"
+                      aria-label="Volver a Cumbre de Ventas"
+                    >
+                      <img 
+                        src={cumbreVentasLogo.src} 
+                        className="h-14 md:h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(6,182,212,0.25)] hover:scale-105 transition-transform duration-300 select-none" 
+                        alt="Cumbre de Ventas 2026" 
+                      />
+                    </button>
                     <span className="font-mono text-xs font-bold text-secondary-orange tracking-widest uppercase mb-1 block">
                       PROGRAMA ACADÉMICO ESPECIAL
                     </span>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import SpeakerHighlight from '@/components/SpeakerHighlight';
+import CumbreSpeakersCta from '@/components/CumbreSpeakersCta';
 import RegistrationTickets from '@/components/RegistrationTickets';
 import RegistrationModal from '@/components/RegistrationModal';
 import TicketBadge from '@/components/TicketBadge';
@@ -222,6 +223,11 @@ export default function App() {
 
       {/* Hero module */}
       <Hero onCtaclick={handleRegisterCta} />
+
+      {/* Cumbre logo CTA → speakers */}
+      <div className="reveal-on-scroll">
+        <CumbreSpeakersCta />
+      </div>
 
       {/* Featured Speakers Highlight */}
       <div id="speakers" className="scroll-mt-28 reveal-on-scroll">
