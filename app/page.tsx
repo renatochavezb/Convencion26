@@ -224,14 +224,14 @@ export default function App() {
       {/* Hero module */}
       <Hero onCtaclick={handleRegisterCta} />
 
-      {/* Cumbre logo CTA → speakers */}
-      <div className="reveal-on-scroll">
-        <CumbreSpeakersCta />
-      </div>
-
       {/* Featured Speakers Highlight */}
       <div id="speakers" className="scroll-mt-28 reveal-on-scroll">
         <SpeakerHighlight />
+      </div>
+
+      {/* Cumbre logo CTA → sitio oficial */}
+      <div className="reveal-on-scroll">
+        <CumbreSpeakersCta />
       </div>
 
       {/* Infinite Scrolling Ribbon */}
