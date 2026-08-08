@@ -12,6 +12,7 @@ import ScheduleSection from '@/components/ScheduleSection';
 import ExecutiveHighlight from '@/components/ExecutiveHighlight';
 import LocationSection from '@/components/LocationSection';
 import FlightDiscountsSection from '@/components/FlightDiscountsSection';
+import SponsorsSection from '@/components/SponsorsSection';
 import Footer from '@/components/Footer';
 import PassportPage from '@/components/PassportPage';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
@@ -396,6 +397,11 @@ export default function App() {
       {/* Interactive Sede / Location */}
       <div id="location" className="scroll-mt-28 reveal-on-scroll">
         <LocationSection />
+      </div>
+
+      {/* Patrocinadores */}
+      <div className="reveal-on-scroll">
+        <SponsorsSection />
       </div>
 
       {/* Footer & Sponsors block */}
