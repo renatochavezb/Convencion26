@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function WhatsAppFAB() {
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex items-center group">
+    <div className="fixed bottom-6 right-6 z-50 flex items-center group mb-20 sm:mb-24">
       {/* Tooltip text */}
       <div className="absolute right-16 bg-deep-blue border border-outline/20 text-white text-xs font-mono py-2 px-3 rounded-none whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none shadow-xl tracking-wider uppercase">
         Grupo Oficial Convención

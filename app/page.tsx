@@ -16,6 +16,7 @@ import SponsorsSection from '@/components/SponsorsSection';
 import Footer from '@/components/Footer';
 import PassportPage from '@/components/PassportPage';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
+import StickyRegisterBar from '@/components/StickyRegisterBar';
 import { joinWhatsAppRegistrationGroup } from '@/constants/whatsapp';
 import { RegistrationDetails } from '@/types';
 import { Star, ShieldAlert, Award, RefreshCw, Ticket } from 'lucide-react';
@@ -409,6 +410,12 @@ export default function App() {
 
       {/* Floating WhatsApp Action Button */}
       <WhatsAppFAB />
+
+      {/* Sticky register bar for visitors without ticket */}
+      <StickyRegisterBar
+        hasRegistration={!!registration}
+        onRegisterClick={handleRegisterCta}
+      />
 
       {/* Checkout modal if selected */}
       {modalConfig && (
