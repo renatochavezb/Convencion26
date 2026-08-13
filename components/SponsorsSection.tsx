@@ -13,6 +13,13 @@ import sponsorProsesa from '../assets/sponsors-cumbre-ventas/sponsor-prosesa.png
 import sponsorSofia from '../assets/sponsors-cumbre-ventas/sponsor-sofia.png';
 import sponsorTortas from '../assets/sponsors-cumbre-ventas/sponsor-tortas-tu-tio.png';
 import sponsorVillalobos from '../assets/sponsors-cumbre-ventas/sponsor-villalobos.png';
+import sponsorCorporativoFiscal from '../assets/sponsors-cumbre-ventas/sponsor-corporativo-fiscal.png';
+import sponsorNancyMx from '../assets/sponsors-cumbre-ventas/sponsor-nancy-mx.png';
+import sponsorMacopisa from '../assets/sponsors-cumbre-ventas/sponsor-macopisa.png';
+import sponsorBusinessHarmony from '../assets/sponsors-cumbre-ventas/sponsor-business-harmony.png';
+import sponsorHaciendaSanJose from '../assets/sponsors-cumbre-ventas/sponsor-hacienda-san-jose.png';
+import sponsorArema from '../assets/sponsors-cumbre-ventas/sponsor-arema.png';
+import sponsorCos from '../assets/sponsors-cumbre-ventas/sponsor-cos.png';
 
 const PRINCIPALES = [
   {
@@ -36,30 +43,47 @@ const PRINCIPALES = [
 ];
 
 const SPONSORS = [
-  { src: sponsorGardea.src, alt: 'Grupo Gardea' },
-  { src: sponsorC10.src, alt: 'C10 Laboratorio e Imagenología' },
-  { src: sponsorCodichisa.src, alt: 'Codichisa' },
-  { src: sponsorProsesa.src, alt: 'Prosesa' },
-  { src: sponsorVillalobos.src, alt: 'Villalobos' },
-  { src: sponsorLuzande.src, alt: 'Luzandé Eventos' },
-  { src: sponsorSofia.src, alt: 'Sofía' },
-  { src: sponsorFatrema.src, alt: 'Fatrema' },
-  { src: sponsorDulceNoviembre.src, alt: 'Dulce Noviembre' },
-  { src: sponsorTortas.src, alt: 'Tortas Tu Tío' },
+  { src: sponsorGardea.src, alt: 'Grupo Gardea', size: 'md' as const },
+  { src: sponsorC10.src, alt: 'C10 Laboratorio e Imagenología', size: 'md' as const },
+  { src: sponsorCodichisa.src, alt: 'Codichisa', size: 'md' as const },
+  { src: sponsorProsesa.src, alt: 'Prosesa', size: 'md' as const },
+  { src: sponsorVillalobos.src, alt: 'Villalobos', size: 'md' as const },
+  { src: sponsorLuzande.src, alt: 'Luzandé Eventos', size: 'lg' as const },
+  { src: sponsorSofia.src, alt: 'Sofía', size: 'lg' as const },
+  { src: sponsorFatrema.src, alt: 'Fatrema', size: 'lg' as const },
+  { src: sponsorDulceNoviembre.src, alt: 'Dulce Noviembre', size: 'lg' as const },
+  { src: sponsorTortas.src, alt: 'Tortas Tu Tío', size: 'xl' as const },
+  { src: sponsorCorporativoFiscal.src, alt: 'Corporativo Fiscal', size: 'xl' as const },
+  { src: sponsorNancyMx.src, alt: 'Nancy MX', size: 'md' as const },
+  { src: sponsorMacopisa.src, alt: 'MACOPISA', size: 'xl' as const },
+  { src: sponsorBusinessHarmony.src, alt: 'Business Harmony Method', size: 'xl' as const },
+  { src: sponsorHaciendaSanJose.src, alt: 'Hacienda San José Eventos', size: 'lg' as const },
+  { src: sponsorArema.src, alt: 'AREMA', size: 'md' as const },
+  { src: sponsorCos.src, alt: 'COS Sports, Friends & Drinks', size: 'lg' as const },
 ];
+
+const LOGO_SIZE = {
+  md: 'max-h-[48px] md:max-h-[56px] max-w-[132px] md:max-w-[152px]',
+  lg: 'max-h-[60px] md:max-h-[70px] max-w-[148px] md:max-w-[168px]',
+  xl: 'max-h-[68px] md:max-h-[80px] max-w-[156px] md:max-w-[172px]',
+};
 
 function SponsorPlate({
   src,
   alt,
-  className,
+  size = 'md',
 }: {
   src: string;
   alt: string;
-  className?: string;
+  size?: keyof typeof LOGO_SIZE;
 }) {
   return (
-    <div className="shrink-0 flex items-center justify-center h-[72px] md:h-[84px] px-5 md:px-7 bg-white/95 border border-white/20 shadow-[0_8px_24px_rgba(0,0,0,0.25)]">
-      <img src={src} alt={alt} className={className ?? 'h-10 md:h-12 w-auto max-w-[150px] md:max-w-[180px] object-contain'} />
+    <div className="shrink-0 flex items-center justify-center w-[156px] md:w-[176px] h-[76px] md:h-[88px] px-2.5 md:px-3 bg-white/95 border border-white/20 shadow-[0_8px_24px_rgba(0,0,0,0.25)] overflow-hidden">
+      <img
+        src={src}
+        alt={alt}
+        className={`block w-auto h-auto object-contain ${LOGO_SIZE[size]}`}
+      />
     </div>
   );
 }
@@ -120,7 +144,7 @@ export default function SponsorsSection() {
           <div className="flex w-max animate-sponsors-marquee hover:[animation-play-state:paused]">
             {parade.map((logo, index) => (
               <div key={`${logo.alt}-${index}`} className="px-3 md:px-4">
-                <SponsorPlate src={logo.src} alt={logo.alt} />
+                <SponsorPlate src={logo.src} alt={logo.alt} size={logo.size} />
               </div>
             ))}
           </div>

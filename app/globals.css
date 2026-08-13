@@ -257,7 +257,7 @@ progress::-webkit-progress-value {
 }
 
 .animate-sponsors-marquee {
-  animation: sponsors-marquee 45s linear infinite;
+  animation: sponsors-marquee 70s linear infinite;
 }
 
 @keyframes sticky-bar-in {
