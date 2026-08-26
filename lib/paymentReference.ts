@@ -33,6 +33,7 @@ const CITY_CODES: Record<string, string> = {
   puebla: 'PUE',
   merida: 'MID',
   cancun: 'CUN',
+  mexicali: 'MXL',
   culiacan: 'CLN',
   mazatlan: 'MZT',
   aguascalientes: 'AGS',

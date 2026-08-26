@@ -488,6 +488,7 @@ export default function RegistrationModal({
                     <option value="Puebla" />
                     <option value="Mérida" />
                     <option value="Cancún" />
+                    <option value="Mexicali" />
                   </datalist>
                 </div>
               </div>
