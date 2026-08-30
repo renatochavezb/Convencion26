@@ -188,9 +188,10 @@ export const SCHEDULE_EVENTS: ScheduleEvent[] = [
   {
     id: 'd5-1',
     title: 'Experiencia Regional: Paisajes y Tradición',
-    time: '',
+    time: '09:30 - 16:30',
     day: 5,
-    location: '',
+    location: 'Paseo · Viñedo Piña Mora',
+    locationUrl: 'https://maps.app.goo.gl/DKhmEy5p4wymfbXR8',
     track: 'casos_reales',
     description: 'Una excursión de integración fuera de la ciudad para explorar la riqueza de la región, diseñada para descubrir espectaculares paisajes naturales o disfrutar de las nuevas propuestas locales que ofrece el entorno de Chihuahua.'
   },
